@@ -6,14 +6,6 @@ USE library;
 ---
 --- Tables
 ---
-CREATE TABLE actor (
-  actor_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  first_name VARCHAR(45) NOT NULL,
-  last_name VARCHAR(45) NOT NULL,
-  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY  (actor_id),
-  KEY idx_actor_last_name (last_name)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --- Table 'school'
 CREATE TABLE school (
@@ -29,17 +21,17 @@ CREATE TABLE school (
   school_admin_firstname VARCHAR(45) NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CHECK(postal_code > 9999 and postal_code < 100000),
-  PRIMARY KEY  (school_id),
+  PRIMARY KEY  (school_id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
--- Table 'school_phone'
+--- Table 'school_phone'
 CREATE TABLE school_phone(
   phone INT NOT NULL,
   school_id INT UNSIGNED NOT NULL,
-  PRIMARY KEY (phone,school_id)
-  KEY idx_fk_school_id
-  CONSTRAINT 'idx_fk_school_id' FOREIGN KEY(school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
+  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (phone,school_id),
+  KEY fk_school_id (school_id), -- πιθανόν να μην χρειαζεται
+  CONSTRAINT fk_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Table 'lib_user'
@@ -48,76 +40,78 @@ CREATE TABLE lib_user(
     user_pwd INT UNSIGNED NOT NULL,
     user_name VARCHAR(45) NOT NULL,
     school_id INT UNSIGNED NOT NULL,
+    last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id),
-    KEY idx_fk_school_id
-    CONSTRAINT 'idx_fk_school_id' FOREIGN KEY(school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+    KEY fk_user_school_id (school_id),
+    CONSTRAINT fk_user_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8; 
+-- ισως: ON DELETE CASCADE 
 
 -- Table 'book'
 CREATE TABLE book (
   book_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   title VARCHAR(45) NOT NULL,
   publisher VARCHAR(45) NOT NULL,
-  pages INT UNSIGNED NOT NULL
+  pages INT UNSIGNED NOT NULL,
   ISBN INT UNSIGNED NOT NULL,
-  summary VARCHAR(1000),
-  no_books INT UNSIGNED NOT NULL, 	
-  image // ??
-  language VARCHAR(45)
-  user_id INT UNSIGNED NOT NULL (FK),
-  school_id INT UNSIGNED NOT NULL (FK)
+  summary VARCHAR(45),
+  number_of_books INT UNSIGNED NOT NULL, 	
+  book_language VARCHAR(45),
+  user_id INT UNSIGNED NOT NULL,
+  school_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (book_id)
-  KEY idx_fk_user_id
-  CONTSTRAINT 'fk_user_id' FOREIGN KEY(user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE
-  KEY idx_fk_school_id
-  CONTSTRAINT 'fk_school_id' FOREIGN KEY(school_id) REFERENCES school (user_id) ON DELETE RESTRICT ON UPDATE CASCADE
+  PRIMARY KEY (book_id),
+  KEY fk_book_user_id (user_id),
+  KEY fk_book_school_id (school_id),
+  CONSTRAINT fk_book_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT fk_book_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--- ΛΕΙΠΕΙ Η ΕΙΚΟΝΑ / ΤΟ SUMMARY ΙΣΩΣ ΝΑ ΘΕΛΕΙ ΜΕΓΑΛΥΤΕΡΟ ΜΕΓΕΘΟΣ
 
 -- Table 'reservation'
 CREATE TABLE reservation (
-  user_id INT NOT NULL,
-  book_id INT NOT NULL,
+  book_id INT UNSIGNED NOT NULL,
   res_date DATE NOT NULL,
-  res_id INT NOT NULL,
-  PRIMARY KEY (res_id),
-  KEY idx_fk_user_id
-  CONTSTRAINT 'fk_user_id' FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-  KEY idx_fk_school_id
-  CONTSTRAINT 'fk_school_id' FOREIGN KEY(school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
+  res_id INT NOT NULL AUTO_INCREMENT,
+  user_id INT UNSIGNED NOT NULL,
+  school_id INT UNSIGNED NOT NULL,
+  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (res_id,user_id,book_id),
+  KEY fk_reserv_user_id (user_id),
+  CONSTRAINT fk_reserv_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  KEY fk_reserv_school_id (school_id),
+  CONSTRAINT fk_reserv_school_id FOREIGN KEY(school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+--- Ειναι σωστο το primary key?
 
 -- Table 'role'
 CREATE TABLE role (
-  user_id INT NOT NULL,
   role_id INT NOT NULL AUTO_INCREMENT,
+  user_id INT UNSIGNED NOT NULL,
   role_name ENUM('student', 'teacher', 'admin', 'super_admin') NOT NULL,
-  PRIMARY KEY (role_id),
-  KEY idx_fk_user_id
-  CONTSTRAINT 'fk_user_id' FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  PRIMARY KEY (role_id,user_id),
+  KEY fk_role_user_id (user_id),
+  CONSTRAINT fk_role_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
--- Table 'book_keyworrds'
-CREATE TABLE book_keyworrds (
+-- Table 'book_keywords'
+CREATE TABLE book_keywords (
   keywords  VARCHAR(100) NOT NULL,
-  book_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  book_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (keywords)
-  KEY idx_fk_book_id
-  CONTSTRAINT 'fk_book_id' FOREIGN KEY(book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;	
+  PRIMARY KEY (keywords),
+  KEY fk_book_keywords_book_id (book_id),
+  CONSTRAINT fk_book_keywords_book_id FOREIGN KEY(book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Table 'book_theme'
 CREATE TABLE book_theme (
-  theme  VARCHAR(30) NOT NULL,
-  book_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  theme VARCHAR(30) NOT NULL,
+  book_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (theme)
-  KEY idx_fk_book_id
-  CONTSTRAINT 'fk_book_id' FOREIGN KEY(book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE
+  PRIMARY KEY (theme),
+  KEY fk_book_theme_book_id (book_id),
+  CONSTRAINT fk_book_theme_book_id FOREIGN KEY(book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Table 'book_author'
@@ -125,40 +119,22 @@ CREATE TABLE book_author (
 	author  VARCHAR(100) NOT NULL,
 	book_id INT UNSIGNED NOT NULL,
 	last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	PRIMARY KEY (theme)
-        KEY idx_fk_book_id
-	CONTSTRAINT '' FOREIGN KEY(book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE
+	PRIMARY KEY (author),
+  KEY fk_book_author_book_id (book_id),
+	CONSTRAINT fk_book_author_book_id FOREIGN KEY(book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 -- Table 'review'
-CREATE TABLE review(
-    user_id INT UNSIGNED NOT NULL,
-    book_id INT UNSIGNED NOT NULL,
-    rev_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    rev_date INT UNSIGNED NOT NULL,
-    rating ENUM('1','2','3','4','5') NOT NULL, 
-    PRIMARY KEY (user_id, book_id)
-    KEY idx_fk_user_id
-    CONSTRAINT 'idx_fk_user_id' FOREIGN KEY(user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE
-    KEY idx_fk_book_id
-    CONSTRAINT 'idx_fk_book_id' FOREIGN KEY(book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE
+CREATE TABLE review (
+  rev_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id INT UNSIGNED NOT NULL,
+  book_id INT UNSIGNED NOT NULL,
+  rev_date INT UNSIGNED NOT NULL,
+  rating ENUM('1', '2', '3', '4', '5') NOT NULL, 
+  PRIMARY KEY (rev_id,user_id,book_id),
+  KEY fk_review_user_id (user_id),
+  CONSTRAINT fk_review_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  KEY fk_review_book_id (book_id),
+  CONSTRAINT fk_review_book_id FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
---- notes: Πως βιβλια με ιδιο όνομα αλλά διαφορετικό id θα έχουν ιδια αξιολόγηση?
-
-
----
---- VIEWS
----
-
----
---- TRIGEGRS
----
-
----
---- PROCUDERS
----
-
-
-
-
+--- Ειναι σωστο το primary key?
