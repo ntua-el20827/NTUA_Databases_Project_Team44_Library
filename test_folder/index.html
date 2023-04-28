@@ -1,0 +1,46 @@
+{% extends "global_layout.html" %}
+{% block content %}
+<head>
+<style>
+h1 {text-align: center;}
+p {text-align: center;}
+div {text-align: center;}
+</style>
+</head>
+<body>
+
+
+<center>
+  <img src="https://www.elidek.gr/wp-content/themes/elidek/images/elidek_logo_en.png" alt="show image" height="120" width="420">
+</center>
+
+
+<h1>Welcome to the H.F.R.I. database</h1>
+<p>
+The Hellenic Foundation for Research and Innovation's goals are the promotion of research and innovation in Greece <br> through funding research activities and technological applications assessed solely on the basis of scientific excellence. <br> The Foundation was created out of the vital need to support young scientists and as a necessary tool in reversing the flow of outstanding scientists out of Greece.</p>
+
+</body>
+<div class="container" id="row-container">
+      {% include "flash_messages.html" %}
+    <div class="row justify-content-center" id="row">
+        <div class="col-md-4">
+            <div class="card" id="card-container-layout">
+                <div class="card-body" id="card">
+                    <h4 class="card-title">Data</h4>
+                    <p class="card-text" id="paragraph">View, update, delete and insert data to the database<br></p>
+                    <a class="btn btn-primary" id="show-home-btn" href="/show_tables">Show</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card" id="card-container-layout">
+                <div class="card-body" id="card">
+                    <h4 class="card-title">FAQ</h4>
+                    <p class="card-text" id="paragraph">See the popular questions <br> asked<br></p>
+                    <a class="btn btn-primary" id="show-home-btn" href="/queries">Show</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
