@@ -1,15 +1,19 @@
-from flask import Flask, render_template, request, flash, redirect, url_for, abort, request
-from flask_mysqldb import MySQL
-from test_folder import app,db  # initially created by __init__.py, need to be used here
-from test_folder import *
+from flask import Blueprint, render_template, request, redirect, url_for
 
+bp = Blueprint("routes", __name__)
 
-# home page
-
-@app.route("/")
+@bp.route("/")
 def index():
-    try:
-        return render_template("landing.html", pageTitle = "Welcome!")
-    except Exception as e:
-        print(e)
-        return render_template("landing.html", pageTitle = "Welcome!")
+    return render_template("index.html")
+
+@bp.route("/check_username", methods=["POST"])
+def check_username():
+    username = request.form["username"]
+    if username == "george":
+        return redirect(url_for("routes.admin"))
+    else:
+        return render_template("index.html", error="Invalid username")
+
+@bp.route("/admin")
+def admin():
+    return render_template("admin.html")
