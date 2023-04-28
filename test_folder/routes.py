@@ -1,14 +1,12 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, abort, request
 from flask_mysqldb import MySQL
-from . import test_folder
+from test_folder import app,db  # initially created by __init__.py, need to be used here
+from test_folder import *
 
-
-global is_admin #for login
-is_admin=False
 
 # home page
 
-@test_folder.route("/")
+@app.route("/")
 def index():
     try:
         return render_template("landing.html", pageTitle = "Welcome!")
