@@ -1,2 +1,0 @@
-this is a test!
-now this text is inside the test_folder
