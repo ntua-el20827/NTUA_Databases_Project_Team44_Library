@@ -1,0 +1,3 @@
+installation:
+pip isntall flask
+pip install flask-mysqldb

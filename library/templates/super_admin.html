@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>44-Library System</title>
+</head>
+<body>
+	{% if super_admin_fname %}
+		<h1>Hi {{ super_admin_fname }} {{super_admin_lname}}!</h1> 
+	{% endif %}
+    <p>Welcome to the super admin page.</p>
+
+	<table>
+		<tr>
+			<th>School ID</th>
+			<th>School Name</th>
+		</tr>
+		{% for school in schools %} <!-- Το schools το έβαλα εγώ ως input στην συνάρτηση στα routes -->
+			<tr>
+				<td>{{ school[0]}}</td> <!-- School_id -->
+				<td>{{ school[1] }}</td> <!-- School_name -->
+			</tr>
+		{% endfor %}
+	</table>
+
+	<form action="{{ url_for('index') }}"> <!-- Τι να κάνει αν πατηθεί το επόμενο κουμπί-->
+		<input type="submit" value="Back to Index">   <!-- Κουμπι για να γυρίσεις στην προηγούμενη σελίδα-->
+	</form>
+</body>
+</html>
