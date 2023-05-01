@@ -31,7 +31,7 @@ def super_admin():
     # code for a list of all schools and admins
     # \/\/\/
     cur = mysql.connection.cursor()
-    cur.execute('''SELECT school_id, school_name FROM school''')
+    cur.execute('''SELECT school_id, school_name FROM school''') # ισως σε τέτοιου είδους εντολές χρειαζόμαστε τα queries
     schools = cur.fetchall()
     print(schools)
     cur.close()
