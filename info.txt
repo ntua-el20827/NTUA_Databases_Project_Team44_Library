@@ -1,3 +1,5 @@
 installation:
 pip isntall flask
 pip install flask-mysqldb
+
+αξίζει να φτιάξουμε ενα txt με όσα χρειάζονται να εγκαταστήσεις για να τρέξει: requirements.txt
