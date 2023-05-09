@@ -4,8 +4,8 @@ from flask_mysqldb import MySQL
 app = Flask(__name__)
 app.config["DB_ADMIN_USERNAME"] = 'root'
 app.config["DB_ADMIN_PASSWORD"] = 'george'
-app.config["DB_ADMIN_FIRSTNAME"] = 'MANOS'
-app.config["DB_ADMIN_LASTNAME"] = 'THELO KOYREMA'
+app.config["DB_ADMIN_FIRSTNAME"] = 'Manos'
+app.config["DB_ADMIN_LASTNAME"] = 'Neofotistos'
 
 # Αυτά συσχετίζουν την βάση με την εφαρμογή που φτιάξαμε με το Flask
 # Δεν ξέρω ακριβώς πως λειτουργούν

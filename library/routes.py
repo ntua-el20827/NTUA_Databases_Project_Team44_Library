@@ -8,9 +8,9 @@ from library.forms import *
 @app.route('/')
 def index():
     # Read the query from queries.sql
-    with open('sql/queries.sql', 'r') as file:
-        query = file.read().split(';')
-    
+    with open('/home/george/Workshop/uni/dblab/project/library/sql/queries.sql', 'r') as file:
+        queries = file.read().split(';')
+    query = queries[0]
     # Execute the query to get a list of all schools from the database
     cur = mysql.connection.cursor()
     cur.execute(query)
