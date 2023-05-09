@@ -1,44 +1,58 @@
 from flask import render_template, request, redirect, url_for, app
 from flask_mysqldb import MySQL
 from library import app,mysql
-from library.forms import MyForm
+from library.forms import *
 
-#route for the first login page
-@app.route('/', methods=['GET', 'POST'])
+
+# Route for the first page
+@app.route('/')
 def index():
-    return render_template('index.html')
-
-#route for checking the username and password the user gave
-@app.route("/check_superadmin", methods=["POST"])
-def check_superadmin():
-    #for the super_admin we check the initialization of the app
-    username = request.form["username"]
-    password = request.form["password"]
-    if username == app.config.get('DB_ADMIN_USERNAME') and password == app.config.get('DB_ADMIN_PASSWORD'):
-        return redirect(url_for('super_admin'))
-    else:
-        # code for checking the other users (basic_user or admin)
-        # I have to check the database
-        return render_template("index.html", error="Invalid username or password")
-
-
-#route for the page of the super_admin
-@app.route("/super_admin")
-def super_admin():
-    #We want to print his name 
-    fname = app.config.get('DB_ADMIN_FIRSTNAME')
-    lname = app.config.get('DB_ADMIN_LASTNAME') 
-    # code for a list of all schools and admins
-    # \/\/\/
+    # Read the query from queries.sql
+    with open('sql/queries.sql', 'r') as file:
+        query = file.read().split(';')
+    
+    # Execute the query to get a list of all schools from the database
     cur = mysql.connection.cursor()
-    cur.execute('''SELECT school_id, school_name FROM school''') # ισως σε τέτοιου είδους εντολές χρειαζόμαστε τα queries
+    cur.execute(query)
     schools = cur.fetchall()
-    #print(schools)
     cur.close()
-    #return render_template('admin.html', schools=schools)
-    # /\/\/\
-    return render_template("super_admin.html", super_admin_fname = fname, super_admin_lname = lname, schools=schools)
+    
+    # Render the template for the first page
+    return render_template('index.html', schools=schools)
 
-@app.route("/admin")
-def admin():
-    return render_template("admin.html")
+# Route for the login page
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    
+    if form.validate_on_submit():
+        # Get the entered username and password from the form
+        username = form.username.data
+        password = form.password.data
+        
+        # Query the database to validate the user's credentials
+        cur = mysql.connection.cursor()
+        query = "SELECT * FROM users WHERE username = %s AND password = %s AND school = %s"
+        cur.execute(query, (username, password, session['selected_school']))
+        user = cur.fetchone()
+        cur.close()
+        
+        if user:
+            # User exists in the database and credentials are valid
+            session['user_id'] = user[0]  # Store user ID in session for future use
+            return redirect(url_for('dashboard'))  # Redirect to the dashboard page after successful login
+        else:
+            # Invalid credentials, show an error message
+            error_message = "Invalid username or password"
+            return render_template('login.html', form=form, error_message=error_message)
+    
+    # Render the template for the login page with the form
+    return render_template('login.html', form=form)
+# Route for the dashboard page
+@app.route('/dashboard')
+def dashboard():
+    # Check if the user is authenticated and retrieve their information from the database
+    # ...
+    
+    # Render the template for the dashboard page
+    return render_template('dashboard.html')
