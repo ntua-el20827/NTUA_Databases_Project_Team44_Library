@@ -1,39 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>44-Library System</title>
+    <title>Schools List</title>
 </head>
 <body>
-	<h1>Welcome to 44-Library System</h1>
-	<p>Give your username and password:</p>
-	<form id="login-form" action="{{ url_for('check_superadmin') }}" method="POST">
-		<input type="text" name="username" id="username" autocomplete="off">
-		<p></p>
-		<input type="password" name="password" id="password" autocomplete="off">
-		<p></p>
-		<input type="submit" value="Submit">
-	</form>
-	{% if error %}
-		<p style="color: red">{{ error }}</p>
-	{% endif %}
-	<script>
-		var usernameInput = document.getElementById("username");
-		var passwordInput = document.getElementById("password");
-		var form = document.getElementById("login-form");
-
-		usernameInput.addEventListener("keypress", function(event) { //javascript
-			if (event.key === "Enter") {
-				event.preventDefault();
-				passwordInput.focus();
-			}
-		});
-
-		passwordInput.addEventListener("keypress", function(event) {
-			if (event.key === "Enter") {
-				event.preventDefault();
-				form.submit();
-			}
-		});
-	</script>
+    <h1>List of Schools</h1>
+    <ul>
+        {% for school in schools %}
+        <li>{{ school.name }} <a href="{{ url_for('login', school_id=school.id) }}">Choose</a></li>
+        {% endfor %}
+    </ul>
 </body>
 </html>

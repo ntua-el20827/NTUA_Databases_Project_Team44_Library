@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, app
+from flask import render_template, request, redirect, url_for, app,session
 from flask_mysqldb import MySQL
 from library import app,mysql
 from library.forms import *
@@ -48,11 +48,24 @@ def login():
     
     # Render the template for the login page with the form
     return render_template('login.html', form=form)
+
+
 # Route for the dashboard page
 @app.route('/dashboard')
 def dashboard():
     # Check if the user is authenticated and retrieve their information from the database
-    # ...
+    if 'user_id' in session:
+        user_id = session['user_id']
+        
+        cur = mysql.connection.cursor()
+        query = "SELECT * FROM users WHERE id = %s"
+        cur.execute(query, (user_id,))
+        user = cur.fetchone()
+        cur.close()
+        
+        if user:
+            # User exists, render the template for the dashboard page
+            return render_template('dashboard.html', user=user)
     
-    # Render the template for the dashboard page
-    return render_template('dashboard.html')
+    # User is not authenticated, redirect to the login page
+    return redirect(url_for('login'))
