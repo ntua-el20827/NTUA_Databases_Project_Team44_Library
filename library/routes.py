@@ -11,6 +11,7 @@ def index():
     with open('/home/george/Workshop/uni/dblab/project/library/sql/queries.sql', 'r') as file:
         queries = file.read().split(';')
     query = queries[0]
+    query = "SELECT * from school"
     # Execute the query to get a list of all schools from the database
     cur = mysql.connection.cursor()
     cur.execute(query)
