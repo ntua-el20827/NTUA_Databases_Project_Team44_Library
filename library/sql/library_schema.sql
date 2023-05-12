@@ -56,6 +56,8 @@ CREATE TABLE book (
   ISBN INT UNSIGNED NOT NULL,
   summary VARCHAR(45),
   number_of_books INT UNSIGNED NOT NULL, 	
+  number_of_available_books INT UNSIGNED NOT NULL,
+  book_image VARCHAR(256) NOT NULL, 
   book_language VARCHAR(45),
   user_id INT UNSIGNED NOT NULL,
   school_id INT UNSIGNED NOT NULL,
