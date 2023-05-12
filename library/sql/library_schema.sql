@@ -40,6 +40,7 @@ CREATE TABLE lib_user(
     user_pwd INT UNSIGNED NOT NULL,
     user_name VARCHAR(45) NOT NULL,
     school_id INT UNSIGNED NOT NULL,
+    role_name ENUM('student', 'teacher', 'admin', 'super_admin') NOT NULL,
     last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id),
     KEY fk_user_school_id (school_id),
@@ -86,15 +87,7 @@ CREATE TABLE reservation (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --- Ειναι σωστο το primary key?
 
--- Table 'role'
-CREATE TABLE role (
-  role_id INT NOT NULL AUTO_INCREMENT,
-  user_id INT UNSIGNED NOT NULL,
-  role_name ENUM('student', 'teacher', 'admin', 'super_admin') NOT NULL,
-  PRIMARY KEY (role_id,user_id),
-  KEY fk_role_user_id (user_id),
-  CONSTRAINT fk_role_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 -- Table 'book_keywords'
 CREATE TABLE book_keywords (
@@ -149,3 +142,27 @@ CREATE TABLE review (
 ---
 --- Triggers
 ---
+
+---Ensure that our db has only one superadmin
+CREATE TRIGGER trg_lib_user_super_admin
+BEFORE INSERT OR UPDATE ON lib_user
+FOR EACH ROW
+BEGIN
+    IF NEW.role_name = 'super_admin' OR IF OLD.role_name = 'super_admin' THEN
+        IF (SELECT COUNT(*) FROM lib_user WHERE role_name = 'super_admin') > 0 THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'There can be only one superadmin in the lib_user table';
+        END IF;
+    END IF;
+END;
+
+---Ensure that the insertion of second admin for a school is forbidden
+CREATE TRIGGER trg_lib_user_admin_count
+BEFORE INSERT OR UPDATE ON lib_user
+FOR EACH ROW
+BEGIN
+    IF NEW.role_name = 'admin' OR OLD.role_name = 'admin' THEN
+        IF (SELECT COUNT(*) FROM lib_user WHERE role_name = 'admin' AND school_id = NEW.school_id) > 1 THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Each school can have only one admin in the lib_user table';
+        END IF;
+    END IF;
+END;
