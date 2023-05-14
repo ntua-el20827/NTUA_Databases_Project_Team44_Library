@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, app,session
+from flask import render_template, request, redirect, url_for, app, session
 from flask_mysqldb import MySQL
 from library import app,mysql
 from library.forms import *
