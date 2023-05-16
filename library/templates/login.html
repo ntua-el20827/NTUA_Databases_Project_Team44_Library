@@ -1,22 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
+	<title>User Login</title>
+	
+	<script>
+		function login() {
+			var username = document.getElementById("username").value;
+			var password = document.getElementById("password").value;
+
+			// Check if the username and password are correct
+			if (username === "admin" && password === "password") {
+				// Redirect to the welcome page and display a welcome message
+				window.location.replace("welcome.html");
+			} else {
+				// Display an error message and reload the page
+				alert("Invalid username or password. Please try again.");
+				location.reload();
+			}
+		}
+	</script>
+	<style>
+		 
+		.search login[type=text]{
+              width:300px;
+              height:25px;
+              border-radius:25px;
+              
+   		 }
+		.login{
+       	  margin:20px;
+        	
+    		}
+		
+		
+		</style>
 </head>
 <body>
-    <h1>Login</h1>
-    {% if error_message %}
-    <p>{{ error_message }}</p>
-    {% endif %}
-    <form method="POST" action="/login">
-        {{ form.hidden_tag() }}
-        <label for="{{ form.username.id }}">{{ form.username.label }}</label>
-        {{ form.username }}
-        <br>
-        <label for="{{ form.password.id }}">{{ form.password.label }}</label>
-        {{ form.password }}
-        <br>
-        {{ form.submit }}
-    </form>
+	<h1>Σύνδεση Στην βιβλιοθήκη Του σχολείου Σας:</h1>
+	<hr>
+	<br>
+	<div class="login">
+	<form>
+		<label for="username">Ονομα Χρηστη:</label> <br>
+		<input type="text" id="username" name="username" required>
+		<br>
+		<label for="password">Κωδικος:</label> <br>
+		<input type="password" id="password" name="password" required>
+		<br> <br>
+		<input type="button" value="Login" onclick="login()">
+	</form>
+	<p>Δεν εχετε λογαριασμό; <a href="signup.html">Εγγραφειτε! </a> </p>
+	<div>
 </body>
 </html>
