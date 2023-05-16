@@ -44,6 +44,7 @@ CREATE TABLE lib_user(
     user_email VARCHAR(45) NOT NULL, -- new ->george
     user_firstname VARCHAR(45) NOT NULL, -- new ->george
     user_lastname VARCHAR(45) NOT NULL, -- new ->george
+    user_date_of_birth BIGINT UNSIGNED NOT NULL, ---new ->baba BIGINT so that it can store Unix timestamps, which are 64-bit integers
     -- user_date_of_birth -- new ->george // δεν εχει συμπληρωθεί πλήρωνς
     last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id),
@@ -75,7 +76,7 @@ CREATE TABLE book (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --- ΛΕΙΠΕΙ Η ΕΙΚΟΝΑ / ΤΟ SUMMARY ΙΣΩΣ ΝΑ ΘΕΛΕΙ ΜΕΓΑΛΥΤΕΡΟ ΜΕΓΕΘΟΣ
 
--- Table 'reservation'
+/*-- Table 'reservation'
 CREATE TABLE reservation (
   book_id INT UNSIGNED NOT NULL,
   res_date DATE NOT NULL,
@@ -89,11 +90,31 @@ CREATE TABLE reservation (
   KEY fk_reserv_school_id (school_id),
   CONSTRAINT fk_reserv_school_id FOREIGN KEY(school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
---- Ειναι σωστο το primary key?
+--- Ειναι σωστο το primary key?*/
 
 --- > george
 -- Χρειάζεται επειγόντως το table με τους δανεισμούς (many to many) ωστε να κάνουμε store ολους
 -- τους δανεισμούς. Το table reservation ισως να μην χρειάζετια και να μπορούμε να το κάνουμε με το view!
+
+--- new -> baba suggestion for reservation/borrowing
+CREATE TABLE book_status (
+  book_status_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  book_id INT UNSIGNED NOT NULL,
+  user_id INT UNSIGNED NOT NULL,
+  school_id INT UNSIGNED NOT NULL,
+  status ENUM('borrowed', 'reserved') NOT NULL,
+  request_date DATE NOT NULL,
+  approval_date DATE,
+  return_date DATE,
+  PRIMARY KEY (book_status_id),
+  KEY fk_book_status_book_id (book_id),
+  KEY fk_book_status_user_id (user_id),
+  KEY fk_book_status_school_id (school_id),
+  CONSTRAINT fk_book_status_book_id FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT fk_book_status_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT fk_book_status_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 -- Table 'book_keywords'
