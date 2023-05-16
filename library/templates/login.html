@@ -2,27 +2,30 @@
 <html>
 <head>
 	<title>User Login</title>
-	<style>
-		.login {
-			margin: 20px;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	
 </head>
 <body>
-	<h1>Σύνδεση Στην βιβλιοθήκη Του σχολείου Σας:</h1>
-	<hr>
-	<br>
+	<div class="header">
+	<h1>Σύνδεση Στην βιβλιοθήκη Του σχολείου Σας</h1>
+	<hr color="black">
+</div><br><br>
 	<div class="login">
+	<br>
+	
 		<form method="POST" action="/login">
 			<label for="username">Ονομα Χρηστη:</label> <br>
 			<input type="text" id="username" name="username" required>
-			<br>
+			<br><br>
 			<label for="password">Κωδικος:</label> <br>
 			<input type="password" id="password" name="password" required>
 			<br> <br>
 			<input type="submit" value="Login">
+
+			<br> <br>
 		</form>
 		<p>Δεν εχετε λογαριασμό; <a href="{{ url_for('signup') }}">Εγγραφειτε! </a> </p>
+		<p>Επιστροφη στην αρχικη <a href="{{ url_for('index') }}"> σελίδα </a></p>
 	</div>
 </body>
 </html>

@@ -2,26 +2,47 @@
 <html>
 <head>
 	<title>User Sign-up</title>
+	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
+	<div class="header">
 	<h1>Εγγραφη Χρηστη</h1>
+	<hr color="black">
+</div>
+	
+	<br><br>
+	<div class="registration">
 	<form method="POST" action="/signup" onsubmit="return validateForm()">
+		<div class="labels">
 		<label for="newusername">Username:</label> <br>
 		<input type="text" id="newusername" name="newusername" required>
+		</div>
 		<br>
 		<label for="newpassword">Κωδικός:</label> <br>
 		<input type="password" id="newpassword" name="newpassword" required>
-		<br>
+		<br> <br>
 		<label for="fname">Ονομα:</label><br>
   		<input type="text" id="fname" name="fname" required><br>
- 		<label for="lname">Επιθετο:</label><br>
+ 		<br>
+		<label for="lname">Επιθετο:</label><br>
   		<input type="text" id="lname" name="lname" required> <br>
+		<br>
 		<label for="email">email:</label><br>
 		<input type="text" id="email" name="email" required><br>
+		<br>
 		<label for="phone">Κινητό:</label><br>
-		<input type="text" id="phone" name="phone" required><br><br><br>
+		<input type="text" id="phone" name="phone" required><br><br>
+		<br>
+		<label for="cars">Επιλέξτε Ιδιότητα:</label>
+		<select name="cars" id="cars">
+			<option value="teacher">Εκπαιδευτικος</option>
+			<option value="student">Μαθητής</option>
+		</select><br><br>
 		<input type="submit" value="Sign Up">
+		<br><br><p>Επιστροφη στην αρχικη <a href="{{ url_for('index') }}"> σελίδα </a></p>
 	</form>
+
+    </div>
 
 	<script>
 		function validateForm() {
