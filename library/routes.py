@@ -37,6 +37,7 @@ def login():
         # Get the entered username and password from the form
         username = form.username.data
         password = form.password.data
+        school = session["selected_school"]
         
         # Query the database to validate the user's credentials
         cur = mysql.connection.cursor()
@@ -62,6 +63,7 @@ def login():
 @app.route('/dashboard')
 def dashboard():
     # Check if the user is authenticated and retrieve their information from the database
+    """
     if 'user_id' in session:
         user_id = session['user_id']
         
@@ -74,6 +76,6 @@ def dashboard():
         if user:
             # User exists, render the template for the dashboard page
             return render_template('dashboard.html', user=user)
-    
+    """
     # User is not authenticated, redirect to the login page
-    return redirect(url_for('login'))
+    return render_template("hello.html")
