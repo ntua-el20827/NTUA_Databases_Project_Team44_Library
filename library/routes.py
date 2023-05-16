@@ -15,7 +15,7 @@ def index():
     # Execute the query to get a list of all schools from the database
     cur = mysql.connection.cursor()
     cur.execute(query)
-    schools = cur.fetchall()
+    schools = cur.fetchall() # με την fetchall() πιάνω όλα όσα ηρθαν απο το execute που έγινε!!
     cur.close()
     
     # Render the template for the first page

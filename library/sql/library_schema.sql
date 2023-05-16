@@ -42,7 +42,8 @@ CREATE TABLE lib_user(
     school_id INT UNSIGNED NOT NULL,
     role_name ENUM('student', 'teacher', 'admin', 'super_admin') NOT NULL,
     user_email VARCHAR(45) NOT NULL, -- new ->george
-    user_fullname VARCHAR(45) NOT NULL, -- new ->george
+    user_firstname VARCHAR(45) NOT NULL, -- new ->george
+    user_lastname VARCHAR(45) NOT NULL, -- new ->george
     -- user_date_of_birth -- new ->george // δεν εχει συμπληρωθεί πλήρωνς
     last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id),
