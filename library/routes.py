@@ -7,6 +7,7 @@ from library.forms import *
 # Route for the first page
 @app.route('/')
 def index():
+    return render_template("hello.html")
     if request.method == "POST":
         selected_school = request.form["selected_school"]
         session["selected_school"] = selected_school
