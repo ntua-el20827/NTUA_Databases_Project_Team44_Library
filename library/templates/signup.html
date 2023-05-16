@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>User Sign-up</title>
+	<script>
+		function signup() {
+			var username = document.getElementById("newusername").value;
+			var password = document.getElementById("newpassword").value;
+
+			
+			if (username === "admin") {
+				alert("That username is already taken. Please choose a different username.");
+				return;
+			}
+
+			
+			localStorage.setItem("username", username);
+			localStorage.setItem("password", password);
+
+			alert("Account created successfully! Please login to continue.");
+			window.location.replace("login.html");
+		}
+	</script>
+</head>
+<body>
+	<h1>Εγγραφη Χρηστη</h1>
+	<form>
+		<label for="newusername">Username:</label> <br>
+		<input type="text" id="newusername" name="newusername" required>
+		<br>
+		<label for="newpassword">Κωδικός:</label> <br>
+		<input type="password" id="newpassword" name="newpassword" required>
+		<br>
+		
+		<label for="fname">Ονομα:</label><br>
+  		<input type="text" id="fname" name="fname" required><br>
+ 		<label for="lname">Επιθετο:</label><br>
+  		<input type="text" id="lname" name="lname" required> <br>
+		<label for="email">email:</label><br>
+		<input type="text" id="email" name="email" email><br>
+		<label for="phone">Κινητό:</label><br>
+		<input type="text" id="phone" name="phone" phone><br><br><br>
+		<input type="button" value="Sign Up" onclick="signup()">
+		
+
+	</form>
+</body>
+</html>
