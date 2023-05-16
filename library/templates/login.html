@@ -5,19 +5,24 @@
 	
 	<script>
 		function login() {
-			var username = document.getElementById("username").value;
-			var password = document.getElementById("password").value;
+    		var username = document.getElementById("username").value;
+    		var password = document.getElementById("password").value;
+    		var queryString = window.location.search;
+    		var urlParams = new URLSearchParams(queryString);
+    		var schoolId = urlParams.get('school_id');
 
-			// Check if the username and password are correct
-			if (username === "admin" && password === "password") {
-				// Redirect to the welcome page and display a welcome message
-				window.location.replace("welcome.html");
-			} else {
-				// Display an error message and reload the page
-				alert("Invalid username or password. Please try again.");
-				location.reload();
-			}
-		}
+    
+    		if (username === "admin" && password === "password") {
+        
+        	var schoolPage = "school" + schoolId + ".html";
+        	window.location.replace(schoolPage);
+   			} else {
+        
+        	alert("Invalid username or password. Please try again.");
+        	location.reload();
+    		}
+}
+		
 	</script>
 	<style>
 		 
