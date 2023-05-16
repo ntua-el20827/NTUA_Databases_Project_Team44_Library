@@ -7,19 +7,26 @@ from library.forms import *
 # Route for the first page
 @app.route('/')
 def index():
-    # Read the query from queries.sql
-    with open('/home/george/Workshop/uni/dblab/project/library/sql/queries.sql', 'r') as file:
-        queries = file.read().split(';')
-    query = queries[0]
-    query = "SELECT * from school"
-    # Execute the query to get a list of all schools from the database
-    cur = mysql.connection.cursor()
-    cur.execute(query)
-    schools = cur.fetchall() # με την fetchall() πιάνω όλα όσα ηρθαν απο το execute που έγινε!!
-    cur.close()
-    
-    # Render the template for the first page
-    return render_template('index.html', schools=schools)
+    if request.method == "POST":
+        selected_school = request.form["selected_school"]
+        session["selected_school"] = selected_school
+        return render_template("login.html")
+    else:
+        # Read the query from queries.sql
+        with open('/home/george/Workshop/uni/dblab/project/library/sql/queries.sql', 'r') as file:
+            queries = file.read().split(';')
+        query = queries[0]
+        query = "SELECT school_name from school"
+        # Execute the query to get a list of all schools from the database
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        schools = cur.fetchall() # με την fetchall() πιάνω όλα όσα ηρθαν απο το execute που έγινε!!
+        cur.close()
+        
+        # Render the template for the first page
+        return render_template('index.html', schools=schools)
+
+#Route for taking school
 
 # Route for the login page
 @app.route('/login', methods=['GET', 'POST'])
