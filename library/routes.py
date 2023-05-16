@@ -7,19 +7,27 @@ from library.forms import *
 # Route for the first page
 @app.route('/')
 def index():
-    # Read the query from queries.sql
-    with open('/home/george/Workshop/uni/dblab/project/library/sql/queries.sql', 'r') as file:
-        queries = file.read().split(';')
-    query = queries[0]
-    query = "SELECT * from school"
-    # Execute the query to get a list of all schools from the database
-    cur = mysql.connection.cursor()
-    cur.execute(query)
-    schools = cur.fetchall()
-    cur.close()
-    
-    # Render the template for the first page
-    return render_template('index.html', schools=schools)
+    return render_template("hello.html")
+    if request.method == "POST":
+        selected_school = request.form["selected_school"]
+        session["selected_school"] = selected_school
+        return render_template("login.html")
+    else:
+        # Read the query from queries.sql
+        with open('/home/george/Workshop/uni/dblab/project/library/sql/queries.sql', 'r') as file:
+            queries = file.read().split(';')
+        query = queries[0]
+        query = "SELECT school_name from school"
+        # Execute the query to get a list of all schools from the database
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        schools = cur.fetchall() # με την fetchall() πιάνω όλα όσα ηρθαν απο το execute που έγινε!!
+        cur.close()
+        
+        # Render the template for the first page
+        return render_template('index.html', schools=schools)
+
+#Route for taking school
 
 # Route for the login page
 @app.route('/login', methods=['GET', 'POST'])
@@ -30,6 +38,7 @@ def login():
         # Get the entered username and password from the form
         username = form.username.data
         password = form.password.data
+        school = session["selected_school"]
         
         # Query the database to validate the user's credentials
         cur = mysql.connection.cursor()
@@ -55,6 +64,7 @@ def login():
 @app.route('/dashboard')
 def dashboard():
     # Check if the user is authenticated and retrieve their information from the database
+    """
     if 'user_id' in session:
         user_id = session['user_id']
         
@@ -67,6 +77,6 @@ def dashboard():
         if user:
             # User exists, render the template for the dashboard page
             return render_template('dashboard.html', user=user)
-    
+    """
     # User is not authenticated, redirect to the login page
-    return redirect(url_for('login'))
+    return render_template("hello.html")

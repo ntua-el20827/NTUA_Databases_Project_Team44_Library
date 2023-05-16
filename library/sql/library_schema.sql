@@ -42,7 +42,8 @@ CREATE TABLE lib_user(
     school_id INT UNSIGNED NOT NULL,
     role_name ENUM('student', 'teacher', 'admin', 'super_admin') NOT NULL,
     user_email VARCHAR(45) NOT NULL, -- new ->george
-    user_fullname VARCHAR(45) NOT NULL, -- new ->george
+    user_firstname VARCHAR(45) NOT NULL, -- new ->george
+    user_lastname VARCHAR(45) NOT NULL, -- new ->george
     -- user_date_of_birth -- new ->george // δεν εχει συμπληρωθεί πλήρωνς
     last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id),
@@ -149,7 +150,7 @@ CREATE TABLE review (
 --- Triggers
 ---
 
----Ensure that our db has only one superadmin
+/* ---Ensure that our db has only one superadmin
 CREATE TRIGGER trg_lib_user_super_admin
 BEFORE INSERT OR UPDATE ON lib_user
 FOR EACH ROW
@@ -171,4 +172,4 @@ BEGIN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Each school can have only one admin in the lib_user table';
         END IF;
     END IF;
-END;
+END; */
