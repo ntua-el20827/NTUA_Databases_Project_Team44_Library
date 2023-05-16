@@ -1,49 +1,53 @@
-from flask import render_template, request, redirect, url_for, app, session
+from flask import render_template, request, redirect, url_for, session, flash
 from flask_mysqldb import MySQL
-from library import app,mysql
+from library import app,mydb
 from library.forms import *
 
 
 # Route for the first page
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template("hello.html")
     if request.method == "POST":
-        selected_school = request.form["selected_school"]
-        session["selected_school"] = selected_school
-        return render_template("login.html")
+        print("HI")
+        school_name = request.form['school_name']
+        session['school_name'] = school_name
+        #print(school_name)
+        return redirect(url_for('login'))
     else:
         # Read the query from queries.sql
-        with open('/home/george/Workshop/uni/dblab/project/library/sql/queries.sql', 'r') as file:
-            queries = file.read().split(';')
-        query = queries[0]
+        #with open('/home/george/Workshop/uni/dblab/project/library/sql/queries.sql', 'r') as file:
+         #   queries = file.read().split(';')
+        #query = queries[0]
         query = "SELECT school_name from school"
         # Execute the query to get a list of all schools from the database
-        cur = mysql.connection.cursor()
+        cur = mydb.connection.cursor()
         cur.execute(query)
         schools = cur.fetchall() # με την fetchall() πιάνω όλα όσα ηρθαν απο το execute που έγινε!!
         cur.close()
-        
+        #schools.strip("(),")
+        print(schools)
+        first_values = [t[0] for t in schools]
         # Render the template for the first page
-        return render_template('index.html', schools=schools)
+        return render_template('index.html',schools=first_values)
 
 #Route for taking school
 
 # Route for the login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
-    
-    if form.validate_on_submit():
+    #return render_template("hello.html")
+    if request.method == "POST":
         # Get the entered username and password from the form
-        username = form.username.data
-        password = form.password.data
-        school = session["selected_school"]
+        username = request.form['username']
+        password = request.form['password']
+        school_name = session["school_name"]
+        session['username'] = username
+        session['password'] = password
         
         # Query the database to validate the user's credentials
-        cur = mysql.connection.cursor()
-        query = "SELECT * FROM users WHERE username = %s AND password = %s AND school = %s"
-        cur.execute(query, (username, password, session['selected_school']))
+        cur = mydb.connection.cursor()
+        query = "SELECT * FROM lib_user WHERE user_name = %s AND user_pwd = %s"
+        cur.execute(query, (username, password))
         user = cur.fetchone()
         cur.close()
         
@@ -54,10 +58,10 @@ def login():
         else:
             # Invalid credentials, show an error message
             error_message = "Invalid username or password"
-            return render_template('login.html', form=form, error_message=error_message)
+            return render_template('login.html', error_message=error_message)
     
     # Render the template for the login page with the form
-    return render_template('login.html', form=form)
+    return render_template('login.html')
 
 
 # Route for the dashboard page
@@ -80,3 +84,22 @@ def dashboard():
     """
     # User is not authenticated, redirect to the login page
     return render_template("hello.html")
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == "POST":
+        newusername = request.form['newusername']
+        newpassword = request.form['newpassword']
+        fname = request.form['fname']
+        lname = request.form['lname']
+        email = request.form['email']
+        phone = request.form['phone']
+        cur = mydb.connection.cursor()
+        query = "INSERT INTO users_applications (username, password, first_name, last_name, email, phone) VALUES (%s, %s, %s, %s, %s, %s)"
+        #values = (newusername, newpassword, fname, lname, email, phone)
+        #cur.execute(query, values)
+        mydb.connection.commit()
+        cur.close()
+        return redirect(url_for('login'))
+    else:
+        return render_template("signup.html")

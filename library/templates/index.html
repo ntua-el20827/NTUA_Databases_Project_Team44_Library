@@ -1,19 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Schools List</title>
-</head>
-<body>
-    <h1>List of Schools</h1>
-    <ul>
-        {% for school in schools %}
-        <li>{{ school.name }} <a href="{{ url_for('login', school_id=school.id) }}">Choose</a></li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
-<!DOCTYPE html> 
-<html>
+
 	<head> 
 		<meta charset ="UTF-8"> 
 		<meta name = "description" content="This is an awesome website"> 
@@ -66,10 +53,15 @@
 			<div>
               <ul>
             	{% for school in schools %}
-                    <li><a href="{{ url_for('login') }}?school_id={{ school.id }}">{{ school }}</a></li>
+				<li>
+					<form action="{{ url_for('index') }}" method="POST">
+						<input type="hidden" name="school_name" value="{{ school_name }}">
+						<button type="submit">{{ school }}</button>
+					</form></li>
                 {% endfor %}
               </ul>
 			</div>
 	
      </body>
-     
+	 
+<html>   

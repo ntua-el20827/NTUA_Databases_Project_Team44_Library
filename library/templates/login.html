@@ -2,59 +2,27 @@
 <html>
 <head>
 	<title>User Login</title>
-	
-	<script>
-		function login() {
-    		var username = document.getElementById("username").value;
-    		var password = document.getElementById("password").value;
-    		var queryString = window.location.search;
-    		var urlParams = new URLSearchParams(queryString);
-    		var schoolId = urlParams.get('school_id');
-
-    
-    		if (username === "admin" && password === "password") {
-        
-        	var schoolPage = "school" + schoolId + ".html";
-        	window.location.replace(schoolPage);
-   			} else {
-        
-        	alert("Invalid username or password. Please try again.");
-        	location.reload();
-    		}
-}
-		
-	</script>
 	<style>
-		 
-		.search login[type=text]{
-              width:300px;
-              height:25px;
-              border-radius:25px;
-              
-   		 }
-		.login{
-       	  margin:20px;
-        	
-    		}
-		
-		
-		</style>
+		.login {
+			margin: 20px;
+		}
+	</style>
 </head>
 <body>
 	<h1>Σύνδεση Στην βιβλιοθήκη Του σχολείου Σας:</h1>
 	<hr>
 	<br>
 	<div class="login">
-	<form>
-		<label for="username">Ονομα Χρηστη:</label> <br>
-		<input type="text" id="username" name="username" required>
-		<br>
-		<label for="password">Κωδικος:</label> <br>
-		<input type="password" id="password" name="password" required>
-		<br> <br>
-		<input type="button" value="Login" onclick="login()">
-	</form>
-	<p>Δεν εχετε λογαριασμό; <a href="signup.html">Εγγραφειτε! </a> </p>
-	<div>
+		<form method="POST" action="/login">
+			<label for="username">Ονομα Χρηστη:</label> <br>
+			<input type="text" id="username" name="username" required>
+			<br>
+			<label for="password">Κωδικος:</label> <br>
+			<input type="password" id="password" name="password" required>
+			<br> <br>
+			<input type="submit" value="Login">
+		</form>
+		<p>Δεν εχετε λογαριασμό; <a href="{{ url_for('signup') }}">Εγγραφειτε! </a> </p>
+	</div>
 </body>
 </html>
