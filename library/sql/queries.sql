@@ -76,3 +76,17 @@ INNER JOIN (
 ) AS max_books ON book_author.book_id = max_books.book_id
 GROUP BY book_author.author
 HAVING (max_books.num_books - COUNT(*)) >= 5;
+
+---3.2 Αdmin Queries
+---3.2.1 Present all books by title, author (search criteria: book title/book theme/book author/number of books)
+SELECT book.title, GROUP_CONCAT(DISTINCT book_author.author SEPARATOR ', ') AS authors, GROUP_CONCAT(DISTINCT book_theme.theme SEPARATOR ', ') AS themes, book.number_of_books 
+FROM book 
+LEFT JOIN book_author ON book.book_id = book_author.book_id 
+LEFT JOIN book_theme ON book.book_id = book_theme.book_id 
+WHERE book.title LIKE '%search_criteria%' 
+OR book_author.author LIKE '%search_criteria%' 
+OR book_theme.theme LIKE '%search_criteria%' 
+GROUP BY book.book_id 
+ORDER BY book.title ASC;
+
+---3.2.2 Find all borrowers who have at least one book and they have delayed the return

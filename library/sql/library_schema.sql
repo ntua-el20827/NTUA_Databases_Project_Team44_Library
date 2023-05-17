@@ -65,6 +65,7 @@ CREATE TABLE book (
   number_of_available_books INT UNSIGNED NOT NULL,
   book_image VARCHAR(256) NOT NULL, 
   book_language VARCHAR(45),
+  borrow_count INT NOT NULL DEFAULT 0, --- new->baba
   user_id INT UNSIGNED NOT NULL,
   school_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -165,6 +166,20 @@ CREATE TABLE review (
 ---
 --- Views
 ---
+
+/*---All schools with their names
+CREATE VIEW all_schools AS
+SELECT school_id, school_name
+FROM school;
+
+---All the books with image, title, name, review
+CREATE VIEW all_books_with_info AS
+SELECT b.book_image, b.title, CONCAT(u.user_firstname, ' ', u.user_lastname) AS name, r.review_text AS review
+FROM book b
+INNER JOIN lib_user u ON b.user_id = u.user_id
+LEFT JOIN review r ON b.book_id = r.book_id;
+*/
+
 
 
 ---
