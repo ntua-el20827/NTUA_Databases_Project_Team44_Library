@@ -8,6 +8,13 @@ VALUES (1234, 'george123', 1, 'student', 'george@example.com', 'George', 'Smith'
 INSERT INTO lib_user (user_pwd, user_name, school_id, role_name, user_email, user_firstname, user_lastname)
 VALUES (9876, 'emma456', 1, 'teacher', 'emma@example.com', 'Emma', 'Johnson');
 --books
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, user_id, school_id)
+VALUES
+  ('Book 1', 'Publisher 1', 200, 123456789, 'Summary 1', 5, 5, 'https://example.com/image1.jpg', 'English', 1, 1),
+  ('Book 2', 'Publisher 2', 150, 987654321, 'Summary 2', 3, 3, 'https://example.com/image2.jpg', 'English', 1, 1),
+  ('Book 3', 'Publisher 3', 180, 246813579, 'Summary 3', 2, 2, 'https://example.com/image3.jpg', 'English', 1, 1),
+  ('Book 4', 'Publisher 4', 220, 135792468, 'Summary 4', 7, 7, 'https://example.com/image4.jpg', 'English', 1, 1),
+  ('Book 5', 'Publisher 5', 300, 987123456, 'Summary 5', 4, 4, 'https://example.com/image5.jpg', 'English', 1, 1);
 
 --reviews
 
