@@ -1,8 +1,9 @@
 
 
 html {
-  background: rgb(117,19,42);
-  background: linear-gradient(90deg, rgba(117,19,42,1) 14%, rgba(207,218,20,1) 100%, rgba(0,212,255,1) 100%);}
+  background: rgb(188,220,224);
+background: linear-gradient(90deg, rgba(188,220,224,1) 0%, rgba(219,231,96,1) 29%, rgba(219,231,96,1) 61%, rgba(188,220,224,1) 100%);
+}
   * {
     box-sizing: border-box;
   }
@@ -13,8 +14,8 @@ body {
 
 /* Style the header */
 .header {
-  background: rgb(117,19,42);
-background: linear-gradient(90deg, rgba(117,19,42,1) 14%, rgba(207,218,20,1) 100%, rgba(0,212,255,1) 100%);
+  background: rgb(188,220,224);
+  background: linear-gradient(90deg, rgba(188,220,224,1) 0%, rgba(219,231,96,1) 29%, rgba(219,231,96,1) 61%, rgba(188,220,224,1) 100%);
   padding: 20px;
   text-align: center;
 }
