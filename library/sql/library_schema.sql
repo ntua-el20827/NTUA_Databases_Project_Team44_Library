@@ -221,3 +221,16 @@ BEGIN
     SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Each user can only submit one review per book title';
   END IF;
 END;*/
+
+---
+---Indexes
+---
+/*
+CREATE INDEX idx_book_status_status ON book_status (status);
+CREATE INDEX idx_book_theme_theme ON book_theme (theme);
+CREATE INDEX idx_book_author_author ON book_author (author);
+CREATE INDEX idx_book_status_user_id ON book_status (user_id);
+CREATE INDEX idx_book_status_approval_date ON book_status (approval_date);
+CREATE INDEX idx_lib_user_name ON lib_user (user_firstname, user_lastname);
+CREATE INDEX idx_book_title ON book (title);
+*/
