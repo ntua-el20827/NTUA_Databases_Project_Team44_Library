@@ -55,6 +55,7 @@
     
     .book {
       width: 20%;
+      
       text-align: center;
       margin-bottom: 20px;
     }
@@ -66,16 +67,16 @@
       </style>
     </head>
     <body>
+      <div class="row">
       {% for book in books %}
-        <div class="row">
           <div class="book">
             <a href="{{ book.link }}">
-              <img src="cat.jpg" alt="book.title">
+              <img src={{book[2]}} alt="fadsbook.titlefdasfasd">
               <h3>{{ book[0] }}</h3>
             </a>
-          </div>
-        </div>
+          </div>  
       {% endfor %}
+    </div>
     </body>
     </html>
   

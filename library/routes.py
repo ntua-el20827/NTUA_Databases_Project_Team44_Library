@@ -128,8 +128,9 @@ def school():
         cur.execute(query,(school_id,))
         books = cur.fetchall()
         cur.close()
-        print(books)
-        return render_template('schooltry2.html',books = books ) 
+        print(books[0][2])
+        cat_image = 'cat.jpg'
+        return render_template('schooltry2.html',books = books,cat_image=cat_image ) 
 
 
 """ @app.route('/superadmin', methods=['GET', 'POST'])
