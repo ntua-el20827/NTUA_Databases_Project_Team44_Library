@@ -79,6 +79,12 @@ def dashboard():
     if 'user_id' in session:
         user_id = session['user_id']
         cur = mydb.connection.cursor()
+        query = "SELECT school_id FROM lib_user WHERE user_id = %s"
+        cur.execute(query, (user_id,))
+        school_id_tuple = cur.fetchone()
+        school_id = school_id_tuple[0] if school_id_tuple else None
+        session['school_id'] = school_id
+        print(school_id)
         query = "SELECT * FROM lib_user WHERE user_id = %s"
         cur.execute(query, (user_id,))
         user = cur.fetchone()
@@ -86,7 +92,7 @@ def dashboard():
         
         if user:
             # User exists, render the template for the dashboard page
-            return render_template("hello.html")
+            return redirect(url_for('school'))
 
     # User is not authenticated, redirect to the login page
     return render_template("hello.html")
@@ -118,11 +124,12 @@ def school():
     else:
         cur = mydb.connection.cursor()
         school_id = session['school_id']
-        query = "SELECT title, ISBN, book_image FROM book WHERE shcool_id = %s" 
-        cur.execute(query,school_id)
+        query = "SELECT title, ISBN, book_image FROM book WHERE school_id = %s" 
+        cur.execute(query,(school_id,))
         books = cur.fetchall()
         cur.close()
-        return render_template('school.html',books = books ) 
+        print(books)
+        return render_template('schooltry2.html',books = books ) 
 
 
 """ @app.route('/superadmin', methods=['GET', 'POST'])

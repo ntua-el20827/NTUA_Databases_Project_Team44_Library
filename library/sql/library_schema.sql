@@ -44,6 +44,8 @@ CREATE TABLE lib_user(
     user_email VARCHAR(45) NOT NULL, -- new ->george
     user_firstname VARCHAR(45) NOT NULL, -- new ->george
     user_lastname VARCHAR(45) NOT NULL, -- new ->george
+    user_date_of_birth BIGINT UNSIGNED NOT NULL, ---new ->baba BIGINT so that it can store Unix timestamps, which are 64-bit integers
+    -- user_date_of_birth -- new ->george // δεν εχει συμπληρωθεί πλήρωνς
     last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id),
     KEY fk_user_school_id (school_id),
@@ -63,8 +65,9 @@ CREATE TABLE book (
   number_of_available_books INT UNSIGNED NOT NULL,
   book_image VARCHAR(256) NOT NULL, 
   book_language VARCHAR(45),
+  borrow_count INT NOT NULL DEFAULT 0, --- new->baba
   user_id INT UNSIGNED NOT NULL,
-  school_id INT UNSIGNED NOT NULL, 
+  school_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (book_id),
   KEY fk_book_user_id (user_id),
@@ -95,7 +98,7 @@ CREATE TABLE reservation (
 -- τους δανεισμούς. Το table reservation ισως να μην χρειάζετια και να μπορούμε να το κάνουμε με το view!
 
 --- new -> baba suggestion for reservation/borrowing
-/* CREATE TABLE book_status (
+CREATE TABLE book_status (
   book_status_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   book_id INT UNSIGNED NOT NULL,
   user_id INT UNSIGNED NOT NULL,
@@ -113,7 +116,7 @@ CREATE TABLE reservation (
   CONSTRAINT fk_book_status_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
- */
+
 
 -- Table 'book_keywords'
 CREATE TABLE book_keywords (
