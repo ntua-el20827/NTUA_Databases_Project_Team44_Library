@@ -89,4 +89,27 @@ OR book_theme.theme LIKE '%search_criteria%'
 GROUP BY book.book_id 
 ORDER BY book.title ASC;
 
----3.2.2 Find all borrowers who have at least one book and they have delayed the return
+---3.2.2 Find all borrowers who have at their pocession at least one book and they have delayed the return
+
+
+---3.2.3 Average of reviews by borrower and book theme(search criteria: user/book theme)
+SELECT CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bt.theme, AVG(r.rating) AS avg_rating
+FROM lib_user u
+INNER JOIN review r ON u.user_id = r.user_id
+INNER JOIN book b ON r.book_id = b.book_id
+INNER JOIN book_theme bt ON b.book_id = bt.book_id
+GROUP BY u.user_id, bt.theme;
+
+
+---3.3 User Queries
+---3.3.1 All registered books(search criteria: title/book theme/author)
+SELECT b.title, bt.theme, ba.author
+FROM book b
+INNER JOIN book_theme bt ON b.book_id = bt.book_id
+INNER JOIN book_author ba ON b.book_id = ba.book_id;
+
+---3.3.2 List of books that each user has borrowed (we have put user_id,user full name,book_id,book_title)
+SELECT u.user_id, CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bs.book_id, b.title
+FROM lib_user u
+INNER JOIN book_status bs ON u.user_id = bs.user_id
+INNER JOIN book b ON bs.book_id = b.book_id;
