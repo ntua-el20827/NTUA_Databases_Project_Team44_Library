@@ -54,6 +54,7 @@ def login():
         if user:
             # User exists in the database and credentials are valid
             session['user_id'] = user[0]  # Store user ID in session for future use
+            #print(user[0])
             return redirect(url_for('dashboard'))  # Redirect to the dashboard page after successful login
         else:
             # Invalid credentials, show an error message
@@ -68,11 +69,11 @@ def login():
 @app.route('/dashboard')
 def dashboard():
     # Check if the user is authenticated and retrieve their information from the database
-    """
+ 
     if 'user_id' in session:
         user_id = session['user_id']
         
-        cur = mysql.connection.cursor()
+        cur = mydb.connection.cursor()
         query = "SELECT * FROM users WHERE id = %s"
         cur.execute(query, (user_id,))
         user = cur.fetchone()
@@ -81,7 +82,7 @@ def dashboard():
         if user:
             # User exists, render the template for the dashboard page
             return render_template('dashboard.html', user=user)
-    """
+
     # User is not authenticated, redirect to the login page
     return render_template("hello.html")
 
