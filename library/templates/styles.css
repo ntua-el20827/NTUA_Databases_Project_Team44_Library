@@ -1,8 +1,10 @@
 
 
 html {
-  background: rgb(117,19,42);
-  background: linear-gradient(90deg, rgba(117,19,42,1) 14%, rgba(207,218,20,1) 100%, rgba(0,212,255,1) 100%);}
+  background: rgb(238,174,202);
+  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+  
+}
   * {
     box-sizing: border-box;
   }
@@ -13,8 +15,9 @@ body {
 
 /* Style the header */
 .header {
-  background: rgb(117,19,42);
-background: linear-gradient(90deg, rgba(117,19,42,1) 14%, rgba(207,218,20,1) 100%, rgba(0,212,255,1) 100%);
+  background: rgb(238,174,202);
+  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+
   padding: 20px;
   text-align: center;
 }
@@ -30,7 +33,7 @@ background: linear-gradient(90deg, rgba(117,19,42,1) 14%, rgba(207,218,20,1) 100
   float: left;
   display: block;
   background-color: rgb(0, 0, 0);
-  color:  rgb(150, 150, 18);
+  color:  rgb(91, 186, 221);
    text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -63,7 +66,7 @@ background: linear-gradient(90deg, rgba(117,19,42,1) 14%, rgba(207,218,20,1) 100
 .school_list{
 	margin: 20px;
     background-color: black;
-  color:  rgb(150, 150, 18);
+  color:  rgb(91, 186, 221);
     width: 400px;
     border-radius:30px
 }
@@ -72,8 +75,11 @@ background: linear-gradient(90deg, rgba(117,19,42,1) 14%, rgba(207,218,20,1) 100
 }
 
 .login {
-  background-color: black;
-  color:  rgb(150, 150, 18);
+  background: rgb(238,174,202);
+  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+ 
+  color:  rgb(18, 11, 19);
+  font-size: large;
   display: block;
   text-align: center;
   width: 500px;
@@ -85,8 +91,9 @@ background: linear-gradient(90deg, rgba(117,19,42,1) 14%, rgba(207,218,20,1) 100
   margin: auto;
   }
 .registration{
-  background-color: black;
-  color:  rgb(150, 150, 18);
+  background: rgb(238,174,202);
+  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+color:  rgb(18, 11, 19);
   display: block;
   text-align: center;
   width: 500px;
@@ -99,8 +106,9 @@ background: linear-gradient(90deg, rgba(117,19,42,1) 14%, rgba(207,218,20,1) 100
 
 }
 .conctact{
-  background-color: black;
-  color:  rgb(150, 150, 18);
+  background: rgb(238,174,202);
+  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+  color:  rgb(18, 11, 19);
   display: block;
   text-align: center;
   width: 500px;
