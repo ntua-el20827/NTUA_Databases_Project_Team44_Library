@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Books Webpage</title>
+  <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
+  <style>
+    
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-left: 50px;
+      margin-right: 50px;
+      margin-top: 50px;
+    }
+    
+    .book {
+      width: 20%;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .book img {
+      width: 100%;
+      max-height: 200px;
+      margin-bottom: 1px;;
+    }
+  </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Καλώς Ήλθατε στην βιβλιοθήκη του Σχολείου σας </h1>
+    </div>
+      
+    <div class="topnav">
+        
+                  <a href="index.html" > Home </a> |
+                  <a href="page2.html"> Εγγραφη Βιβλιοθηκης </a> |
+                  <a href="#" > Το προφιλ μου </a> |
+                  <a href="contact.html" > Επικοινωνια με τον Υπεύθυνο Βιβλιοθήκης </a> |
+    </div>
+    <br>
+    <div class ="welcome">
+    <p > <h3>Μπορειτε να αναζητήσετε παρακάτω το σχολείο στο οποίο ανήκετε. Αφού το βρείτε, πατήστε στο σχολείο, όπου και θα μπορέσετε να κάνετε αίτηση για έγγραφη.</h3> 
+    </p>
+    
+    <h2> Σχολεία: </h2>
+  <div class="row">
+    <div class="book">
+      <a href="book1.html">
+        <img src="cat.jpg" alt="Book 1">
+        <h4>Book 1</h4>
+        <h4>Book 1</h4>
+      </a>
+    </div>
+    <div class="book">
+      <a href="book2.html">
+        <img src="cat.jpg" alt="Book 2">
+        <h3>Book 2</h3>
+      </a>
+    </div>
+    <div class="book">
+      <a href="book3.html">
+        <img src="cat.jpg" alt="Book 3">
+        <h3>Book 3</h3>
+      </a>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="book">
+      <a href="book4.html">
+        <img src="cat.jpg" alt="Book 4">
+        <h3>Book 4</h3>
+      </a>
+    </div>
+    <div class="book">
+      <a href="book5.html">
+        <img src="cat.jpg" alt="Book 5">
+        <h3>Book 5</h3>
+      </a>
+    </div>
+    <div class="book">
+      <a href="book6.html">
+        <img src="cat.jpg" alt="Book 6">
+        <h3>Book 6</h3>
+      </a>
+    </div>
+  </div>
+  
+  <!-- Add more rows with books as needed -->
+  
+</body>
+</html>
