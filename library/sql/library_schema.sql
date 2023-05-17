@@ -193,4 +193,16 @@ BEGIN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Each school can have only one admin in the lib_user table';
         END IF;
     END IF;
-END; */
+END; 
+
+--- Each user can only submit one review per book title
+CREATE TRIGGER trg_review_unique_title
+BEFORE INSERT ON review
+FOR EACH ROW
+BEGIN
+  DECLARE cnt INT;
+  SELECT COUNT(*) INTO cnt FROM review WHERE user_id = NEW.user_id AND book_title = NEW.book_title;
+  IF cnt > 0 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Each user can only submit one review per book title';
+  END IF;
+END;*/
