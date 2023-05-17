@@ -11,13 +11,14 @@ def index():
         print("HI")
         school_name = request.form['school_name']
         session['school_name'] = school_name
+        #print(school_name)
         #query για να πάρω το school_id
-        query = "SELECT school_id from school where shcool_name = %s"
-        cur = mydb.connection.cursor()
-        cur.execute(query,school_name)
-        school_id = cur.fetchone() # με την fetchall() πιάνω όλα όσα ηρθαν απο το execute που έγινε!!
-        cur.close()
-        session['shcool_id'] = school_id
+        #query = "SELECT school_id from school where shcool_name = %s"
+        #cur = mydb.connection.cursor()
+        #cur.execute(query,school_name)
+        #school_id = cur.fetchone() # με την fetchall() πιάνω όλα όσα ηρθαν απο το execute που έγινε!!
+        #cur.close()
+        #session['shcool_id'] = school_id
         return redirect(url_for('login'))
     else:
         # Read the query from queries.sql
@@ -47,7 +48,7 @@ def login():
         password = request.form['password']
         session['username'] = username
         session['password'] = password
-        school_id = session['school_id']
+        #school_id = session['school_id']
         
         # Query the database to validate the user's credentials
         cur = mydb.connection.cursor()
@@ -77,16 +78,15 @@ def dashboard():
  
     if 'user_id' in session:
         user_id = session['user_id']
-        
         cur = mydb.connection.cursor()
-        query = "SELECT * FROM users WHERE id = %s"
+        query = "SELECT * FROM lib_user WHERE user_id = %s"
         cur.execute(query, (user_id,))
         user = cur.fetchone()
         cur.close()
         
         if user:
             # User exists, render the template for the dashboard page
-            return render_template('dashboard.html', user=user)
+            return render_template("hello.html")
 
     # User is not authenticated, redirect to the login page
     return render_template("hello.html")
