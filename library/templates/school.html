@@ -2,29 +2,27 @@
 <html>
 <head>
     <title>School Page</title>
+    <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
 </head>
 <body>
-    <h1 id="schoolName">School Name</h1>
-    <p id="schoolDescription">School Description</p>
-
-    <script>
-        
-        var queryString = window.location.search;
-        var urlParams = new URLSearchParams(queryString);
-        var schoolId = urlParams.get('school_id');
-
+    
+    <div class="header">
+        <h1>Καλώς Ήλθατε στην βιβλιοθήκη του Σχολείου σας </h1>
+    </div>
       
-        if (schoolId === '1') {
-            document.getElementById('schoolName').innerText = 'School 1';
-            document.getElementById('schoolDescription').innerText = 'Description for School 1';
-        } else if (schoolId === '2') {
-            document.getElementById('schoolName').innerText = 'School 2';
-            document.getElementById('schoolDescription').innerText = 'Description for School 2';
-        } else if (schoolId === '3') {
-            document.getElementById('schoolName').innerText = 'School 3';
-            document.getElementById('schoolDescription').innerText = 'Description for School 3';
-        }
+    <div class="topnav">
         
-    </script>
+                  <a href="index.html" > Home </a> |
+                  <a href="page2.html"> Εγγραφη Βιβλιοθηκης </a> |
+                  <a href="#" > Το προφιλ μου </a> |
+                  <a href="contact.html" > Επικοινωνια με τον Υπεύθυνο Βιβλιοθήκης </a> |
+    </div>
+    <br>
+    <div class ="welcome">
+    <p > <h3>Μπορειτε να αναζητήσετε παρακάτω το σχολείο στο οποίο ανήκετε. Αφού το βρείτε, πατήστε στο σχολείο, όπου και θα μπορέσετε να κάνετε αίτηση για έγγραφη.</h3> 
+    </p>
+    
+    <h2> Σχολεία: </h2>
+    
 </body>
 </html>
