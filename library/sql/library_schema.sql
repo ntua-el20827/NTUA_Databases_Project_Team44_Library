@@ -103,7 +103,7 @@ CREATE TABLE book_status (
   book_id INT UNSIGNED NOT NULL,
   user_id INT UNSIGNED NOT NULL,
   school_id INT UNSIGNED NOT NULL,
-  status ENUM('borrowed', 'reserved') NOT NULL,
+  status ENUM('borrowed', 'reserved') NOT NULL, -- Αρχικά όμως τι θα είναι?
   request_date DATE NOT NULL,
   approval_date DATE,
   return_date DATE,

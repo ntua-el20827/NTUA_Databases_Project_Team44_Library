@@ -11,7 +11,13 @@ def index():
         print("HI")
         school_name = request.form['school_name']
         session['school_name'] = school_name
-        #print(school_name)
+        #query για να πάρω το school_id
+        query = "SELECT school_id from school where shcool_name = %s"
+        cur = mydb.connection.cursor()
+        cur.execute(query,school_name)
+        school_id = cur.fetchone() # με την fetchall() πιάνω όλα όσα ηρθαν απο το execute που έγινε!!
+        cur.close()
+        session['shcool_id'] = school_id
         return redirect(url_for('login'))
     else:
         # Read the query from queries.sql
@@ -30,7 +36,6 @@ def index():
         # Render the template for the first page
         return render_template('index.html',schools=first_values)
 
-#Route for taking school
 
 # Route for the login page
 @app.route('/login', methods=['GET', 'POST'])
@@ -40,9 +45,9 @@ def login():
         # Get the entered username and password from the form
         username = request.form['username']
         password = request.form['password']
-        school_name = session["school_name"]
         session['username'] = username
         session['password'] = password
+        school_id = session['school_id']
         
         # Query the database to validate the user's credentials
         cur = mydb.connection.cursor()
