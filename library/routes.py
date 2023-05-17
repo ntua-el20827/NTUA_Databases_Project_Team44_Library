@@ -109,3 +109,15 @@ def signup():
         return redirect(url_for('login'))
     else:
         return render_template("signup.html")
+    
+""" @app.route('/superadmin', methods=['GET', 'POST'])
+def superadmin():
+
+@app.route('/student', methods=['GET', 'POST'])
+def student():
+
+@app.route('/teacher', methods=['GET', 'POST'])
+def teacher():
+
+@app.route('/schooladmin', methods=['GET', 'POST'])
+def schooladmin(): """

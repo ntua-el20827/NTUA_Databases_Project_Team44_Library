@@ -1,5 +1,3 @@
-SELECT school_name FROM school; --0
-
 ---3.1 Superadmin Queries
 ---3.1.1 List of the total number of borrowings per school  //Κριτήρια Αναζήτησης??
 SELECT school.school_name, COUNT(*) AS num_borrowings
