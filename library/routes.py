@@ -102,14 +102,29 @@ def signup():
         phone = request.form['phone']
         cur = mydb.connection.cursor()
         query = "INSERT INTO users_applications (username, password, first_name, last_name, email, phone) VALUES (%s, %s, %s, %s, %s, %s)"
-        #values = (newusername, newpassword, fname, lname, email, phone)
-        #cur.execute(query, values)
+        values = (newusername, newpassword, fname, lname, email, phone)
+        cur.execute(query, values)
         mydb.connection.commit()
         cur.close()
         return redirect(url_for('login'))
     else:
         return render_template("signup.html")
-    
+
+
+@app.route('/school', methods=['GET', 'POST'])
+def school():
+    if request.method == "POST":
+        print("hi")
+    else:
+        cur = mydb.connection.cursor()
+        school_id = session['school_id']
+        query = "SELECT title, ISBN, book_image FROM book WHERE shcool_id = %s" 
+        cur.execute(query,school_id)
+        books = cur.fetchall()
+        cur.close()
+        return render_template('school.html',books = books ) 
+
+
 """ @app.route('/superadmin', methods=['GET', 'POST'])
 def superadmin():
 
