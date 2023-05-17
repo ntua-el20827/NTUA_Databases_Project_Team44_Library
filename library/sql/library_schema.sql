@@ -44,6 +44,7 @@ CREATE TABLE lib_user(
     user_email VARCHAR(45) NOT NULL, -- new ->george
     user_firstname VARCHAR(45) NOT NULL, -- new ->george
     user_lastname VARCHAR(45) NOT NULL, -- new ->george
+    user_date_of_birth BIGINT UNSIGNED NOT NULL, ---new ->baba BIGINT so that it can store Unix timestamps, which are 64-bit integers
     -- user_date_of_birth -- new ->george // δεν εχει συμπληρωθεί πλήρωνς
     last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id),
@@ -64,6 +65,7 @@ CREATE TABLE book (
   number_of_available_books INT UNSIGNED NOT NULL,
   book_image VARCHAR(256) NOT NULL, 
   book_language VARCHAR(45),
+  borrow_count INT NOT NULL DEFAULT 0, --- new->baba
   user_id INT UNSIGNED NOT NULL,
   school_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -75,7 +77,7 @@ CREATE TABLE book (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --- ΛΕΙΠΕΙ Η ΕΙΚΟΝΑ / ΤΟ SUMMARY ΙΣΩΣ ΝΑ ΘΕΛΕΙ ΜΕΓΑΛΥΤΕΡΟ ΜΕΓΕΘΟΣ
 
--- Table 'reservation'
+/*-- Table 'reservation'
 CREATE TABLE reservation (
   book_id INT UNSIGNED NOT NULL,
   res_date DATE NOT NULL,
@@ -89,11 +91,31 @@ CREATE TABLE reservation (
   KEY fk_reserv_school_id (school_id),
   CONSTRAINT fk_reserv_school_id FOREIGN KEY(school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
---- Ειναι σωστο το primary key?
+--- Ειναι σωστο το primary key?*/
 
 --- > george
 -- Χρειάζεται επειγόντως το table με τους δανεισμούς (many to many) ωστε να κάνουμε store ολους
 -- τους δανεισμούς. Το table reservation ισως να μην χρειάζετια και να μπορούμε να το κάνουμε με το view!
+
+--- new -> baba suggestion for reservation/borrowing
+CREATE TABLE book_status (
+  book_status_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  book_id INT UNSIGNED NOT NULL,
+  user_id INT UNSIGNED NOT NULL,
+  school_id INT UNSIGNED NOT NULL,
+  status ENUM('borrowed', 'reserved') NOT NULL, -- Αρχικά όμως τι θα είναι?
+  request_date DATE NOT NULL,
+  approval_date DATE,
+  return_date DATE,
+  PRIMARY KEY (book_status_id),
+  KEY fk_book_status_book_id (book_id),
+  KEY fk_book_status_user_id (user_id),
+  KEY fk_book_status_school_id (school_id),
+  CONSTRAINT fk_book_status_book_id FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT fk_book_status_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT fk_book_status_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 -- Table 'book_keywords'
@@ -145,6 +167,20 @@ CREATE TABLE review (
 --- Views
 ---
 
+/*---All schools with their names
+CREATE VIEW all_schools AS
+SELECT school_id, school_name
+FROM school;
+
+---All the books with image, title, name, review
+CREATE VIEW all_books_with_info AS
+SELECT b.book_image, b.title, CONCAT(u.user_firstname, ' ', u.user_lastname) AS name, r.review_text AS review
+FROM book b
+INNER JOIN lib_user u ON b.user_id = u.user_id
+LEFT JOIN review r ON b.book_id = r.book_id;
+*/
+
+
 
 ---
 --- Triggers
@@ -172,4 +208,29 @@ BEGIN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Each school can have only one admin in the lib_user table';
         END IF;
     END IF;
-END; */
+END; 
+
+--- Each user can only submit one review per book title
+CREATE TRIGGER trg_review_unique_title
+BEFORE INSERT ON review
+FOR EACH ROW
+BEGIN
+  DECLARE cnt INT;
+  SELECT COUNT(*) INTO cnt FROM review WHERE user_id = NEW.user_id AND book_title = NEW.book_title;
+  IF cnt > 0 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Each user can only submit one review per book title';
+  END IF;
+END;*/
+
+---
+---Indexes
+---
+/*
+CREATE INDEX idx_book_status_status ON book_status (status);
+CREATE INDEX idx_book_theme_theme ON book_theme (theme);
+CREATE INDEX idx_book_author_author ON book_author (author);
+CREATE INDEX idx_book_status_user_id ON book_status (user_id);
+CREATE INDEX idx_book_status_approval_date ON book_status (approval_date);
+CREATE INDEX idx_lib_user_name ON lib_user (user_firstname, user_lastname);
+CREATE INDEX idx_book_title ON book (title);
+*/

@@ -1,9 +1,14 @@
 
 
 html {
+<<<<<<< HEAD
   background: rgb(238,174,202);
   background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
   
+=======
+  background: rgb(188,220,224);
+background: linear-gradient(90deg, rgba(188,220,224,1) 0%, rgba(219,231,96,1) 29%, rgba(219,231,96,1) 61%, rgba(188,220,224,1) 100%);
+>>>>>>> c396b2d952c45454e29ede3dd198fc0dff5f8073
 }
   * {
     box-sizing: border-box;
@@ -15,9 +20,14 @@ body {
 
 /* Style the header */
 .header {
+<<<<<<< HEAD
   background: rgb(238,174,202);
   background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
 
+=======
+  background: rgb(188,220,224);
+  background: linear-gradient(90deg, rgba(188,220,224,1) 0%, rgba(219,231,96,1) 29%, rgba(219,231,96,1) 61%, rgba(188,220,224,1) 100%);
+>>>>>>> c396b2d952c45454e29ede3dd198fc0dff5f8073
   padding: 20px;
   text-align: center;
 }
@@ -120,8 +130,4 @@ color:  rgb(18, 11, 19);
   padding-bottom: 20px;
   margin: auto;
 
-}
-
-.labels{
-  
 }
