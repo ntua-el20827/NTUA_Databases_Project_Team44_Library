@@ -67,7 +67,7 @@ CREATE TABLE book (
   book_language VARCHAR(45),
   borrow_count INT NOT NULL DEFAULT 0, --- new->baba
   user_id INT UNSIGNED NOT NULL,
-  school_id INT UNSIGNED NOT NULL,
+  school_id INT UNSIGNED NOT NULL, 
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (book_id),
   KEY fk_book_user_id (user_id),
