@@ -132,7 +132,9 @@ def school():
         cat_image = 'cat.jpg'
         return render_template('schooltry2.html',books = books,cat_image=cat_image ) 
 
-
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    return render_template('contact.html')
 """ @app.route('/superadmin', methods=['GET', 'POST'])
 def superadmin():
 

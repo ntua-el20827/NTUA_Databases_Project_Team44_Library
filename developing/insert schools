@@ -1,0 +1,23 @@
+--- shcools
+INSERT INTO school (school_id, school_name, city, street, postal_code, email, principal_lastname, principal_firstname, school_admin_lastname, school_admin_firstname)
+VALUES
+  (1, 'Maplewood Elementary School', 'Springfield', 'Oak Avenue', 12345, 'maplewood@gmail.com', 'Johnson', 'Emily', 'Smith', 'Jennifer'),
+  (2, 'Willowbrook High School', 'Harrisonburg', 'Willow Street', 54321, 'willowbrook@gmail.com', 'Anderson', 'Michael', 'Brown', 'Jessica'),
+  (3, 'Cedar Ridge Middle School', 'Wilmington', 'Cedar Lane', 67890, 'cedarridge@gmail.com', 'Davis', 'Sarah', 'Wilson', 'David'),
+  (4, 'Hawthorne Academy', 'Birmingham', 'Maple Street', 98765, 'hawthorne@gmail.com', 'Thompson', 'Robert', 'Miller', 'Amy'),
+  (5, 'Pinecrest Elementary School', 'Denver', 'Pine Avenue', 54321, 'pinecrest@gmail.com', 'Taylor', 'Jessica', 'Jackson', 'Matthew');
+
+---- phones
+INSERT INTO school_phone (phone, school_id) VALUES
+  (3572212345, 1),
+  (3572298765, 1);
+INSERT INTO school_phone (phone, school_id) VALUES
+  (3572245678, 2);
+INSERT INTO school_phone (phone, school_id) VALUES
+  (3572278912, 3),
+  (3572232165, 3);
+INSERT INTO school_phone (phone, school_id) VALUES
+  (3572265498, 4);
+INSERT INTO school_phone (phone, school_id) VALUES
+  (3572298732, 5),
+  (3572214725, 5);

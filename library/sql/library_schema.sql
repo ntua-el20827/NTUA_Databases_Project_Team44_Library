@@ -30,7 +30,7 @@ CREATE TABLE school_phone(
   school_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (phone,school_id),
-  KEY fk_school_id (school_id), -- πιθανόν να μην χρειαζεται
+  KEY fk_school_id (school_id),
   CONSTRAINT fk_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -41,17 +41,16 @@ CREATE TABLE lib_user(
     user_name VARCHAR(45) NOT NULL,
     school_id INT UNSIGNED NOT NULL,
     role_name ENUM('student', 'teacher', 'admin', 'super_admin') NOT NULL,
-    user_email VARCHAR(45) NOT NULL, -- new ->george
-    user_firstname VARCHAR(45) NOT NULL, -- new ->george
-    user_lastname VARCHAR(45) NOT NULL, -- new ->george
-    user_date_of_birth BIGINT UNSIGNED NOT NULL, ---new ->baba BIGINT so that it can store Unix timestamps, which are 64-bit integers
-    -- user_date_of_birth -- new ->george // δεν εχει συμπληρωθεί πλήρωνς
+    user_email VARCHAR(45) NOT NULL,
+    user_firstname VARCHAR(45) NOT NULL, 
+    user_lastname VARCHAR(45) NOT NULL, 
+    user_date_of_birth DATE NOT NULL,
     last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id),
     KEY fk_user_school_id (school_id),
     CONSTRAINT fk_user_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8; 
--- ισως: ON DELETE CASCADE 
+-- BIGINT so that it can store Unix timestamps, which are 64-bit integers
 
 -- Table 'book'
 CREATE TABLE book (
@@ -65,14 +64,11 @@ CREATE TABLE book (
   number_of_available_books INT UNSIGNED NOT NULL,
   book_image VARCHAR(256) NOT NULL, 
   book_language VARCHAR(45),
-  borrow_count INT NOT NULL DEFAULT 0, --- new->baba
-  user_id INT UNSIGNED NOT NULL,
+  borrow_count INT NOT NULL DEFAULT 0,
   school_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (book_id),
-  KEY fk_book_user_id (user_id),
   KEY fk_book_school_id (school_id),
-  CONSTRAINT fk_book_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT fk_book_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --- ΛΕΙΠΕΙ Η ΕΙΚΟΝΑ / ΤΟ SUMMARY ΙΣΩΣ ΝΑ ΘΕΛΕΙ ΜΕΓΑΛΥΤΕΡΟ ΜΕΓΕΘΟΣ
@@ -97,23 +93,20 @@ CREATE TABLE reservation (
 -- Χρειάζεται επειγόντως το table με τους δανεισμούς (many to many) ωστε να κάνουμε store ολους
 -- τους δανεισμούς. Το table reservation ισως να μην χρειάζετια και να μπορούμε να το κάνουμε με το view!
 
---- new -> baba suggestion for reservation/borrowing
 CREATE TABLE book_status (
   book_status_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   book_id INT UNSIGNED NOT NULL,
   user_id INT UNSIGNED NOT NULL,
   school_id INT UNSIGNED NOT NULL,
-  status ENUM('borrowed', 'reserved') NOT NULL, -- Αρχικά όμως τι θα είναι?
+  status ENUM('borrowed', 'reserved') NOT NULL,
   request_date DATE NOT NULL,
   approval_date DATE,
   return_date DATE,
   PRIMARY KEY (book_status_id),
   KEY fk_book_status_book_id (book_id),
   KEY fk_book_status_user_id (user_id),
-  KEY fk_book_status_school_id (school_id),
   CONSTRAINT fk_book_status_book_id FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT fk_book_status_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT fk_book_status_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT fk_book_status_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -153,6 +146,7 @@ CREATE TABLE review (
   rev_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id INT UNSIGNED NOT NULL,
   book_id INT UNSIGNED NOT NULL,
+  review_text VARCHAR(200) NOT NULL,
   rev_date INT UNSIGNED NOT NULL,
   rating ENUM('1', '2', '3', '4', '5') NOT NULL, 
   PRIMARY KEY (rev_id,user_id,book_id),
@@ -167,7 +161,7 @@ CREATE TABLE review (
 --- Views
 ---
 
-/*---All schools with their names
+---All schools with their names
 CREATE VIEW all_schools AS
 SELECT school_id, school_name
 FROM school;
@@ -178,27 +172,28 @@ SELECT b.book_image, b.title, CONCAT(u.user_firstname, ' ', u.user_lastname) AS 
 FROM book b
 INNER JOIN lib_user u ON b.user_id = u.user_id
 LEFT JOIN review r ON b.book_id = r.book_id;
-*/
 
+--- new users applications
 
 
 ---
 --- Triggers
 ---
 
-/* ---Ensure that our db has only one superadmin
-CREATE TRIGGER trg_lib_user_super_admin
-BEFORE INSERT OR UPDATE ON lib_user
+---Ensure that our db has only one superadmin
+/* CREATE TRIGGER trg_lib_user_super_admin
+BEFORE INSERT ON lib_user
 FOR EACH ROW
 BEGIN
-    IF NEW.role_name = 'super_admin' OR IF OLD.role_name = 'super_admin' THEN
+    IF (NEW.role_name = 'super_admin' OR OLD.role_name = 'super_admin') THEN
         IF (SELECT COUNT(*) FROM lib_user WHERE role_name = 'super_admin') > 0 THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'There can be only one superadmin in the lib_user table';
         END IF;
     END IF;
 END;
+ */
 
----Ensure that the insertion of second admin for a school is forbidden
+/* ---Ensure that the insertion of second admin for a school is forbidden
 CREATE TRIGGER trg_lib_user_admin_count
 BEFORE INSERT OR UPDATE ON lib_user
 FOR EACH ROW
@@ -220,8 +215,7 @@ BEGIN
   IF cnt > 0 THEN
     SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Each user can only submit one review per book title';
   END IF;
-END;*/
-
+END; */
 ---
 ---Indexes
 ---
