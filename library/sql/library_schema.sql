@@ -26,7 +26,7 @@ CREATE TABLE school (
 
 --- Table 'school_phone'
 CREATE TABLE school_phone(
-  phone INT NOT NULL,
+  phone BIGINT NOT NULL,
   school_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (phone,school_id),
