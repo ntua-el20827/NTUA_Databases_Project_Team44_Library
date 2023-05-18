@@ -88,13 +88,17 @@ GROUP BY book.book_id
 ORDER BY book.title ASC;
 
 ---3.2.2 Find all borrowers who have at their pocession at least one book and they have delayed the return
-SELECT u.user_firstname, u.user_lastname, DATEDIFF(NOW(), bs.return_date) AS days_of_delay
+SELECT u.user_firstname, u.user_lastname, 
+       CASE u.role_name 
+           WHEN 'student' THEN DATEDIFF(NOW(), bs.approval_date) - 7 
+           WHEN 'teacher' THEN DATEDIFF(NOW(), bs.approval_date) - 14 
+       END AS days_of_delay
 FROM lib_user u
-JOIN book_status bs ON u.user_id = bs.user_id AND bs.status = 'borrowed'
-JOIN book b ON bs.book_id = b.book_id AND b.number_of_available_books = 0
-WHERE DATEDIFF(NOW(), bs.return_date) > 0
-GROUP BY u.user_id
-HAVING COUNT(*) = 1;
+JOIN book_status bs ON u.user_id = bs.user_id
+WHERE bs.status = 'borrowed' AND bs.return_date IS NULL
+AND u.user_firstname LIKE '%<first_name>%'   -- replace <first_name> with the user's input for first name
+AND u.user_lastname LIKE '%<last_name>%'     -- replace <last_name> with the user's input for last name
+HAVING (days_of_delay > <days_of_delay>);     -- replace <days_of_delay> with the user's input for days of delay
 
 ---3.2.3 Average of reviews by borrower and book theme(search criteria: user/book theme)
 SELECT CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bt.theme, AVG(r.rating) AS avg_rating
