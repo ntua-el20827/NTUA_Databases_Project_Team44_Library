@@ -11,13 +11,14 @@ def index():
         print("HI")
         school_name = request.form['school_name']
         session['school_name'] = school_name
+        #print(school_name)
         #query για να πάρω το school_id
-        query = "SELECT school_id from school where shcool_name = %s"
-        cur = mydb.connection.cursor()
-        cur.execute(query,school_name)
-        school_id = cur.fetchone() # με την fetchall() πιάνω όλα όσα ηρθαν απο το execute που έγινε!!
-        cur.close()
-        session['shcool_id'] = school_id
+        #query = "SELECT school_id from school where shcool_name = %s"
+        #cur = mydb.connection.cursor()
+        #cur.execute(query,school_name)
+        #school_id = cur.fetchone() # με την fetchall() πιάνω όλα όσα ηρθαν απο το execute που έγινε!!
+        #cur.close()
+        #session['shcool_id'] = school_id
         return redirect(url_for('login'))
     else:
         # Read the query from queries.sql
@@ -47,7 +48,7 @@ def login():
         password = request.form['password']
         session['username'] = username
         session['password'] = password
-        school_id = session['school_id']
+        #school_id = session['school_id']
         
         # Query the database to validate the user's credentials
         cur = mydb.connection.cursor()
@@ -77,16 +78,21 @@ def dashboard():
  
     if 'user_id' in session:
         user_id = session['user_id']
-        
         cur = mydb.connection.cursor()
-        query = "SELECT * FROM users WHERE id = %s"
+        query = "SELECT school_id FROM lib_user WHERE user_id = %s"
+        cur.execute(query, (user_id,))
+        school_id_tuple = cur.fetchone()
+        school_id = school_id_tuple[0] if school_id_tuple else None
+        session['school_id'] = school_id
+        print(school_id)
+        query = "SELECT * FROM lib_user WHERE user_id = %s"
         cur.execute(query, (user_id,))
         user = cur.fetchone()
         cur.close()
         
         if user:
             # User exists, render the template for the dashboard page
-            return render_template('dashboard.html', user=user)
+            return redirect(url_for('school'))
 
     # User is not authenticated, redirect to the login page
     return render_template("hello.html")
@@ -102,14 +108,31 @@ def signup():
         phone = request.form['phone']
         cur = mydb.connection.cursor()
         query = "INSERT INTO users_applications (username, password, first_name, last_name, email, phone) VALUES (%s, %s, %s, %s, %s, %s)"
-        #values = (newusername, newpassword, fname, lname, email, phone)
-        #cur.execute(query, values)
+        values = (newusername, newpassword, fname, lname, email, phone)
+        cur.execute(query, values)
         mydb.connection.commit()
         cur.close()
         return redirect(url_for('login'))
     else:
         return render_template("signup.html")
-    
+
+
+@app.route('/school', methods=['GET', 'POST'])
+def school():
+    if request.method == "POST":
+        print("hi")
+    else:
+        cur = mydb.connection.cursor()
+        school_id = session['school_id']
+        query = "SELECT title, ISBN, book_image FROM book WHERE school_id = %s" 
+        cur.execute(query,(school_id,))
+        books = cur.fetchall()
+        cur.close()
+        print(books[0][2])
+        cat_image = 'cat.jpg'
+        return render_template('schooltry2.html',books = books,cat_image=cat_image ) 
+
+
 """ @app.route('/superadmin', methods=['GET', 'POST'])
 def superadmin():
 

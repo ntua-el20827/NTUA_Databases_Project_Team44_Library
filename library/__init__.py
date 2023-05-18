@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_mysqldb import MySQL
 
-app = Flask(__name__)
+app = Flask(__name__,)
 #Αυτά μάλλον δεν χρειάζονται
 #app.config["DB_ADMIN_USERNAME"] = 'root'
 #app.config["DB_ADMIN_PASSWORD"] = 'george'
