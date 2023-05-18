@@ -130,7 +130,7 @@ CREATE TABLE book_keywords (
 
 -- Table 'book_theme'
 CREATE TABLE book_theme (
-  theme ENUM('Fiction', 'Non-fiction', 'Science fiction', 'Drama', 'Mystery', 'Romance', 'Thriller', 'Horror', 'Fantasy', 'Biography', 'Autobiography', 'History', 'Poetry', 'Comics', 'Cookbooks', 'Travel', 'Religion', 'Self-help', 'Art', 'Music','Coming of Age', 'Sports', 'Humor', 'Reference') NOT NULL,
+  theme ENUM('Fiction', 'Non-fiction', 'Science fiction', 'Drama', 'Adventure','Mystery', 'Romance', 'Thriller', 'Horror', 'Fantasy', 'Biography', 'Autobiography', 'History', 'Poetry', 'Comics', 'Cookbooks', 'Travel', 'Religion', 'Self-help', 'Art', 'Music','Coming of Age', 'Sports', 'Humor', 'Reference') NOT NULL,
   book_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (theme, book_id),

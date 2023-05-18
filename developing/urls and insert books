@@ -187,15 +187,6 @@ VALUES (29, 'The Chronicles of Narnia', 'Enchanted Tales Publishing', 600, 45678
 
 
 --- thmemes for books of school 1
-INSERT INTO book_theme (theme, book_id) VALUES
-  ('Romance', 1),
-  ('Societal Norms', 1),
-  ('Coming-of-Age', 2),
-  ('Identity', 2),
-  ('Fantasy', 3),
-  ('Adventure', 3),
-  ('Fantasy', 4),
-  ('Adventure', 4);
 INSERT INTO book_theme (theme, book_id)
 VALUES
     ('Romance', 1),
@@ -254,14 +245,25 @@ VALUES
   ('Fiction', 18);
 --- themes for books of school 4
 INSERT INTO book_theme (theme, book_id)
-VALUES ('Romance', 19),
-       ('Drama', 19),
-       ('Fiction', 20),
-       ('Adventure', 21),
-       ('Fantasy', 21),
-       ('Science fiction', 22),
-       ('Fantasy', 23),
-       ('Fiction', 24);
+VALUES
+    ('Fiction', 19),
+    ('Romance', 19),
+    ('Coming of Age', 19),
+    ('Fiction', 20),
+    ('Drama', 20),
+    ('Coming of Age', 20),
+    ('Fantasy', 21),
+    ('Adventure', 21),
+    ('Fiction', 21),
+    ('Science Fiction', 22),
+    ('Dystopian', 22),
+    ('Fiction', 22),
+    ('Fantasy', 23),
+    ('Adventure', 23),
+    ('Fiction', 23),
+    ('Epic Poetry', 24),
+    ('Adventure', 24),
+    ('History', 24);
 
 --- themes for books of school 5
 INSERT INTO book_theme (theme, book_id)
@@ -275,75 +277,3 @@ VALUES
     ('Mystery', 29),
     ('Fantasy', 29);
 
---
---
---
---
--- AUTHORS
---- authors for books of shcool 1
-
---- authors for books of shcool 2
-INSERT INTO book_author (author, book_id)
-VALUES ('Dan Brown', 5);
-
-INSERT INTO book_author (author, book_id)
-VALUES ('Khaled Hosseini', 6);
-
-INSERT INTO book_author (author, book_id)
-VALUES ('Amir', 6);
-
-INSERT INTO book_author (author, book_id)
-VALUES ('Markus Zusak', 7);
-
-INSERT INTO book_author (author, book_id)
-VALUES ('Sue Monk Kidd', 8);
-
-INSERT INTO book_author (author, book_id)
-VALUES ('Lily Owens', 8);
-
-INSERT INTO book_author (author, book_id)
-VALUES ('Cormac McCarthy', 9);
-
-INSERT INTO book_author (author, book_id)
-VALUES ('Sylvia Plath', 10);
-
-INSERT INTO book_author (author, book_id)
-VALUES ('Esther Greenwood', 10);
-
-INSERT INTO book_author (author, book_id)
-VALUES ('Kathryn Stockett', 11);
-
---- authors for books of shcool 3
-INSERT INTO book_author (author, book_id)
-VALUES
-  ('J.K. Rowling', 12),
-  ('Suzanne Collins', 13),
-  ('Stieg Larsson', 14),
-  ('George R.R. Martin', 15),
-  ('John Green', 16),
-  ('Gillian Flynn', 17),
-  ('C.S. Lewis', 18);
-
---- authors for books of shcool 4
-INSERT INTO book_author (author, book_id)
-VALUES ('Jane Austen', 19),
-       ('William Shakespeare', 19),
-       ('J.R.R. Tolkien', 20),
-       ('J.K. Rowling', 20),
-       ('George Orwell', 21),
-       ('Ray Bradbury', 21),
-       ('J.R.R. Tolkien', 22),
-       ('C.S. Lewis', 22),
-       ('Homer', 23),
-       ('Ruta Sepetys', 23),
-       ('J.D. Salinger', 24),
-       ('Harper Lee', 24);
-
---- authors for books of shcool 5
-INSERT INTO author (author_name, book_id)
-VALUES 
-    ('Stieg Larsson', 25),
-    ('George R.R. Martin', 26),
-    ('John Green', 27),
-    ('Gillian Flynn', 28),
-    ('C.S. Lewis', 29);

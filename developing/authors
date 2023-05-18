@@ -1,0 +1,75 @@
+-- AUTHORS --> OK
+--- authors for books of shcool 1
+INSERT INTO book_author (author, book_id)
+VALUES
+    ('Jane Austen', 1),
+    ('J.D. Salinger', 2),
+    ('J.R.R. Tolkien', 3),
+    ('George Orwell', 4);
+
+
+--- authors for books of shcool 2
+INSERT INTO book_author (author, book_id)
+VALUES ('Dan Brown', 5);
+
+INSERT INTO book_author (author, book_id)
+VALUES ('Khaled Hosseini', 6);
+
+INSERT INTO book_author (author, book_id)
+VALUES ('Amir', 6);
+
+INSERT INTO book_author (author, book_id)
+VALUES ('Markus Zusak', 7);
+
+INSERT INTO book_author (author, book_id)
+VALUES ('Sue Monk Kidd', 8);
+
+INSERT INTO book_author (author, book_id)
+VALUES ('Lily Owens', 8);
+
+INSERT INTO book_author (author, book_id)
+VALUES ('Cormac McCarthy', 9);
+
+INSERT INTO book_author (author, book_id)
+VALUES ('Sylvia Plath', 10);
+
+INSERT INTO book_author (author, book_id)
+VALUES ('Esther Greenwood', 10);
+
+INSERT INTO book_author (author, book_id)
+VALUES ('Kathryn Stockett', 11);
+
+--- authors for books of shcool 3
+INSERT INTO book_author (author, book_id)
+VALUES
+  ('J.K. Rowling', 12),
+  ('Suzanne Collins', 13),
+  ('Stieg Larsson', 14),
+  ('George R.R. Martin', 15),
+  ('John Green', 16),
+  ('Gillian Flynn', 17),
+  ('C.S. Lewis', 18);
+
+--- authors for books of shcool 4
+INSERT INTO book_author (author, book_id)
+VALUES ('Jane Austen', 19),
+       ('William Shakespeare', 19),
+       ('J.R.R. Tolkien', 20),
+       ('J.K. Rowling', 20),
+       ('George Orwell', 21),
+       ('Ray Bradbury', 21),
+       ('J.R.R. Tolkien', 22),
+       ('C.S. Lewis', 22),
+       ('Homer', 23),
+       ('Ruta Sepetys', 23),
+       ('J.D. Salinger', 24),
+       ('Harper Lee', 24);
+
+--- authors for books of shcool 5
+INSERT INTO author (author_name, book_id)
+VALUES 
+    ('Stieg Larsson', 25),
+    ('George R.R. Martin', 26),
+    ('John Green', 27),
+    ('Gillian Flynn', 28),
+    ('C.S. Lewis', 29);
