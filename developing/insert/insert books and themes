@@ -1,15 +1,66 @@
----- books for school 1
-INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES (1, 'Pride and Prejudice', 'Stellar Books', 400, '1234567890', 'A classic romance novel exploring themes of societal norms, love, and prejudice in 19th-century England.', 4, 4, 'https://covers.openlibrary.org/b/id/12645114-M.jpg', 'English', 1);
+---- books for school 1 - 20 books
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("Pride and Prejudice", "Stellar Books", 400, 1234567890, "A classic romance novel exploring themes of societal norms, love, and prejudice in 19th-century England.", 4, 4, "https://covers.openlibrary.org/b/id/12645114-M.jpg", "English", 1);
 
-INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES (2, 'The Catcher in the Rye', 'BlueSky Publications', 320, '2345678901', 'A coming-of-age novel narrated by an angsty teenager who questions societal conventions and struggles with his own identity.', 3, 3, 'https://covers.openlibrary.org/b/id/6297651-M.jpg', 'English', 1);
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Catcher in the Rye", "BlueSky Publications", 320, 2345678901, "A coming-of-age novel narrated by an angsty teenager who questions societal conventions and struggles with his own identity.", 3, 3, "https://covers.openlibrary.org/b/id/6297651-M.jpg", "English", 1);
 
-INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES (3, 'The Hobbit', 'Golden Quill Press', 350, '3456789012', 'An epic fantasy adventure following a hobbit''s journey to reclaim a stolen treasure, encountering magical creatures and dangers along the way.', 5, 5, 'https://covers.openlibrary.org/b/id/12003329-M.jpg', 'English', 1);
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Hobbit", "Golden Quill Press", 350, 3456789012, "An epic fantasy adventure following a hobbit's journey to reclaim a stolen treasure, encountering magical creatures and dangers along the way.", 5, 5, "https://covers.openlibrary.org/b/id/12003329-M.jpg", "English", 1);
 
-INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES (4,'1984', 'Crimson Ink Publishing', 250, 9876543210, 'A dystopian novel depicting a totalitarian society where individualism is suppressed and critical thought is controlled.', 2, 2, 'https://covers.openlibrary.org/b/id/12054527-M.jpg', 'English', 1);
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("1984", "Crimson Ink Publishing", 250, 9876543210, "A dystopian novel depicting a totalitarian society where individualism is suppressed and critical thought is controlled.", 2, 2, "https://covers.openlibrary.org/b/id/12054527-M.jpg", "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Alchemist", "HarperOne", 208, 9780062315007, "A philosophical novel about a young Andalusian shepherd who embarks on a journey to find his personal legend.", 1, 1, 'https://covers.openlibrary.org/b/id/8314135-M.jpg', "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Great Expectations", "Penguin Classics", 544, 9780141439563, "A coming-of-age novel following the life of Pip, an orphan, as he navigates his way through the social classes of Victorian England.", 1, 1, 'https://covers.openlibrary.org/b/id/13029793-M.jpg', "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("To the Lighthouse", "Harvest Books", 209, 9780156907392, "A modernist novel that explores the lives and relationships of the Ramsay family and their guests on a trip to the Isle of Skye.", 1, 1, 'https://covers.openlibrary.org/b/id/8291454-M.jpg', "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("Moby-Dick", "Harper Perennial", 896, 9780062085661, "An epic tale of Captain Ahab's obsessive quest for revenge against the great white whale.", 1, 1, 'https://covers.openlibrary.org/b/id/110556-M.jpg', "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Picture of Dorian Gray", "Penguin Classics", 254, 9780141439570, "A Gothic novel about a young man named Dorian Gray, who remains eternally youthful while a portrait of him ages and bears the scars of his immoral actions.", 1, 1, 'https://covers.openlibrary.org/b/id/14314591-M.jpg', "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("Frankenstein", "Penguin Classics", 352, 9780141439471, "A science fiction novel exploring the ethical implications of creating artificial life, as Victor Frankenstein brings a creature to life with disastrous consequences.", 1, 1, 'https://covers.openlibrary.org/b/id/109033-M.jpg', "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("A Game of Thrones", "Bantam Books", 694, 9780553593716, "The first book in the epic fantasy series 'A Song of Ice and Fire' that follows the power struggles among noble families in the Seven Kingdoms.", 1, 1, 'https://covers.openlibrary.org/b/id/9269942-M.jpg', "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Fault in Our Stars", "Dutton Books", 313, 9780525478812, "A young adult novel about two teenagers, Hazel and Gus, who meet and fall in love while dealing with the challenges of living with cancer.", 1, 1, 'https://covers.openlibrary.org/b/id/7890579-M.jpg', "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("Gone Girl", "Crown Publishing Group", 432, 9780307588364, "A psychological thriller about a husband, Nick, and his wife, Amy, whose marriage takes a dark turn when Amy goes missing under suspicious circumstances.", 1, 1, 'https://covers.openlibrary.org/b/id/11568078-M.jpg', "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Chronicles of Narnia", "HarperCollins", 767, 9780066238500, "A series of fantasy novels that transport readers to the magical world of Narnia, where animals talk, mythical creatures abound, and battles between good and evil unfold.", 1, 1, 'https://covers.openlibrary.org/b/id/13236788-M.jpg', "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Da Vinci Code", "Doubleday", 454, 9780385504201, "A thriller that follows symbologist Robert Langdon as he unravels a complex mystery involving secret societies, hidden messages, and the search for the Holy Grail.", 1, 1, 'https://covers.openlibrary.org/b/id/10520498-M.jpg', "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Kite Runner", "Riverhead Books", 371, 9781573222457, "A novel about the friendship between Amir, a privileged boy, and Hassan, the son of his father's servant, set against the backdrop of Afghanistan's tumultuous history.", 1, 1, 'https://covers.openlibrary.org/b/id/12728870-M.jpg', "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Book Thief", "Knopf", 550, 9780375831003, "Set during World War II, the story follows Liesel Meminger, a young girl who finds solace in books and develops a secret habit of stealing them.", 1, 1, 'https://covers.openlibrary.org/b/id/11478077-M.jpg', "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Secret Life of Bees", "Penguin Books", 336, 9780142001745, "A coming-of-age novel that explores race, female empowerment, and the power of love as a young girl named Lily Owens finds refuge with a group of beekeeping sisters.", 1, 1, 'https://covers.openlibrary.org/b/id/8066208-M.jpg', "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Road", "Vintage Books", 287, 9780307387899, "A post-apocalyptic novel that follows a father and his young son as they journey through a desolate landscape, facing danger and despair in search of a better life.", 1, 1, 'https://covers.openlibrary.org/b/id/9557220-M.jpg', "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Bell Jar", "Harper & Row", 288, 9780060174903, "A semi-autobiographical novel about Esther Greenwood, a talented young woman who struggles with mental health issues and societal expectations in 1950s America.", 1, 1, 'https://covers.openlibrary.org/b/id/13282079-M.jpg', "English", 1);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Help", "Amy Einhorn Books", 451, 9780399155345, "Set in 1960s Mississippi, the story revolves around African American maids working in white households and their relationships with the aspiring writer who tells their stories.", 1, 1, 'https://covers.openlibrary.org/b/id/10544717-M.jpg', "English", 1);
 
 
 ---- books for school 2
