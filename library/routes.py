@@ -143,14 +143,13 @@ def school():
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     return render_template('contact.html')
-""" @app.route('/superadmin', methods=['GET', 'POST'])
-def superadmin():
 
-@app.route('/student', methods=['GET', 'POST'])
-def student():
+""" @app.route('/home', methods=['GET', 'POST'])
+def home():
+    #return render_template('') """
 
-@app.route('/teacher', methods=['GET', 'POST'])
-def teacher():
 
-@app.route('/schooladmin', methods=['GET', 'POST'])
-def schooladmin(): """
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    #πρεπει να μηδενίζω τα session
+    return render_template('contact.html')
