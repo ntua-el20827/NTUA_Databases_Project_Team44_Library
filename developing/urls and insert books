@@ -1,0 +1,186 @@
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/14314120-M.jpg'
+where Title = 'The Great Gatsby';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/8410894-M.jpg'
+where Title = 'To Kill a Mockingbird';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/12054527-M.jpg'
+where Title = '1984';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/12645114-M.jpg'
+where Title = 'Pride and Prejudice';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/6297651-M.jpg'
+where Title = 'The Catcher in the Rye';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/12003329-M.jpg'
+where Title = 'The Hobbit';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/12992919-M.jpg'
+where Title = 'Brave New World';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/13911921-M.jpg'
+where Title = 'The Lord of the Rings';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/13081298-M.jpg'
+where Title = 'The Odyssey';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/8314135-M.jpg'
+where Title = 'The Alchemist';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/13029793-M.jpg'
+where Title = 'The Great Expectations';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/8291454-M.jpg'
+where Title = 'To the Lighthouse';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/110556-M.jpg'
+where Title = 'Moby-Dick';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/14314591-M.jpg'
+where Title = 'The Picture of Dorian Gray';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/109033-M.jpg'
+where Title = 'Frankenstein';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/13398433-M.jpg'
+where Title = 'The Adventures of Huckleberry Finn';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/9411898-M.jpg'
+where Title = 'Crime and Punishment';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/12903634-M.jpg'
+where Title = 'Harry Potter and the Sorcerer-s Stone';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/12646540-M.jpg'
+where Title = 'The Hunger Games';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/10655947-M.jpg'
+where Title = 'The Girl with the Dragon Tattoo';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/9269942-M.jpg'
+where Title = 'A Game of Thrones';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/7890579-M.jpg'
+where Title = 'The Fault in Our Stars';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/11568078-M.jpg'
+where Title = 'Gone Girl';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/13236788-M.jpg'
+where Title = 'The Chronicles of Narnia';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/10520498-M.jpg'
+where Title = 'The Da Vinci Code';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/12728870-M.jpg'
+where Title = 'The Kite Runner';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/11478077-M.jpg'
+where Title = 'The Book Thief';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/8066208-M.jpg'
+where Title = 'The Secret Life of Bees';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/9557220-M.jpg'
+where Title = 'The Road';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/13282079-M.jpg'
+where Title = 'The Bell Jar';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/10544717-M.jpg'
+where Title = 'The Help';
+
+---- books for school 1
+INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES (1, 'Pride and Prejudice', 'Stellar Books', 400, '1234567890', 'A classic romance novel exploring themes of societal norms, love, and prejudice in 19th-century England.', 4, 4, 'https://covers.openlibrary.org/b/id/12645114-M.jpg', 'English', 1);
+
+INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES (2, 'The Catcher in the Rye', 'BlueSky Publications', 320, '2345678901', 'A coming-of-age novel narrated by an angsty teenager who questions societal conventions and struggles with his own identity.', 3, 3, 'https://covers.openlibrary.org/b/id/6297651-M.jpg', 'English', 1);
+
+INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES (3, 'The Hobbit', 'Golden Quill Press', 350, '3456789012', 'An epic fantasy adventure following a hobbit''s journey to reclaim a stolen treasure, encountering magical creatures and dangers along the way.', 5, 5, 'https://covers.openlibrary.org/b/id/12003329-M.jpg', 'English', 1);
+
+INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES (4,'1984', 'Crimson Ink Publishing', 250, 9876543210, 'A dystopian novel depicting a totalitarian society where individualism is suppressed and critical thought is controlled.', 2, 2, 'https://covers.openlibrary.org/b/id/12054527-M.jpg', 'English', 1);
+
+
+---- books for school 2
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('The Da Vinci Code', 'Sapphire Books', 450, 1234567890, 'A thrilling mystery novel that combines art, history, and religion, following a symbologist in his quest to uncover a hidden secret.', 3, 3, 'https://covers.openlibrary.org/b/id/10520498-M.jpg', 'English', 2);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('The Kite Runner', 'Amber Publishing', 400, 9876543210, 'A powerful story of friendship, betrayal, and redemption set against the backdrop of Afghanistans turbulent history.', 5, 5, 'https://covers.openlibrary.org/b/id/12728870-M.jpg', 'English', 2);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('The Book Thief', 'Moonstone Press', 350, 2345678901, 'Narrated by Death, this extraordinary novel tells the story of a young girl living in Nazi Germany who finds solace in books and words.', 2, 2, 'https://covers.openlibrary.org/b/id/11478077-M.jpg', 'English', 2);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('The Secret Life of Bees', 'Lavender Publishing', 320, 3456789012, 'Set in 1960s South Carolina, this poignant novel explores themes of family, race, and female empowerment as a young girl seeks answers about her mother.', 4, 4, 'https://covers.openlibrary.org/b/id/8066208-M.jpg', 'English', 2);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('The Road', 'Harbor Books', 300, 4567890123, 'A post-apocalyptic tale of a father and sons journey through a desolate landscape, exploring themes of survival, love, and hope.', 3, 3, 'https://covers.openlibrary.org/b/id/9557220-M.jpg', 'English', 2);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('The Bell Jar', 'Willow Publishing', 380, 5678901234, 'Semi-autobiographical, this novel follows a young womans descent into mental illness and her struggle for identity in a society that places expectations and limitations on women.', 5, 5, 'https://covers.openlibrary.org/b/id/13282079-M.jpg', 'English', 2);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('The Help', 'Quillfire Books', 420, 6789012345, 'Set in 1960s Mississippi, this novel portrays the lives of American maids and their relationships with white families, challenging racial boundaries and societal norms.', 2, 2, 'https://covers.openlibrary.org/b/id/10544717-M.jpg', 'English', 2);
+
+--- books for school 3
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("Harry Potter and the Sorcerer's Stone", 'Whimsical Publishing', 320, 1234567890, 'A captivating tale of a young boy who discovers he is a wizard and embarks on a magical journey at Hogwarts School of Witchcraft and Wizardry.', 3, 3, 'https://covers.openlibrary.org/b/id/12903634-M.jpg', 'English', 3);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Hunger Games", 'Eagle Books', 400, 9876543210, 'In a dystopian future, teenagers are forced to participate in a televised fight to the death, testing their survival skills and challenging the oppressive regime.', 5, 5, 'https://covers.openlibrary.org/b/id/12646540-M.jpg', 'English', 3);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Girl with the Dragon Tattoo", 'Mysterious Press', 480, 2345678901, 'A gripping crime novel that follows a journalist and a talented hacker as they investigate a decades-old disappearance and unravel a web of secrets and violence.', 2, 2, 'https://covers.openlibrary.org/b/id/10655947-M.jpg', 'English', 3);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("A Game of Thrones", 'Silverwood Publishing', 800, 3456789012, 'The first book in the epic fantasy series A Song of Ice and Fire, where noble families and political intrigue clash in a battle for the Iron Throne.', 4, 4, 'https://covers.openlibrary.org/b/id/9269942-M.jpg', 'English', 3);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Fault in Our Stars", 'Starlight Books', 320, 4567890123, 'A heart-wrenching love story between two teenagers with cancer who embark on a journey of love, friendship, and finding meaning in the face of mortality.', 3, 3, 'https://covers.openlibrary.org/b/id/7890579-M.jpg', 'English', 3);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("Gone Girl", 'Mistwood Publishing', 400, 5678901234, 'A psychological thriller that explores the disappearance of a wife and the dark secrets that emerge as her husband becomes the prime suspect.', 5, 5, 'https://covers.openlibrary.org/b/id/11568078-M.jpg', 'English', 3);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ("The Chronicles of Narnia", 'Enchanted Books', 600, 6789012345, 'A beloved fantasy series that transports readers into a magical world filled with talking animals, mythical creatures, and epic adventures.', 2, 2, 'https://covers.openlibrary.org/b/id/13236788-M.jpg', 'English', 3);
+
+--- books for school 4
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('Pride and Prejudice', 'Enchanting Publications', 400, 1234567890, 'A classic romance novel that explores the societal norms and expectations of 19th-century England, as Elizabeth Bennet navigates love, pride, and prejudice.', 3, 3, 'https://covers.openlibrary.org/b/id/12645114-M.jpg', 'English', 4);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('The Catcher in the Rye', 'Rebel Books', 224, 9876543210, 'A coming-of-age novel that follows the disillusioned teenager Holden Caulfield as he navigates the complexities of adulthood and society.', 2, 2, 'https://covers.openlibrary.org/b/id/6297651-M.jpg', 'English', 4);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('The Hobbit', 'Mystical Press', 320, 2345678901, 'An enchanting adventure that takes readers to the magical world of Middle-earth, following Bilbo Baggins as he embarks on a quest to reclaim a stolen treasure.', 4, 4, 'https://covers.openlibrary.org/b/id/12003329-M.jpg', 'English', 4);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('Brave New World', 'Futuristic Publishing', 352, 3456789012, 'A dystopian novel set in a future where society is engineered for stability and conformity, challenging the notions of individuality, freedom, and the pursuit of happiness.', 3, 3, 'https://covers.openlibrary.org/b/id/12992919-M.jpg', 'English', 4);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('The Lord of the Rings', 'Mythical Books', 1200, 4567890123, 'An epic fantasy trilogy that follows the journey of Frodo Baggins and the Fellowship of the Ring as they strive to destroy the One Ring and defeat the Dark Lord Sauron.', 5, 5, 'https://covers.openlibrary.org/b/id/13911921-M.jpg', 'English', 4);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('The Odyssey', 'Adventurous Press', 416, 5678901234, 'An ancient Greek epic poem that tells the story of Odysseus ten-year journey back home after the Trojan War, encountering mythical creatures and facing numerous challenges along the way.', 2, 2, 'https://covers.openlibrary.org/b/id/13081298-M.jpg', 'English', 4);
+
+--- books for shcool 5
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('The Girl with the Dragon Tattoo', 'Mysterious Publishing', 480, 1234567890, 'A gripping crime novel that follows a journalist and a talented hacker as they investigate a decades-old disappearance and unravel a web of secrets and violence.', 3, 3, 'https://covers.openlibrary.org/b/id/10655947-M.jpg', 'English', 5);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('A Game of Thrones', 'Epic Books', 800, 9876543210, 'The first book in the epic fantasy series "A Song of Ice and Fire," where noble families and political intrigue clash in a battle for the Iron Throne.', 5, 5, 'https://covers.openlibrary.org/b/id/9269942-M.jpg', 'English', 5);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('The Fault in Our Stars', 'Starlit Publications', 320, 2345678901, 'A heart-wrenching love story between two teenagers with cancer who embark on a journey of love, friendship, and finding meaning in the face of mortality.', 3, 3, 'https://covers.openlibrary.org/b/id/7890579-M.jpg', 'English', 5);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('Gone Girl', 'Mystery House', 400, 3456789012, 'A psychological thriller that explores the disappearance of a wife and the dark secrets that emerge as her husband becomes the prime suspect.', 5, 5, 'https://covers.openlibrary.org/b/id/11568078-M.jpg', 'English', 5);
+
+INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES ('The Chronicles of Narnia', 'Enchanted Tales Publishing', 600, 4567890123, 'A beloved fantasy series that transports readers into a magical world filled with talking animals, mythical creatures, and epic adventures.', 2, 2, 'https://covers.openlibrary.org/b/id/13236788-M.jpg', 'English', 5);
