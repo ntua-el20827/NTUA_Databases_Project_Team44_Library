@@ -70,7 +70,7 @@ VALUES ('The Hunger Games', 'Scholastic Press', 374, 9780439023481, 'The first b
 ---
 ---
 ---
----- books for school 2
+---- books for school 2 - 20 books
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
 VALUES ('The Da Vinci Code', 'Sapphire Books', 450, 1234567890, 'A thrilling mystery novel that combines art, history, and religion, following a symbologist in his quest to uncover a hidden secret.', 3, 3, 'https://covers.openlibrary.org/b/id/10520498-M.jpg', 'English', 2);
 
@@ -141,7 +141,7 @@ VALUES ("Alice's Adventures in Wonderland", "Macmillan Publishers", 192, 9781509
 ---
 ---
 ---
---- books for school 3
+--- books for school 3 - 18 books
 INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
 VALUES (12, "Harry Potter and the Sorcerer's Stone", 'Whimsical Publishing', 320, 1234567890, 'A captivating tale of a young boy who discovers he is a wizard and embarks on a magical journey at Hogwarts School of Witchcraft and Wizardry.', 3, 3, 'https://covers.openlibrary.org/b/id/12903634-M.jpg', 'English', 3);
 
@@ -163,39 +163,37 @@ VALUES (17, "Gone Girl", 'Mistwood Publishing', 400, 5678901234, 'A psychologica
 INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
 VALUES (18, "The Chronicles of Narnia", 'Enchanted Books', 600, 6789012345, 'A beloved fantasy series that transports readers into a magical world filled with talking animals, mythical creatures, and epic adventures.', 2, 2, 'https://covers.openlibrary.org/b/id/13236788-M.jpg', 'English', 3);
 
---- books for school 4
 INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES (19, 'Pride and Prejudice', 'Enchanting Publications', 400, 1234567890, 'A classic romance novel that explores the societal norms and expectations of 19th-century England, as Elizabeth Bennet navigates love, pride, and prejudice.', 3, 3, 'https://covers.openlibrary.org/b/id/12645114-M.jpg', 'English', 4);
+VALUES (19, 'Pride and Prejudice', 'Enchanting Publications', 400, 1234567890, 'A classic romance novel that explores the societal norms and expectations of 19th-century England, as Elizabeth Bennet navigates love, pride, and prejudice.', 3, 3, 'https://covers.openlibrary.org/b/id/12645114-M.jpg', 'English', 3);
 
 INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES (20, 'The Catcher in the Rye', 'Rebel Books', 224, 9876543210, 'A coming-of-age novel that follows the disillusioned teenager Holden Caulfield as he navigates the complexities of adulthood and society.', 2, 2, 'https://covers.openlibrary.org/b/id/6297651-M.jpg', 'English', 4);
+VALUES (20, 'The Catcher in the Rye', 'Rebel Books', 224, 9876543210, 'A coming-of-age novel that follows the disillusioned teenager Holden Caulfield as he navigates the complexities of adulthood and society.', 2, 2, 'https://covers.openlibrary.org/b/id/6297651-M.jpg', 'English', 3);
 
 INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES (21, 'The Hobbit', 'Mystical Press', 320, 2345678901, 'An enchanting adventure that takes readers to the magical world of Middle-earth, following Bilbo Baggins as he embarks on a quest to reclaim a stolen treasure.', 4, 4, 'https://covers.openlibrary.org/b/id/12003329-M.jpg', 'English', 4);
+VALUES (21, 'The Hobbit', 'Mystical Press', 320, 2345678901, 'An enchanting adventure that takes readers to the magical world of Middle-earth, following Bilbo Baggins as he embarks on a quest to reclaim a stolen treasure.', 4, 4, 'https://covers.openlibrary.org/b/id/12003329-M.jpg', 'English', 3);
 
 INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES (22, 'Brave New World', 'Futuristic Publishing', 352, 3456789012, 'A dystopian novel set in a future where society is engineered for stability and conformity, challenging the notions of individuality, freedom, and the pursuit of happiness.', 3, 3, 'https://covers.openlibrary.org/b/id/12992919-M.jpg', 'English', 4);
+VALUES (22, 'Brave New World', 'Futuristic Publishing', 352, 3456789012, 'A dystopian novel set in a future where society is engineered for stability and conformity, challenging the notions of individuality, freedom, and the pursuit of happiness.', 3, 3, 'https://covers.openlibrary.org/b/id/12992919-M.jpg', 'English', 3);
 
 INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES (23, 'The Lord of the Rings', 'Mythical Books', 1200, 4567890123, 'An epic fantasy trilogy that follows the journey of Frodo Baggins and the Fellowship of the Ring as they strive to destroy the One Ring and defeat the Dark Lord Sauron.', 5, 5, 'https://covers.openlibrary.org/b/id/13911921-M.jpg', 'English', 4);
+VALUES (23, 'The Lord of the Rings', 'Mythical Books', 1200, 4567890123, 'An epic fantasy trilogy that follows the journey of Frodo Baggins and the Fellowship of the Ring as they strive to destroy the One Ring and defeat the Dark Lord Sauron.', 5, 5, 'https://covers.openlibrary.org/b/id/13911921-M.jpg', 'English', 3);
 
 INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES (24, 'The Odyssey', 'Adventurous Press', 416, 5678901234, 'An ancient Greek epic poem that tells the story of Odysseus ten-year journey back home after the Trojan War, encountering mythical creatures and facing numerous challenges along the way.', 2, 2, 'https://covers.openlibrary.org/b/id/13081298-M.jpg', 'English', 4);
-
---- books for shcool 5
-INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES (25, 'The Girl with the Dragon Tattoo', 'Mysterious Publishing', 480, 1234567890, 'A gripping crime novel that follows a journalist and a talented hacker as they investigate a decades-old disappearance and unravel a web of secrets and violence.', 3, 3, 'https://covers.openlibrary.org/b/id/10655947-M.jpg', 'English', 5);
+VALUES (24, 'The Odyssey', 'Adventurous Press', 416, 5678901234, 'An ancient Greek epic poem that tells the story of Odysseus ten-year journey back home after the Trojan War, encountering mythical creatures and facing numerous challenges along the way.', 2, 2, 'https://covers.openlibrary.org/b/id/13081298-M.jpg', 'English', 3);
 
 INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES (26, 'A Game of Thrones', 'Epic Books', 800, 9876543210, 'The first book in the epic fantasy series "A Song of Ice and Fire," where noble families and political intrigue clash in a battle for the Iron Throne.', 5, 5, 'https://covers.openlibrary.org/b/id/9269942-M.jpg', 'English', 5);
+VALUES (25, 'The Girl with the Dragon Tattoo', 'Mysterious Publishing', 480, 1234567890, 'A gripping crime novel that follows a journalist and a talented hacker as they investigate a decades-old disappearance and unravel a web of secrets and violence.', 3, 3, 'https://covers.openlibrary.org/b/id/10655947-M.jpg', 'English', 3);
 
 INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES (27, 'The Fault in Our Stars', 'Starlit Publications', 320, 2345678901, 'A heart-wrenching love story between two teenagers with cancer who embark on a journey of love, friendship, and finding meaning in the face of mortality.', 3, 3, 'https://covers.openlibrary.org/b/id/7890579-M.jpg', 'English', 5);
+VALUES (26, 'A Game of Thrones', 'Epic Books', 800, 9876543210, 'The first book in the epic fantasy series "A Song of Ice and Fire," where noble families and political intrigue clash in a battle for the Iron Throne.', 5, 5, 'https://covers.openlibrary.org/b/id/9269942-M.jpg', 'English', 3);
 
 INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES (28, 'Gone Girl', 'Mystery House', 400, 3456789012, 'A psychological thriller that explores the disappearance of a wife and the dark secrets that emerge as her husband becomes the prime suspect.', 5, 5, 'https://covers.openlibrary.org/b/id/11568078-M.jpg', 'English', 5);
+VALUES (27, 'The Fault in Our Stars', 'Starlit Publications', 320, 2345678901, 'A heart-wrenching love story between two teenagers with cancer who embark on a journey of love, friendship, and finding meaning in the face of mortality.', 3, 3, 'https://covers.openlibrary.org/b/id/7890579-M.jpg', 'English', 3);
 
 INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES (29, 'The Chronicles of Narnia', 'Enchanted Tales Publishing', 600, 4567890123, 'A beloved fantasy series that transports readers into a magical world filled with talking animals, mythical creatures, and epic adventures.', 2, 2, 'https://covers.openlibrary.org/b/id/13236788-M.jpg', 'English', 5);
+VALUES (28, 'Gone Girl', 'Mystery House', 400, 3456789012, 'A psychological thriller that explores the disappearance of a wife and the dark secrets that emerge as her husband becomes the prime suspect.', 5, 5, 'https://covers.openlibrary.org/b/id/11568078-M.jpg', 'English', 3);
+
+INSERT INTO book (book_id, title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
+VALUES (29, 'The Chronicles of Narnia', 'Enchanted Tales Publishing', 600, 4567890123, 'A beloved fantasy series that transports readers into a magical world filled with talking animals, mythical creatures, and epic adventures.', 2, 2, 'https://covers.openlibrary.org/b/id/13236788-M.jpg', 'English', 3);
 
 

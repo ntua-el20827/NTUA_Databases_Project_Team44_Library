@@ -57,8 +57,6 @@ VALUES
   ('John Green', 16),
   ('Gillian Flynn', 17),
   ('C.S. Lewis', 18);
-
---- authors for books of shcool 4
 INSERT INTO book_author (author, book_id)
 VALUES ('Jane Austen', 19),
        ('William Shakespeare', 19),
@@ -72,8 +70,6 @@ VALUES ('Jane Austen', 19),
        ('Ruta Sepetys', 23),
        ('J.D. Salinger', 24),
        ('Harper Lee', 24);
-
---- authors for books of shcool 5
 INSERT INTO author (author_name, book_id)
 VALUES 
     ('Stieg Larsson', 25),

@@ -150,7 +150,6 @@ VALUES
   ('Thriller', 17),
   ('Fantasy', 18),
   ('Fiction', 18);
---- themes for books of school 4
 INSERT INTO book_theme (theme, book_id)
 VALUES
     ('Fiction', 19),
@@ -171,8 +170,6 @@ VALUES
     ('Epic Poetry', 24),
     ('Adventure', 24),
     ('History', 24);
-
---- themes for books of school 5
 INSERT INTO book_theme (theme, book_id)
 VALUES
     ('Mystery', 25),
