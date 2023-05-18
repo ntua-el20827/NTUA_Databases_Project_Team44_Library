@@ -121,7 +121,7 @@ CREATE TABLE book_keywords (
 
 -- Table 'book_theme'
 CREATE TABLE book_theme (
-  theme ENUM('Fiction', 'Non-fiction','Science fiction', 'Drama', 'Adventure','Mystery', 'Romance', 'Thriller', 'Horror', 'Fantasy', 'Biography', 'Autobiography', 'History', 'Poetry', 'Comics', 'Cookbooks', 'Travel', 'Religion', 'Self-help', 'Art', 'Music','Coming of Age', 'Sports', 'Humor', 'Reference') NOT NULL,
+  theme ENUM('Fiction', 'Non-fiction','Dystopia','Gothic','Science Fiction', 'Science','Drama', 'Adventure','Mystery', 'Romance','War', 'Classic','Thriller', 'Horror', 'Fantasy', 'Biography', 'Autobiography', 'History', 'Poetry', 'Comics', 'Cookbooks', 'Travel', 'Religion', 'Self-help', 'Art', 'Music','Coming of Age', 'Sports', 'Humor', 'Children\'s','Reference') NOT NULL,
   book_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (theme, book_id),
@@ -144,6 +144,7 @@ CREATE TABLE review (
   rev_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id INT UNSIGNED NOT NULL,
   book_id INT UNSIGNED NOT NULL,
+  review_text VARCHAR(100),
   rev_date INT UNSIGNED NOT NULL,
   rating ENUM('1', '2', '3', '4', '5') NOT NULL, 
   PRIMARY KEY (rev_id,user_id,book_id),
