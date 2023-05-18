@@ -196,6 +196,20 @@ INSERT INTO book_theme (theme, book_id) VALUES
   ('Adventure', 3),
   ('Fantasy', 4),
   ('Adventure', 4);
+INSERT INTO book_theme (theme, book_id)
+VALUES
+    ('Romance', 1),
+    ('Societal Norms', 1),
+    ('Love', 1),
+    ('Coming of Age', 2),
+    ('Identity', 2),
+    ('Teenagers', 2),
+    ('Fantasy', 3),
+    ('Adventure', 3),
+    ('Magic', 3),
+    ('Dystopian', 4),
+    ('Science Fiction', 4),
+    ('Totalitarianism', 4);
 
 
 --- thmemes for books of school 2
