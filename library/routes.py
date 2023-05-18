@@ -38,6 +38,14 @@ def index():
         return render_template('index.html',schools=first_values)
 
 
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+@app.route('/home')
+def home():
+    return redirect(url_for('index'))
+
 # Route for the login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
