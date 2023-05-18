@@ -145,13 +145,13 @@ CREATE TABLE review (
   user_id INT UNSIGNED NOT NULL,
   book_id INT UNSIGNED NOT NULL,
   review_text VARCHAR(100),
-  rev_date INT UNSIGNED NOT NULL,
+  rev_date DATE NULL,
   rating ENUM('1', '2', '3', '4', '5') NOT NULL, 
   PRIMARY KEY (rev_id,user_id,book_id),
   KEY fk_review_user_id (user_id),
-  CONSTRAINT fk_review_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT fk_review_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT,
   KEY fk_review_book_id (book_id),
-  CONSTRAINT fk_review_book_id FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT fk_review_book_id FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE RESTRICT
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --- Ειναι σωστο το primary key?
 

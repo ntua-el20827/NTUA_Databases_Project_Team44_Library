@@ -342,7 +342,6 @@ VALUES
   ('Edwin A. Abbott', 42),
   ('Joseph Conrad', 43),
   ('Lewis Carroll', 44);
--- +++++++++++++++ --> WORKING SO FAR
 
 ---
 ---
@@ -410,6 +409,100 @@ INSERT INTO book_keywords (keywords, book_id) VALUES ('nonsense', 44);
 INSERT INTO book_keywords (keywords, book_id) VALUES ('children', 44);
 
 ---
+---
+---
+---
+---
+---
+--- superadmin
+INSERT INTO lib_user (user_pwd, user_name, school_id, role_name, user_email, user_firstname, user_lastname, user_date_of_birth)
+VALUES (1111, 'manosneo', 1, 'super_admin', 'manosaekara@gmail.com', 'manos', 'aek', '1924-01-01');
+--- 1 admin for every shcool 
+INSERT INTO lib_user (user_pwd, user_name, school_id, role_name, user_email, user_firstname, user_lastname, user_date_of_birth)
+VALUES (1234, 'george123', 1, 'admin', 'georgesmith@gmail.com', 'George', 'Smith', '1985-07-10'),
+       (5678, 'emily456', 2, 'admin', 'emilyjones@gmail.com', 'Emily', 'Jones', '1982-11-18'),
+       (9876, 'jason789', 3, 'admin', 'jasonbrown@gmail.com', 'Jason', 'Brown', '1988-03-25'),
+       (5432, 'sarah321', 4, 'admin', 'sarahdavis@gmail.com', 'Sarah', 'Davis', '1979-09-05'),
+       (7890, 'michael654', 5, 'admin', 'michaelwilson@gmail.com', 'Michael', 'Wilson', '1987-12-01');
+--- teachers - 2 for every school
+INSERT INTO lib_user (user_pwd, user_name, school_id, role_name, user_email, user_firstname, user_lastname, user_date_of_birth)
+VALUES
+  (1234, 'johnsmith', 2, 'teacher', 'johnsmith@gmail.com', 'John', 'Smith', '1985-07-12'),
+  (9876, 'jennifermiller', 3, 'teacher', 'jennifermiller@gmail.com', 'Jennifer', 'Miller', '1978-03-30'),
+  (2468, 'mike1980', 4, 'teacher', 'mike1980@gmail.com', 'Michael', 'Johnson', '1980-11-05'),
+  (1357, 'amandabrown', 5, 'teacher', 'amandabrown@gmail.com', 'Amanda', 'Brown', '1992-02-18'),
+  (5678, 'davidthompson', 1, 'teacher', 'davidthompson@gmail.com', 'David', 'Thompson', '1972-09-10'),
+  (7890, 'sarahjones', 2, 'teacher', 'sarahjones@gmail.com', 'Sarah', 'Jones', '1988-12-01'),
+  (5432, 'robertgreen', 3, 'teacher', 'robertgreen@gmail.com', 'Robert', 'Green', '1983-06-22'),
+  (2109, 'emilytaylor', 4, 'teacher', 'emilytaylor@gmail.com', 'Emily', 'Taylor', '1995-04-14'),
+  (8765, 'chrisharris', 5, 'teacher', 'chrisharris@gmail.com', 'Chris', 'Harris', '1975-08-07'),
+  (4321, 'jessicawright', 1, 'teacher', 'jessicawright@gmail.com', 'Jessica', 'Wright', '1987-01-23');
+
+--students - 5 for every school
+INSERT INTO lib_user (user_pwd, user_name, school_id, role_name, user_email, user_firstname, user_lastname, user_date_of_birth)
+VALUES
+  (4321, 'ethan456', 1, 'student', 'ethanbrown@example.com', 'Ethan', 'Brown', '2003-06-10'),
+  (5678, 'mia789', 1, 'student', 'miaharris@example.com', 'Mia', 'Harris', '2004-09-05'),
+  (8765, 'jacob234', 1, 'student', 'jacobsmith@example.com', 'Jacob', 'Smith', '2003-03-17'),
+  (7890, 'ava567', 1, 'student', 'avajones@example.com', 'Ava', 'Jones', '2002-12-08'),
+  (9012, 'sophia890', 1, 'student', 'sophiawilson@example.com', 'Sophia', 'Wilson', '2004-11-25'),
+  (3456, 'noah321', 2, 'student', 'noahdavis@example.com', 'Noah', 'Davis', '2005-07-02'),
+  (2345, 'olivia654', 2, 'student', 'oliviamartin@example.com', 'Olivia', 'Martin', '2003-02-13'),
+  (1234, 'liam987', 2, 'student', 'liamthompson@example.com', 'Liam', 'Thompson', '2004-04-30'),
+  (4321, 'emma123', 2, 'student', 'emmalopez@example.com', 'Emma', 'Lopez', '2002-09-22'),
+  (5678, 'william456', 2, 'student', 'williamjohnson@example.com', 'William', 'Johnson', '2003-12-14'),
+  (8765, 'ava789', 3, 'student', 'avamartinez@example.com', 'Ava', 'Martinez', '2004-06-07'),
+  (7890, 'mason234', 3, 'student', 'masonhall@example.com', 'Mason', 'Hall', '2002-11-19'),
+  (9012, 'sophia567', 3, 'student', 'sophiamiller@example.com', 'Sophia', 'Miller', '2003-08-12'),
+  (3456, 'james890', 3, 'student', 'jamesrivera@example.com', 'James', 'Rivera', '2004-02-27'),
+  (2345, 'olivia123', 3, 'student', 'oliviacooper@example.com', 'Olivia', 'Cooper', '2002-10-15'),
+  (1234, 'liam456', 4, 'student', 'liamroberts@example.com', 'Liam', 'Roberts', '2003-01-28'),
+  (4321, 'ava729', 4, 'student', 'avahill@example.com', 'Ava', 'Hill', '2004-04-15'),
+  (5678, 'michael234', 4, 'student', 'michaelwood@example.com', 'Michael', 'Wood', '2002-12-07'),
+  (8765, 'sophia567', 4, 'student', 'sophialong@example.com', 'Sophia', 'Long', '2003-09-20'),
+  (9012, 'oliver123', 5, 'student', 'oliverwright@example.com', 'Oliver', 'Wright', '2003-05-10'),
+  (3456, 'charlotte456', 5, 'student', 'charlottelee@example.com', 'Charlotte', 'Lee', '2002-11-15'),
+  (2345, 'lucas789', 5, 'student', 'lucasbaker@example.com', 'Lucas', 'Baker', '2004-02-22'),
+  (1234, 'harper234', 5, 'student', 'harperjackson@example.com', 'Harper', 'Jackson', '2003-07-31'),
+  (4321, 'amelia567', 5, 'student', 'ameliarobinson@example.com', 'Amelia', 'Robinson', '2002-12-18');
+---
+---
+---
+-- +++++++++++++++ --> WORKING SO FAR
+---
+---
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (2, 1, 'I loved Pride and Prejudice! Great characters and engaging story.', '2022-03-10', '5');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (3, 10, 'Frankenstein is a must-read classic!', '2023-02-24', '4');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (4, 6, 'The Great Expectations captures Victorian society beautifully.', '2022-02-15', '5');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (5, 14, 'The Chronicles of Narnia is a delightful fantasy series.', '2022-03-01', '4');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (6, 21, 'The Help is a powerful novel on racial discrimination.', '2022-12-12', '5');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (7, 27, 'The Road is a haunting post-apocalyptic tale.', '2022-02-28', '5');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (8, 33, 'The Lost World is a thrilling dinosaur adventure.', '2022-03-15', '4');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (9, 39, 'The Poison Belt is an intriguing sci-fi novel.', '2022-12-31', '3');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (10, 44, 'Alice''s Adventures in Wonderland is a whimsical classic.', '2022-02-20', '4');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (11, 43, 'The Secret Agent is a gripping spy thriller.', '2022-12-20', '4');
+
+--- select AVG(rating) as average_rating from review;
+
 ---
 ---
 ---
