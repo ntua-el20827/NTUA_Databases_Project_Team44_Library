@@ -1,0 +1,94 @@
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/14314120-M.jpg'
+where Title = 'The Great Gatsby';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/8410894-M.jpg'
+where Title = 'To Kill a Mockingbird';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/12054527-M.jpg'
+where Title = '1984';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/12645114-M.jpg'
+where Title = 'Pride and Prejudice';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/6297651-M.jpg'
+where Title = 'The Catcher in the Rye';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/12003329-M.jpg'
+where Title = 'The Hobbit';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/12992919-M.jpg'
+where Title = 'Brave New World';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/13911921-M.jpg'
+where Title = 'The Lord of the Rings';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/13081298-M.jpg'
+where Title = 'The Odyssey';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/8314135-M.jpg'
+where Title = 'The Alchemist';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/13029793-M.jpg'
+where Title = 'The Great Expectations';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/8291454-M.jpg'
+where Title = 'To the Lighthouse';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/110556-M.jpg'
+where Title = 'Moby-Dick';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/14314591-M.jpg'
+where Title = 'The Picture of Dorian Gray';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/109033-M.jpg'
+where Title = 'Frankenstein';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/13398433-M.jpg'
+where Title = 'The Adventures of Huckleberry Finn';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/9411898-M.jpg'
+where Title = 'Crime and Punishment';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/12903634-M.jpg'
+where Title = 'Harry Potter and the Sorcerer-s Stone';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/12646540-M.jpg'
+where Title = 'The Hunger Games';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/10655947-M.jpg'
+where Title = 'The Girl with the Dragon Tattoo';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/9269942-M.jpg'
+where Title = 'A Game of Thrones';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/7890579-M.jpg'
+where Title = 'The Fault in Our Stars';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/11568078-M.jpg'
+where Title = 'Gone Girl';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/13236788-M.jpg'
+where Title = 'The Chronicles of Narnia';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/10520498-M.jpg'
+where Title = 'The Da Vinci Code';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/12728870-M.jpg'
+where Title = 'The Kite Runner';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/11478077-M.jpg'
+where Title = 'The Book Thief';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/8066208-M.jpg'
+where Title = 'The Secret Life of Bees';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/9557220-M.jpg'
+where Title = 'The Road';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/13282079-M.jpg'
+where Title = 'The Bell Jar';
+UPDATE book 
+Set Images = 'https://covers.openlibrary.org/b/id/10544717-M.jpg'
+where Title = 'The Help';
+
