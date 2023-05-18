@@ -158,12 +158,14 @@ CREATE TABLE review (
 --- Views
 ---
 
-/*---All schools with their names
+---All schools with their names
 CREATE VIEW all_schools AS
 SELECT school_id, school_name
 FROM school;
 
----All the books with image, title, name, review
+
+-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --> WORKING SO FAR
+/* ---All the books with image, title, name, review
 CREATE VIEW all_books_with_info AS
 SELECT b.book_image, b.title, CONCAT(u.user_firstname, ' ', u.user_lastname) AS name, r.review_text AS review
 FROM book b
@@ -177,7 +179,7 @@ FROM book_status bs
 INNER JOIN book b ON bs.book_id = b.book_id
 WHERE b.number_of_available_books = 0 AND bs.status = 'reserved'
 GROUP BY bs.request_date;
-*/
+ */
 
 
 
