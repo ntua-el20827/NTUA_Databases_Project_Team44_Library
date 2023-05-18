@@ -72,7 +72,6 @@ CREATE TABLE book (
   CONSTRAINT fk_book_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 /*-- Table 'reservation'
 CREATE TABLE reservation (
   book_id INT UNSIGNED NOT NULL,
@@ -90,12 +89,10 @@ CREATE TABLE reservation (
 --- Ειναι σωστο το primary key?*/
 
 
---- new -> baba suggestion for reservation/borrowing
 CREATE TABLE book_status (
   book_status_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   book_id INT UNSIGNED NOT NULL,
   user_id INT UNSIGNED NOT NULL,
-  shool_id INT UNSIGNED NOT NULL,
   status ENUM('borrowed', 'reserved') NOT NULL,
   request_date DATE,
   approval_date DATE,

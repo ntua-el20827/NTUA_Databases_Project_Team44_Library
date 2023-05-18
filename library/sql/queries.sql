@@ -1,12 +1,21 @@
 ---3.1 Superadmin Queries
 ---3.1.1 List of the total number of borrowings per school  //Κριτήρια Αναζήτησης??
-SELECT school.school_name, COUNT(*) AS num_borrowings
-FROM book_status
-INNER JOIN school ON book_status.school_id = school.school_id
-WHERE status = 'borrowed'
-GROUP BY school.school_name;
+SELECT 
+  school.school_name,
+  COUNT(*) AS borrow_count
+FROM 
+  book_status
+  INNER JOIN book ON book_status.book_id = book.book_id
+  INNER JOIN school ON book.school_id = school.school_id
+WHERE 
+  book_status.status = 'borrowed' AND
+  YEAR(book_status.approval_date) = <year> AND
+  MONTH(book_status.approval_date) = <month>
+GROUP BY 
+  school.school_name
+ORDER BY 
+  borrow_count DESC;
 
----Τι θα κάνουμε με το 'your_book_theme'??
 ---3.1.2(a) Authors who belong to a given book theme
 SELECT DISTINCT book_author.author
 FROM book_theme
@@ -50,16 +59,19 @@ GROUP BY lib_user.user_id
 HAVING COUNT(*) >= 20;
 
 ---3.1.6 top 3 book theme pairs that appear in borrowings
-SELECT theme1, theme2, COUNT(*) AS num_borrowings
-FROM (
-    SELECT DISTINCT book_status.book_id, book_theme1.theme AS theme1, book_theme2.theme AS theme2
-    FROM book_status
-    INNER JOIN book_theme AS book_theme1 ON book_status.book_id = book_theme1.book_id
-    INNER JOIN book_theme AS book_theme2 ON book_theme1.book_id = book_theme2.book_id AND book_theme1.theme < book_theme2.theme
-    WHERE book_status.status = 'borrowed'
-) AS t
-GROUP BY theme1, theme2
-ORDER BY num_borrowings DESC
+SELECT 
+  CONCAT(bt1.theme,',',bt2.theme) AS theme_pair, 
+  COUNT(*) AS borrow_count
+FROM 
+  book_theme bt1
+  INNER JOIN book_theme bt2 ON bt1.book_id = bt2.book_id AND bt1.theme < bt2.theme
+  INNER JOIN book_status ON book_theme.book_id = book_status.book_id
+WHERE 
+  book_status.status = 'borrowed'
+GROUP BY 
+  theme_pair
+ORDER BY 
+  borrow_count DESC
 LIMIT 3;
 
 ---3.1.7 Authors who have written at least 5 books less than the author who has written the most books
@@ -111,13 +123,39 @@ GROUP BY u.user_id, bt.theme;
 
 ---3.3 User Queries
 ---3.3.1 All registered books(search criteria: title/book theme/author)
-SELECT b.title, bt.theme, ba.author
-FROM book b
-INNER JOIN book_theme bt ON b.book_id = bt.book_id
-INNER JOIN book_author ba ON b.book_id = ba.book_id;
+SELECT 
+  book.book_id,
+  book.title,
+  book.publisher,
+  book.pages,
+  book.ISBN,
+  book.summary,
+  book.number_of_books,
+  book.number_of_available_books,
+  book.book_image,
+  book.book_language,
+  book_theme.theme,
+  book_author.author
+FROM 
+  book
+  INNER JOIN book_theme ON book.book_id = book_theme.book_id
+  INNER JOIN book_author ON book.book_id = book_author.book_id
+WHERE 
+  book.title LIKE '%Title_search%' -- specify the book title
+  OR book_theme.theme = 'Theme_search' -- specify the book theme
+  OR book_author.author LIKE '%Author_search%' -- specify the book author
 
 ---3.3.2 List of books that each user has borrowed (we have put user_id,user full name,book_id,book_title)
-SELECT u.user_id, CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bs.book_id, b.title
-FROM lib_user u
-INNER JOIN book_status bs ON u.user_id = bs.user_id
-INNER JOIN book b ON bs.book_id = b.book_id;
+SELECT 
+  lib_user.user_id,
+  CONCAT(lib_user.user_firstname, ' ', lib_user.user_lastname) AS user_full_name,
+  book.book_id,
+  book.title AS book_title
+FROM 
+  book_status
+  INNER JOIN lib_user ON book_status.user_id = lib_user.user_id
+  INNER JOIN book ON book_status.book_id = book.book_id
+WHERE 
+  book_status.status = 'borrowed'
+ORDER BY 
+  lib_user.user_id;
