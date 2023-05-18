@@ -66,16 +66,12 @@ CREATE TABLE book (
   book_image VARCHAR(256) NOT NULL, 
   book_language VARCHAR(45),
   borrow_count INT NOT NULL DEFAULT 0, --- new->baba
-  ---user_id INT UNSIGNED NOT NULL,
   school_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (book_id),
-  KEY fk_book_user_id (user_id),
   KEY fk_book_school_id (school_id),
-  CONSTRAINT fk_book_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT fk_book_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
---- ΛΕΙΠΕΙ Η ΕΙΚΟΝΑ / ΤΟ SUMMARY ΙΣΩΣ ΝΑ ΘΕΛΕΙ ΜΕΓΑΛΥΤΕΡΟ ΜΕΓΕΘΟΣ
 
 /*-- Table 'reservation'
 CREATE TABLE reservation (
@@ -93,16 +89,11 @@ CREATE TABLE reservation (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --- Ειναι σωστο το primary key?*/
 
---- > george
--- Χρειάζεται επειγόντως το table με τους δανεισμούς (many to many) ωστε να κάνουμε store ολους
--- τους δανεισμούς. Το table reservation ισως να μην χρειάζετια και να μπορούμε να το κάνουμε με το view!
 
---- new -> baba suggestion for reservation/borrowing
 CREATE TABLE book_status (
   book_status_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   book_id INT UNSIGNED NOT NULL,
   user_id INT UNSIGNED NOT NULL,
-  shool_id INT UNSIGNED NOT NULL,
   status ENUM('borrowed', 'reserved') NOT NULL,
   request_date DATE,
   approval_date DATE,
@@ -110,10 +101,8 @@ CREATE TABLE book_status (
   PRIMARY KEY (book_status_id),
   KEY fk_book_status_book_id (book_id),
   KEY fk_book_status_user_id (user_id),
-  KEY fk_book_status_school_id (school_id),
   CONSTRAINT fk_book_status_book_id FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT fk_book_status_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-  ---CONSTRAINT fk_book_status_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
