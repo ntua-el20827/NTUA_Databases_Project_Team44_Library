@@ -22,6 +22,7 @@ INSERT INTO school_phone (phone, school_id) VALUES
   (3572298732, 5),
   (3572214725, 5);
 
+--- books for school 1 -> 20 so far
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
 VALUES ('Pride and Prejudice','Stellar Books', 400, 1234567890, 'A classic romance novel exploring themes of societal norms, love, and prejudice in 19th-century England.', 4, 4, 'https://covers.openlibrary.org/b/id/12645114-M.jpg', 'English', 1);
 
@@ -296,6 +297,7 @@ VALUES
 ---
 ---
 ---
+--- authors for books of schools 1 and 2
 INSERT INTO book_author (author, book_id)
 VALUES
   ('Jane Austen', 1),
@@ -348,6 +350,7 @@ VALUES
 ---
 ---
 ---
+-- keywords for all books of schools 1 and 2
 -- Book 1: Pride and Prejudice
 INSERT INTO book_keywords (keywords, book_id) VALUES ('romance', 1);
 INSERT INTO book_keywords (keywords, book_id) VALUES ('social class', 1);
