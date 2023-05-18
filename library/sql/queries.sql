@@ -81,14 +81,20 @@ SELECT book.title, GROUP_CONCAT(DISTINCT book_author.author SEPARATOR ', ') AS a
 FROM book 
 LEFT JOIN book_author ON book.book_id = book_author.book_id 
 LEFT JOIN book_theme ON book.book_id = book_theme.book_id 
-WHERE book.title LIKE '%search_criteria%' 
+WHERE book.title LIKE '%search_criteriar%' 
 OR book_author.author LIKE '%search_criteria%' 
 OR book_theme.theme LIKE '%search_criteria%' 
 GROUP BY book.book_id 
 ORDER BY book.title ASC;
 
 ---3.2.2 Find all borrowers who have at their pocession at least one book and they have delayed the return
-
+SELECT u.user_firstname, u.user_lastname, DATEDIFF(NOW(), bs.return_date) AS days_of_delay
+FROM lib_user u
+JOIN book_status bs ON u.user_id = bs.user_id AND bs.status = 'borrowed'
+JOIN book b ON bs.book_id = b.book_id AND b.number_of_available_books = 0
+WHERE DATEDIFF(NOW(), bs.return_date) > 0
+GROUP BY u.user_id
+HAVING COUNT(*) = 1;
 
 ---3.2.3 Average of reviews by borrower and book theme(search criteria: user/book theme)
 SELECT CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bt.theme, AVG(r.rating) AS avg_rating
