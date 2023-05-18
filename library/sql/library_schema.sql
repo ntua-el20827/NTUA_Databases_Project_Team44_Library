@@ -103,8 +103,8 @@ CREATE TABLE book_status (
   book_id INT UNSIGNED NOT NULL,
   user_id INT UNSIGNED NOT NULL,
   school_id INT UNSIGNED NOT NULL,
-  status ENUM('borrowed', 'reserved') NOT NULL, -- Αρχικά όμως τι θα είναι?
-  request_date DATE NOT NULL,
+  status ENUM('borrowed', 'reserved') NOT NULL,
+  request_date DATE,
   approval_date DATE,
   return_date DATE,
   PRIMARY KEY (book_status_id),
@@ -178,6 +178,14 @@ SELECT b.book_image, b.title, CONCAT(u.user_firstname, ' ', u.user_lastname) AS 
 FROM book b
 INNER JOIN lib_user u ON b.user_id = u.user_id
 LEFT JOIN review r ON b.book_id = r.book_id;
+
+---Reservations without available copies(grouped by date)
+CREATE VIEW no_available_copies_reservations AS
+SELECT bs.request_date AS reservation_date, COUNT(*) AS reservation_count
+FROM book_status bs
+INNER JOIN book b ON bs.book_id = b.book_id
+WHERE b.number_of_available_books = 0 AND bs.status = 'reserved'
+GROUP BY bs.request_date;
 */
 
 
