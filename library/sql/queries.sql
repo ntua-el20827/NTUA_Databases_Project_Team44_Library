@@ -1,5 +1,5 @@
 ---3.1 Superadmin Queries
----3.1.1 List of the total number of borrowings per school  //Κριτήρια Αναζήτησης??
+---3.1.1 List of the total number of borrowings per school  //Κριτήρια Αναζήτησης
 SELECT 
   school.school_name,
   COUNT(*) AS borrow_count
@@ -65,7 +65,7 @@ SELECT
 FROM 
   book_theme bt1
   INNER JOIN book_theme bt2 ON bt1.book_id = bt2.book_id AND bt1.theme < bt2.theme
-  INNER JOIN book_status ON book_theme.book_id = book_status.book_id
+  INNER JOIN book_status ON bt2.book_id = book_status.book_id
 WHERE 
   book_status.status = 'borrowed'
 GROUP BY 
