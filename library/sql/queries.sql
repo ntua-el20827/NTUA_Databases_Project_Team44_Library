@@ -75,7 +75,7 @@ ORDER BY
 LIMIT 3;
 
 ---3.1.7 Authors who have written at least 5 books less than the author who has written the most books
-SELECT book_author.author
+SELECT book_author.author, (max_books.num_books - COUNT(*)) AS book_diff
 FROM book_author
 INNER JOIN (
   SELECT book_author.book_id, COUNT(*) AS num_books
@@ -85,7 +85,7 @@ INNER JOIN (
   LIMIT 1
 ) AS max_books ON book_author.book_id = max_books.book_id
 GROUP BY book_author.author
-HAVING (max_books.num_books - COUNT(*)) >= 5;
+HAVING book_diff >= 5;
 
 ---3.2 Αdmin Queries
 ---3.2.1 Present all books by title, author (search criteria: book title/book theme/book author/number of books)
@@ -134,8 +134,8 @@ SELECT
   book.number_of_available_books,
   book.book_image,
   book.book_language,
-  book_theme.theme,
-  book_author.author
+  GROUP_CONCAT(DISTINCT book_theme.theme SEPARATOR ', ') AS themes,
+  GROUP_CONCAT(DISTINCT book_author.author SEPARATOR ', ') AS authors
 FROM 
   book
   INNER JOIN book_theme ON book.book_id = book_theme.book_id
@@ -143,7 +143,9 @@ FROM
 WHERE 
   book.title LIKE '%Title_search%' -- specify the book title
   OR book_theme.theme = 'Theme_search' -- specify the book theme
-  OR book_author.author LIKE '%Author_search%' -- specify the book author
+  OR book_author.author LIKE '%Jane Austen%' -- specify the book author
+GROUP BY 
+  book.book_id;
 
 ---3.3.2 List of books that each user has borrowed (we have put user_id,user full name,book_id,book_title)
 SELECT 
