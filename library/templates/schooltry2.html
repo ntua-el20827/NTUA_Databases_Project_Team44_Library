@@ -3,6 +3,14 @@
 <head>
   <title>Books Webpage</title>
   <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
+  <script>
+    function confirmLogout() {
+      var result = confirm("Are you sure you want to logout?");
+      if (result) {
+        window.location.href = "{{ url_for('logout') }}";
+      }
+    }
+  </script>
   <style>
     
     .row {
@@ -28,11 +36,10 @@
     </div>
       
     <div class="topnav">
-        
-                  <a href="index.html" > Home </a> |
-                  <a href="profile.html" > Το προφιλ μου </a> |
+                  <a href="{{ url_for('user_profile') }}" > Το προφιλ μου </a> |
                   <a href="page2.html"> Τα βιβλια μου </a> |
-                  <a href="contact.html" > Επικοινωνια με τον Υπεύθυνο Βιβλιοθήκης </a> |
+                  <a href="{{ url_for('contact') }}" > Επικοινωνια με τον Υπεύθυνο Βιβλιοθήκης </a>
+                  <a href="#" onclick="confirmLogout()">Logout</a>
     </div>
     <br>
     <div class ="welcome">
