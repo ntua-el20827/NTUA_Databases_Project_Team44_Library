@@ -20,6 +20,7 @@
       width: 100%;
       max-height: 200px;
     }
+  
   </style>
 </head>
 <body>
@@ -29,48 +30,21 @@
       
     <div class="topnav">
         
-                  <a href="index.html" > Home </a> |
+                  <a href="{{ url_for('home') }}">Home</a>  |
                   <a href="profile.html" > Το προφιλ μου </a> |
                   <a href="page2.html"> Τα βιβλια μου </a> |
-                  <a href="contact.html" > Επικοινωνια με τον Υπεύθυνο Βιβλιοθήκης </a> |
+                  <a href="{{ url_for('contact') }}">Επικοινωνια με τον Υπευθυνο Βιβλιοθηκης</a>
     </div>
     <br>
     <div class ="welcome">
     <p > <h3>Μπορειτε να αναζητήσετε παρακάτω το σχολείο στο οποίο ανήκετε. Αφού το βρείτε, πατήστε στο σχολείο, όπου και θα μπορέσετε να κάνετε αίτηση για έγγραφη.</h3> 
     </p>
     
-    <h2> Σχολεία: </h2>
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Books Webpage</title>
-      <style>
-        .row {
-      display: flex;
-      justify-content: space-between;
-      margin-left: 50px;
-      margin-right: 50px;
-      margin-top: 50px;
-    }
     
-    .book {
-      width: 20%;
-      
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    
-    .book img {
-      width: 100%;
-      max-height: 200px;
-    }
-      </style>
-    </head>
-    <body>
       <div class="row">
       {% for book in books %}
           <div class="book">
-            <a href="{{ book.link }}">
+            <a href="{{ url_for('books') }}">
               <img src={{book[2]}} alt="fadsbook.titlefdasfasd">
               <h3>{{ book[0] }}</h3>
             </a>

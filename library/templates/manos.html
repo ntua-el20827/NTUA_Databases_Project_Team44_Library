@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Details</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            display: flex;
+        }
+
+        .card img {
+            width: 200px;
+            height: 200px;
+            margin-right: 10px;
+        }
+
+        .card .details {
+            flex-grow: 1;
+            margin: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <img src="cat.jpg" alt="Book Cover">
+        <div class="details">
+            <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+            <p><strong>Title:</strong> {{ book.title }}</p>
+            <p><strong>Author:</strong> {{ book.author }}</p>
+            <p><strong>Publish Date:</strong> {{ book.publish_date }}</p>
+        </div>
+    </div>
+</body>
+</html>

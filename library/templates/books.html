@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+	<head> 
+		<meta charset ="UTF-8"> 
+		<meta name = "description" content="This is an awesome website"> 
+		<title> School Library </title>
+		
+
+		<link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
+      
+	</head>
+	
+	<body>
+		
+		  
+		  <div class="topnav">		  
+					  <a href="{{ url_for('contact') }}">Επικοινωνια</a> |
+                      <a href="{{ url_for('school') }}">Επιστροφή</a>
+					  
+		  </div>
+		 <br>
+         <div class="card">
+            <img 
+             src="cat.jpg"
+             alt="Το εξώφυλλο δεν είναι διαθέσιμο"
+             class = "cover">             
+             <div class="details1">
+                <p><strong>ISBN (Barcode):</strong> </p>
+                <p><strong>Τίτλος:</strong> </p>
+                <p><strong>Συγγραφέας:</strong> </p>
+                <p><strong>Εκδόσεις:</strong> </p>
+                <p><strong>Αριθμός Διαθέσιμων Αντιτύπων:</strong> </p>
+                <p><strong>Αριθμός Σελίδων:</strong> </p>
+                
+                <p><strong>Περιγραφή:</strong> </p>
+                <p><strong>Γλώσσα:</strong> </p>
+                <p><strong>Λέξεις κλειδιά:</strong> </p>
+            </div>
+            <div class="details2">
+                <p> ISBN: </p>
+                <p>Title: </p>
+                <p>Author: </p>
+                <p>Publish Date:</p>
+                <p>Publish Date:</p>
+                <p>Publish Date:</p>
+
+                <p> Ένας άγγλος συνταξιούχος γιατρός, ο οποίος πρόσφατα έχασε τη γυναίκα του, αναζητά μανιωδώς λεπτομέρειες 
+                    -φαινομενικά επουσιώδεις- της ζωής του Φλωμπέρ. Μέσα από τη δονκιχωτική αναζήτησή του προκύπτει 
+                    η πρωτότυπη βιογραφία ενός σπουδαίου λογοτέχνη, στην οποία ακούμε τη φωνή του καθώς 
+                    και τη φωνή των οικείων του, αλλά και η αυτοβιογραφία του ίδιου του αφηγητή 
+                    που προσπαθεί να εκλογικεύσει τη ζωή του μέσα από την πορεία της ζωής του Φλωμπέρ.</p>
+                <p>Publish Date:</p>
+                <p>Publish Date:</p>
+                <p>Publish Date:</p>
+                    
+           
+             </div>
+
+        </div>
+     </body>
+	 
+<html>   
