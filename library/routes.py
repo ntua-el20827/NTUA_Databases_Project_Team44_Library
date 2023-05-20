@@ -38,13 +38,9 @@ def index():
         return render_template('index.html',schools=first_values)
 
 
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
-
 @app.route('/home')
 def home():
-    return redirect(url_for('index'))
+    return redirect(url_for('logout')) # θελει αλλαγή
 
 # Route for the login page
 @app.route('/login', methods=['GET', 'POST'])
@@ -138,18 +134,32 @@ def school():
         cur.close()
         print(books[0][2])
         cat_image = 'cat.jpg'
-        return render_template('schooltry2.html',books = books,cat_image=cat_image ) 
+        return render_template('schooltry2.html',books = books ) 
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
-    return render_template('contact.html')
-
-""" @app.route('/home', methods=['GET', 'POST'])
-def home():
-    #return render_template('') """
+    school_id = session['school_id']
+    # info for admin
+    cur = mydb.connection.cursor()
+    query = "SELECT user_firstname, user_lastname, user_email FROM lib_user WHERE school_id = %s AND role_name = 'admin'" 
+    cur.execute(query,(school_id,))
+    admin = cur.fetchone()
+    cur.close()
+    # info for school
+    cur = mydb.connection.cursor()
+    query = "SELECT email,principal_lastname,principal_firstname FROM school WHERE school_id = %s" 
+    cur.execute(query,(school_id,))
+    admin = cur.fetchone()
+    cur.close()
+    return render_template('contact.html',admin=admin)
 
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     #πρεπει να μηδενίζω τα session
-    return render_template('contact.html')
+    session.clear()
+    return redirect(url_for('index'))
+
+@app.route('/user_profile')
+def user_profile():
+    return render_template('hello.html')
