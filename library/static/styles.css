@@ -93,7 +93,8 @@ body {
 .registration{
   background: rgb(238,174,202);
   background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
-color:  rgb(18, 11, 19);
+  color:  rgb(18, 11, 19);
+ 
   display: block;
   text-align: center;
   width: 500px;
@@ -103,6 +104,7 @@ color:  rgb(18, 11, 19);
   border-width: 6px;
   padding: 50px;
   margin: auto;
+  margin-bottom: 20px;
 
 }
 .conctact{
@@ -138,4 +140,25 @@ color:  rgb(18, 11, 19);
 .book img {
   width: 100%;
   max-height: 200px;
+}
+
+.card{
+  border: 10px solid blue;
+  padding: 20px;
+  display: flex;
+  margin-top: 50px;
+  margin-left: 50px;
+  margin-right: 50px;
+  width 
+}
+.cover{
+  width:150px;
+}
+
+.details1{
+  font-style: italic;
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 300px;
+  
 }
