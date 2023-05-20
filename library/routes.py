@@ -132,7 +132,9 @@ def signup():
 @app.route('/school', methods=['GET', 'POST'])
 def school():
     if request.method == "POST":
-        print("hi")
+        ISBN = request.form['ISBN']  
+        session['ISBN'] = ISBN  
+        return redirect(url_for('book_display'))
     else:
         cur = mydb.connection.cursor()
         school_id = session['school_id']
@@ -224,3 +226,15 @@ def edit_profile():
     cur.close()
     return render_template('edit_profile.html',user_info = user_info,school_info=school_info)
 
+@app.route('/book_display',methods=['GET', 'POST'])
+def book_display():
+    if request.method == "POST":
+        return render_template('hello.html')
+    ISBN = session['ISBN']
+    school_id = session['school_id']
+    cur = mydb.connection.cursor()
+    query = "SELECT title, book_image,publisher, pages, ISBN, summary, number_of_available_books, FROM book WHERE school_id = %s AND ISBN = %s" 
+    cur.execute(query,(school_id, ISBN,))
+    book_info = cur.fetchall()
+    cur.close()
+    return render_template("book_display.html",book_info= book_info)
