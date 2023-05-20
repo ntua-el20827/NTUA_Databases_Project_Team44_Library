@@ -226,15 +226,35 @@ def edit_profile():
     cur.close()
     return render_template('edit_profile.html',user_info = user_info,school_info=school_info)
 
-@app.route('/book_display',methods=['GET', 'POST'])
+@app.route('/book_display')
 def book_display():
-    if request.method == "POST":
-        return render_template('hello.html')
     ISBN = session['ISBN']
     school_id = session['school_id']
     cur = mydb.connection.cursor()
-    query = "SELECT title, book_image,publisher, pages, ISBN, summary, number_of_available_books, FROM book WHERE school_id = %s AND ISBN = %s" 
-    cur.execute(query,(school_id, ISBN,))
-    book_info = cur.fetchall()
+    print("ISBN is ", type(ISBN))
+    print(int(ISBN))
+    query = "SELECT title, book_image,publisher, pages, ISBN, summary, number_of_available_books FROM book WHERE school_id = %s AND ISBN = %s" 
+    cur.execute(query,(school_id, int(ISBN)))
+    book_info = cur.fetchone()
     cur.close()
     return render_template("book_display.html",book_info= book_info)
+   
+@app.route('/rent',methods=['GET', 'POST'])
+def rent():
+    if request.method == "POST":
+        print("hi from rent")
+    # ελεγχος αν υπάρχει διαθέσιμο το βιβλίο
+    ISBN = session['ISBN']
+    school_id = session['school_id']
+    cur = mydb.connection.cursor()
+    query = "SELECT number_of_available_books FROM book WHERE school_id = %s AND ISBN = %s" 
+    cur.execute(query,(school_id, int(ISBN)))
+    available_books = cur.fetchone()
+    cur.close()
+    # αν ναι συνεχίζει στο να το κρατήσει -> table book_status με status=reserved
+    if (available_books>0):
+        print("all okey for rent")
+    # αν οχι πηγαίνει σε άλλη σελίδα για να μπεί σε ουρά κράτησης -> view book_queue 
+
+""" @app.route('/book_queue',methods=['GET', 'POST'])
+def book_queue(): """

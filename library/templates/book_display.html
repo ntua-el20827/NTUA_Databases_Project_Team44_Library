@@ -6,20 +6,18 @@
 </head>
 <body>
   <div class="book-info">
-    <h2>{{ book['title'] }}</h2>
-    <img src="{{ book[1] }}" alt="{{ book[0] }}">
-    <p>ISBN: {{ book[2] }}</p>
-    <p>Description: {{ book['description'] }}</p>
-    <p>Author: {{ book['author'] }}</p>
+    <h2>{{ book_info[0] }}</h2>
+    <img src="{{ book_info[1] }}" alt="{{ book_info[0] }}">
+    <p>ISBN: {{ book_info[2] }}</p>
     <!-- Add more book details as needed -->
 
     <div class="buttons">
       <form action="{{ url_for('book_display') }}" method="POST">
-        <input type="hidden" name="ISBN" value="{{ book[4] }}">
+        <input type="hidden" name="ISBN" value="{{ book_info[4] }}">
         <button type="submit">Rent</button>
       </form>
       <form action="{{ url_for('book_display') }}" method="POST">
-        <input type="hidden" name="ISBN" value="{{ book[4] }}">
+        <input type="hidden" name="ISBN" value="{{ book_info[4] }}">
         <button type="submit">Review</button>
       </form>
     </div>
