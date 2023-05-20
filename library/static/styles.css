@@ -149,7 +149,7 @@ body {
   margin-top: 50px;
   margin-left: 50px;
   margin-right: 50px;
-  width 
+  
 }
 .cover{
   width:150px;
@@ -161,4 +161,17 @@ body {
   margin-right: 20px;
   width: 300px;
   
+}
+.edit-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 5px;
+}
+
+.edit-btn:hover {
+  background-color: #45a049;
 }

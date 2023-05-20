@@ -1,0 +1,44 @@
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (2, 1, 'I loved Pride and Prejudice! Great characters and engaging story.', '2022-03-10', '5');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (3, 1, 'Pride and Prejudice is a timeless classic that never fails to captivate.', '2022-04-15', '4');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (4, 1, 'I enjoyed reading Pride and Prejudice. The romance and social commentary were compelling.', '2022-05-20', '4');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (5, 1, 'Pride and Prejudice is a beautifully written novel. Jane Austens wit shines throughout the story.', '2022-06-25', '5');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (6, 1, 'I couldnt put down Pride and Prejudice! The character development was exceptional.', '2022-07-30', '5');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (7, 1, 'Pride and Prejudice is a must-read for any literature enthusiast. It exceeded my expectations.', '2022-08-05', '4');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (3, 10, 'Frankenstein is a must-read classic!', '2023-02-24', '4');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (4, 6, 'The Great Expectations captures Victorian society beautifully.', '2022-02-15', '5');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (5, 14, 'The Chronicles of Narnia is a delightful fantasy series.', '2022-03-01', '4');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (6, 21, 'The Help is a powerful novel on racial discrimination.', '2022-12-12', '5');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (7, 27, 'The Road is a haunting post-apocalyptic tale.', '2022-02-28', '5');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (8, 33, 'The Lost World is a thrilling dinosaur adventure.', '2022-03-15', '4');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (9, 39, 'The Poison Belt is an intriguing sci-fi novel.', '2022-12-31', '3');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (10, 44, 'Alice''s Adventures in Wonderland is a whimsical classic.', '2022-02-20', '4');
+
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (11, 43, 'The Secret Agent is a gripping spy thriller.', '2022-12-20', '4');

@@ -7,8 +7,7 @@
 <body>
     <div class="topnav">
 			
-        <a href="index.html" > Home </a> |
-        <a href="page2.html"> Εγγραφη Βιβλιοθηκης </a> |
+        <a href="{{url_for('school')}}" > Home </a> |
         <a href="#" > Οδηγιες χρησης </a> |
         
     </div>
@@ -17,12 +16,9 @@
 	</div>
 
     <div class="conctact">
-       <p> <h3>Υπεύθυνη ομάδα Βιβλιοθήκης:</h3> </p> <br>
-        <ul>
-           <li> Γιώργος Γεωργακόπουλοσ </li> <br><br>
-           <li> Ιωάννα  </li><br> <br>
-           <li> Μάνος Νεοφώτιστος, neofotistosmanos@gmail.com</li> 
-        </ul>
+        <p><h3> Στοιχεία Υπευθυνου Βιβλιοθήκης</h3></p><br>
+        <p>Ονοματεπώνυμο: {{ admin[0]}} {{ admin[1] }}</p>
+        <p>Email: {{ admin[2] }}</p>
     </div>
 
 </body>

@@ -1,0 +1,66 @@
+-- Book 1: Pride and Prejudice
+INSERT INTO book_keywords (keywords, book_id) VALUES ('romance', 1);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('social class', 1);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('marriage', 1);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('19th century', 1);
+
+-- Book 2: The Catcher in the Rye
+INSERT INTO book_keywords (keywords, book_id) VALUES ('coming of age', 2);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('teenage angst', 2);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('alienation', 2);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('rebellion', 2);
+
+-- Book 3: The Hobbit
+INSERT INTO book_keywords (keywords, book_id) VALUES ('fantasy', 3);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('adventure', 3);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('quest', 3);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('dwarves', 3);
+
+-- Book 4: 1984
+INSERT INTO book_keywords (keywords, book_id) VALUES ('dystopian', 4);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('totalitarianism', 4);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('surveillance', 4);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('thought control', 4);
+
+-- Book 5: The Alchemist
+INSERT INTO book_keywords (keywords, book_id) VALUES ('allegory', 5);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('destiny', 5);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('personal legend', 5);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('self-discovery', 5);
+
+-- Book 6: The Great Expectations
+INSERT INTO book_keywords (keywords, book_id) VALUES ('bildungsroman', 6);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('ambition', 6);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('unrequited love', 6);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('social status', 6);
+
+-- Book 41: Vingt mille lieues sous les mers
+INSERT INTO book_keywords (keywords, book_id) VALUES ('adventure', 41);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('underwater', 41);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('exploration', 41);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('submarine', 41);
+
+-- Book 42: Flatland
+INSERT INTO book_keywords (keywords, book_id) VALUES ('mathematical fiction', 42);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('satire', 42);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('dimension', 42);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('social commentary', 42);
+
+-- Book 43: The Secret Agent
+INSERT INTO book_keywords (keywords, book_id) VALUES ('espionage', 43);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('terrorism', 43);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('anarchism', 43);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('political thriller', 43);
+
+-- Book 44: Alice's Adventures in Wonderland
+INSERT INTO book_keywords (keywords, book_id) VALUES ('fantasy', 44);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('imagination', 44);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('nonsense', 44);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('children', 44);
+
+---
+---
+---
+---
+---
+---

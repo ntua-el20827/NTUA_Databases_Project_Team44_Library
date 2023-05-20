@@ -38,13 +38,9 @@ def index():
         return render_template('index.html',schools=first_values)
 
 
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
-
 @app.route('/home')
 def home():
-    return redirect(url_for('index'))
+    return redirect(url_for('logout')) # θελει αλλαγή
 
 # Route for the login page
 @app.route('/login', methods=['GET', 'POST'])
@@ -68,7 +64,15 @@ def login():
         if user:
             # User exists in the database and credentials are valid
             session['user_id'] = user[0]  # Store user ID in session for future use
-            #print(user[0])
+            # i want to find the role_name\
+            print(user[0])
+            cur = mydb.connection.cursor()
+            query = "SELECT role_name FROM lib_user WHERE user_id = %s" 
+            cur.execute(query,(user[0],))
+            role_name = cur.fetchone()
+            session['role_name'] = role_name[0]
+            cur.close()
+            print("login -> ",role_name)
             return redirect(url_for('dashboard'))  # Redirect to the dashboard page after successful login
         else:
             # Invalid credentials, show an error message
@@ -128,7 +132,9 @@ def signup():
 @app.route('/school', methods=['GET', 'POST'])
 def school():
     if request.method == "POST":
-        print("hi")
+        ISBN = request.form['ISBN']  
+        session['ISBN'] = ISBN  
+        return redirect(url_for('book_display'))
     else:
         cur = mydb.connection.cursor()
         school_id = session['school_id']
@@ -136,19 +142,99 @@ def school():
         cur.execute(query,(school_id,))
         books = cur.fetchall()
         cur.close()
-        print(books[0][2])
-        cat_image = 'cat.jpg'
-        return render_template('schooltry2.html',books = books,cat_image=cat_image ) 
+        return render_template('schooltry2.html',books = books ) 
+
+@app.route('/contact')
+def contact():
+    school_id = session['school_id']
+    # info for admin
+    cur = mydb.connection.cursor()
+    query = "SELECT user_firstname, user_lastname, user_email FROM lib_user WHERE school_id = %s AND role_name = 'admin'" 
+    cur.execute(query,(school_id,))
+    admin = cur.fetchone()
+    cur.close()
+    # info for school
+    cur = mydb.connection.cursor()
+    query = "SELECT email,principal_lastname,principal_firstname FROM school WHERE school_id = %s" 
+    cur.execute(query,(school_id,))
+    school_info = cur.fetchall()
+    cur.close()
+    return render_template('contact.html',admin=admin,school_info = school_info)
 
 
-""" @app.route('/superadmin', methods=['GET', 'POST'])
-def superadmin():
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    #πρεπει να μηδενίζω τα session
+    session.clear()
+    return redirect(url_for('index'))
 
-@app.route('/student', methods=['GET', 'POST'])
-def student():
+@app.route('/user_profile')
+def user_profile():
+    school_id = session['school_id']
+    user_id = session['user_id']
+    role_name = session['role_name']
+    can_edit = False
+    # info for user
+    cur = mydb.connection.cursor()
+    query = "SELECT user_firstname, user_lastname, user_name, user_email,user_date_of_birth FROM lib_user WHERE user_id = %s" 
+    cur.execute(query,(user_id,))
+    user_info = cur.fetchone()
+    cur.close()
+    # info for school
+    cur = mydb.connection.cursor()
+    query = "SELECT principal_lastname,principal_firstname,school_name FROM school WHERE school_id = %s" 
+    cur.execute(query,(school_id,))
+    school_info = cur.fetchone()
+    cur.close()
+    # if statement -> true if user_role == teacher
+    #print("user_profile ", role_name)
+    if (role_name == 'teacher'):
+        can_edit = True
+        print("can edit = true")
+    return render_template('profile.html',user_info = user_info,school_info=school_info,can_edit=can_edit)
 
-@app.route('/teacher', methods=['GET', 'POST'])
-def teacher():
+@app.route('/edit_profile',methods=['GET', 'POST'])
+def edit_profile():
+    if request.method == 'POST':
+        # Retrieve the updated user information from the form
+        user_firstname = request.form['user_firstname']
+        user_lastname = request.form['user_lastname']
+        user_username = request.form['user_username']
+        user_email = request.form['user_email']
 
-@app.route('/schooladmin', methods=['GET', 'POST'])
-def schooladmin(): """
+        # Perform the necessary database update query using the new information
+        cur = mydb.connection.cursor()
+        query = "UPDATE lib_user SET user_firstname = %s, user_lastname = %s, user_name = %s, user_email = %s WHERE user_id = %s"
+        cur.execute(query, (user_firstname, user_lastname, user_username, user_email, session['user_id']))
+        mydb.connection.commit()
+        cur.close()
+        # Redirect the user to the updated profile page or any other desired page
+        return redirect(url_for('user_profile'))
+    school_id = session['school_id']
+    user_id = session['user_id']
+    # info for user
+    cur = mydb.connection.cursor()
+    query = "SELECT user_firstname, user_lastname, user_name, user_email,user_date_of_birth FROM lib_user WHERE user_id = %s" 
+    cur.execute(query,(user_id,))
+    user_info = cur.fetchone()
+    cur.close()
+    # info for school
+    cur = mydb.connection.cursor()
+    query = "SELECT principal_lastname,principal_firstname,school_name FROM school WHERE school_id = %s" 
+    cur.execute(query,(school_id,))
+    school_info = cur.fetchone()
+    cur.close()
+    return render_template('edit_profile.html',user_info = user_info,school_info=school_info)
+
+@app.route('/book_display',methods=['GET', 'POST'])
+def book_display():
+    if request.method == "POST":
+        return render_template('hello.html')
+    ISBN = session['ISBN']
+    school_id = session['school_id']
+    cur = mydb.connection.cursor()
+    query = "SELECT title, book_image,publisher, pages, ISBN, summary, number_of_available_books, FROM book WHERE school_id = %s AND ISBN = %s" 
+    cur.execute(query,(school_id, ISBN,))
+    book_info = cur.fetchall()
+    cur.close()
+    return render_template("book_display.html",book_info= book_info)

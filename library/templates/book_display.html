@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Book Information</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="book-info">
+    <h2>{{ book['title'] }}</h2>
+    <img src="{{ book[1] }}" alt="{{ book[0] }}">
+    <p>ISBN: {{ book[2] }}</p>
+    <p>Description: {{ book['description'] }}</p>
+    <p>Author: {{ book['author'] }}</p>
+    <!-- Add more book details as needed -->
+
+    <div class="buttons">
+      <form action="{{ url_for('book_display') }}" method="POST">
+        <input type="hidden" name="ISBN" value="{{ book[4] }}">
+        <button type="submit">Rent</button>
+      </form>
+      <form action="{{ url_for('book_display') }}" method="POST">
+        <input type="hidden" name="ISBN" value="{{ book[4] }}">
+        <button type="submit">Review</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
