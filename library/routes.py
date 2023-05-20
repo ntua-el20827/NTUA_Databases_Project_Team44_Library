@@ -64,7 +64,15 @@ def login():
         if user:
             # User exists in the database and credentials are valid
             session['user_id'] = user[0]  # Store user ID in session for future use
-            #print(user[0])
+            # i want to find the role_name\
+            print(user[0])
+            cur = mydb.connection.cursor()
+            query = "SELECT role_name FROM lib_user WHERE user_id = %s" 
+            cur.execute(query,(user[0],))
+            role_name = cur.fetchone()
+            session['role_name'] = role_name[0]
+            cur.close()
+            print("login -> ",role_name)
             return redirect(url_for('dashboard'))  # Redirect to the dashboard page after successful login
         else:
             # Invalid credentials, show an error message
@@ -132,11 +140,9 @@ def school():
         cur.execute(query,(school_id,))
         books = cur.fetchall()
         cur.close()
-        print(books[0][2])
-        cat_image = 'cat.jpg'
         return render_template('schooltry2.html',books = books ) 
 
-@app.route('/contact', methods=['GET', 'POST'])
+@app.route('/contact')
 def contact():
     school_id = session['school_id']
     # info for admin
@@ -149,9 +155,9 @@ def contact():
     cur = mydb.connection.cursor()
     query = "SELECT email,principal_lastname,principal_firstname FROM school WHERE school_id = %s" 
     cur.execute(query,(school_id,))
-    admin = cur.fetchone()
+    school_info = cur.fetchall()
     cur.close()
-    return render_template('contact.html',admin=admin)
+    return render_template('contact.html',admin=admin,school_info = school_info)
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -162,4 +168,29 @@ def logout():
 
 @app.route('/user_profile')
 def user_profile():
-    return render_template('hello.html')
+    school_id = session['school_id']
+    user_id = session['user_id']
+    role_name = session['role_name']
+    can_edit = False
+    # info for user
+    cur = mydb.connection.cursor()
+    query = "SELECT user_firstname, user_lastname, user_name, user_email,user_date_of_birth FROM lib_user WHERE user_id = %s" 
+    cur.execute(query,(user_id,))
+    user_info = cur.fetchone()
+    cur.close()
+    # info for school
+    cur = mydb.connection.cursor()
+    query = "SELECT principal_lastname,principal_firstname,school_name FROM school WHERE school_id = %s" 
+    cur.execute(query,(school_id,))
+    school_info = cur.fetchone()
+    cur.close()
+    # if statement -> true if user_role == teacher
+    #print("user_profile ", role_name)
+    if (role_name == 'teacher'):
+        can_edit = True
+        print("can edit = true")
+    return render_template('profile.html',user_info = user_info,school_info=school_info,can_edit=can_edit)
+
+@app.route('/edit_profile')
+def edit_profile():
+    return render_template("hello.html")

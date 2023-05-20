@@ -139,3 +139,17 @@ color:  rgb(18, 11, 19);
   width: 100%;
   max-height: 200px;
 }
+
+.edit-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 5px;
+}
+
+.edit-btn:hover {
+  background-color: #45a049;
+}
