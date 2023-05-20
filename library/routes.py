@@ -191,6 +191,35 @@ def user_profile():
         print("can edit = true")
     return render_template('profile.html',user_info = user_info,school_info=school_info,can_edit=can_edit)
 
-@app.route('/edit_profile')
+@app.route('/edit_profile',methods=['GET', 'POST'])
 def edit_profile():
-    return render_template("hello.html")
+    if request.method == 'POST':
+        # Retrieve the updated user information from the form
+        user_firstname = request.form['user_firstname']
+        user_lastname = request.form['user_lastname']
+        user_username = request.form['user_username']
+        user_email = request.form['user_email']
+
+        # Perform the necessary database update query using the new information
+        cur = mydb.connection.cursor()
+        query = "UPDATE lib_user SET user_firstname = %s, user_lastname = %s, user_name = %s, user_email = %s WHERE user_id = %s"
+        cur.execute(query, (user_firstname, user_lastname, user_username, user_email, session['user_id']))
+        mydb.connection.commit()
+        cur.close()
+        # Redirect the user to the updated profile page or any other desired page
+        return redirect(url_for('user_profile'))
+    school_id = session['school_id']
+    user_id = session['user_id']
+    # info for user
+    cur = mydb.connection.cursor()
+    query = "SELECT user_firstname, user_lastname, user_name, user_email,user_date_of_birth FROM lib_user WHERE user_id = %s" 
+    cur.execute(query,(user_id,))
+    user_info = cur.fetchone()
+    cur.close()
+    # info for school
+    cur = mydb.connection.cursor()
+    query = "SELECT principal_lastname,principal_firstname,school_name FROM school WHERE school_id = %s" 
+    cur.execute(query,(school_id,))
+    school_info = cur.fetchone()
+    cur.close()
+    return render_template('edit_profile.html',user_info = user_info,school_info=school_info)
