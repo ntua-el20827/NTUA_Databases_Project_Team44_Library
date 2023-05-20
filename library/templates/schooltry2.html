@@ -77,10 +77,13 @@
       <div class="row">
       {% for book in books %}
           <div class="book">
-            <a href="{{ book.link }}">
-              <img src={{book[2]}} alt="fadsbook.titlefdasfasd">
-              <h3>{{ book[0] }}</h3>
-            </a>
+            <form action="{{ url_for('school') }}" method="POST">
+              <input type="hidden" name="ISBN" value="{{ book[1] }}">
+              <button type="submit" style="border: none; background: none; padding: 0;">
+                <img src="{{ book[2] }}" alt="{{ book[0] }}">
+                <h3>{{ book[0] }}</h3>
+              </button>
+            </form>
           </div>  
       {% endfor %}
     </div>
@@ -91,3 +94,9 @@
   
 </body>
 </html>
+<!--
+<a href="{{ book.link }}">
+  <img src={{book[2]}} alt="fadsbook.titlefdasfasd">
+  <h3>{{ book[0] }}</h3>
+</a>
+-->

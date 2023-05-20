@@ -223,3 +223,4 @@ def edit_profile():
     school_info = cur.fetchone()
     cur.close()
     return render_template('edit_profile.html',user_info = user_info,school_info=school_info)
+
