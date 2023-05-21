@@ -8,15 +8,15 @@
   <div class="book-info">
     <h2>{{ book_info[0] }}</h2>
     <img src="{{ book_info[1] }}" alt="{{ book_info[0] }}">
-    <p>ISBN: {{ book_info[2] }}</p>
+    <p>ISBN: {{ book_info[4] }}</p>
     <!-- Add more book details as needed -->
 
     <div class="buttons">
-      <form action="{{ url_for('book_display') }}" method="POST">
+      <form action="{{ url_for('rent') }}" method="GET">
         <input type="hidden" name="ISBN" value="{{ book_info[4] }}">
         <button type="submit">Rent</button>
       </form>
-      <form action="{{ url_for('book_display') }}" method="POST">
+      <form action="{{ url_for('review') }}" method="GET">
         <input type="hidden" name="ISBN" value="{{ book_info[4] }}">
         <button type="submit">Review</button>
       </form>

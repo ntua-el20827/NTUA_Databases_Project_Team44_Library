@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Super Admin Actions</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="super-admin-page">
+    <h2>Ενέργειες Διαχειριστή</h2>
+    <div class="button-container">
+      <a href="{{ url_for('super_admin_Q1') }}" class="btn">Query 1</a>
+      <a href="{{ url_for('super_admin_Q2') }}" class="btn">Query 2</a>
+      <a href="{{ url_for('super_admin_Q3') }}" class="btn">Query 3</a>
+      <a href="{{ url_for('super_admin_Q4') }}" class="btn">Query 4</a>
+      <a href="{{ url_for('super_admin_Q5') }}" class="btn">Query 5</a>
+      <a href="{{ url_for('super_admin_Q6') }}" class="btn">Query 6</a>
+      <a href="{{ url_for('super_admin_Q7') }}" class="btn">Query 7</a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reservation Confirmation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="reservation-info">
+    <h2>Ok, the book is reserved</h2>
+    <p>Thank you for reserving the book. It is now reserved for you.</p>
+
+    <div class="buttons">
+      <a href="{{ url_for('back_to_school') }}" class="btn">Back to School</a>
+    </div>
+  </div>
+</body>
+</html>
