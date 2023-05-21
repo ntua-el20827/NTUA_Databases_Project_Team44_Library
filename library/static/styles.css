@@ -153,3 +153,169 @@ color:  rgb(18, 11, 19);
 .edit-btn:hover {
   background-color: #45a049;
 }
+Μάνος Νεοφώτιστος
+.hh{
+  text-align: center;
+}
+
+
+form { display: inline; }
+
+.btn{
+  font-weight: bold;
+  background: black;
+  color: red;
+  border: none;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 6px;
+  margin-right: 15px;
+}
+h3.likert-header {
+  padding-left:4.25%;
+  margin:20px 0 0;
+}
+form .statement {
+  display:block;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 30px 0 0 4.25%;
+  margin-bottom: 25px;
+  
+  
+}
+form .likert {
+  list-style:none;
+  width:100%;
+  margin:0;
+  padding:0 0 35px;
+  display:block;
+  border-bottom:2px solid #efefef;
+  
+}
+form .likert:last-of-type {border-bottom:0;}
+form .likert:before {
+  content: '';
+  position:relative;
+  top:11px;
+  left:9.5%;
+  display:block;
+  background-color:#efefef;
+  height:4px;
+  width:78%;
+  background: rgb(228, 140, 179);
+}
+form .likert li {
+  display:inline-block;
+  width:19%;
+  text-align:center;
+  vertical-align: top;
+  
+}
+form .likert li input[type=radio] {
+  display:block;
+  position:relative;
+  top:0;
+  left:50%;
+  margin-left:-6px;
+  
+  
+}
+
+#fh2{
+ padding: 2px 15px;
+ color: black;
+ text-align: center;
+ 
+ 
+}
+
+/* #fh6 {
+ padding: 2px 15px;
+ color: #4d0er;
+ text-align: center;
+ font-weight: normal;
+} */
+
+.pinfo {
+ display:block;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 30px 0 0 4.25%;
+  margin-bottom: 25px
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+  
+.form-control {
+  
+  display: block;
+  width: 100%;
+  font-size: 1rem;
+  line-height: 1;
+  font-weight: normal;
+  background-color: rgb(228, 140, 179);
+  background-image: none;
+  -webkit-background-clip: padding-box;
+          background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+  
+  -webkit-transition: border-color ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
+  -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
+}
+
+
+.input-group {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 50%;
+  color: black;
+  margin-bottom: 20
+  
+
+  
+}
+
+
+.input-group-addon {
+  margin-left: 80px;
+  width: 100px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0;
+  font-size: 1rem;
+  font-weight: normal;
+  line-height: 1.25;
+  color: black;
+  text-align: center;
+  background-color: rgb(228, 140, 179);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+}
+
+
+
+.btn-primary {
+  color: black;
+  background-color: rgb(228, 140, 179);
+  margin-left: 80px;;
+  width: 100px;
+  height: 35px;
+  
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #025aa5;
+  border-color: #01549b;
+}

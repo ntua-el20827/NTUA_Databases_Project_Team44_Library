@@ -317,7 +317,7 @@ def review():
         cur.close()
         return render_template("review.html")
     # σε κάθε αλλή περίπτωση sorry δεν μπορεις να κάνεις review
-    return render_template("review_test.html")
+    return render_template("review_test2.html")
 
 #route για την αρχική του super_admin 
 # Super Admin page with buttons
