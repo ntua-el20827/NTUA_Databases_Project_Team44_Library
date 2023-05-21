@@ -242,6 +242,8 @@ def book_display():
 @app.route('/rent',methods=['GET', 'POST'])
 def rent():
     if request.method == "POST":
+        # 
+        # βάζω το query για να φτιάξει έναν δανεισμό 
         print("hi from rent")
     # ελεγχος αν υπάρχει διαθέσιμο το βιβλίο
     ISBN = session['ISBN']
@@ -254,6 +256,7 @@ def rent():
     # αν ναι συνεχίζει στο να το κρατήσει -> table book_status με status=reserved
     if (available_books>0):
         print("all okey for rent")
+        # πηγαίνει στο 
     # αν οχι πηγαίνει σε άλλη σελίδα για να μπεί σε ουρά κράτησης -> view book_queue 
 
 """ @app.route('/book_queue',methods=['GET', 'POST'])
