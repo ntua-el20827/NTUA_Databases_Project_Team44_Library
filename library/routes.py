@@ -74,6 +74,8 @@ def login():
             cur.close()
             ## Ελεγχος αν ειναι καποιος admin
             print("login -> ",role_name)
+            if (role_name[0]=='admin'):
+                    return redirect(url_for('school_admin'))
             return redirect(url_for('dashboard'))  # Redirect to the dashboard page after successful login
         else:
             # Invalid credentials, show an error message
@@ -330,7 +332,7 @@ def super_admin():
     return render_template('super_admin_test.html')
 
 # Route for Query 3.1.1
-@app.route('/super_admin/Q1')
+@app.route('/super_admin/Q1',methods=['GET', 'POST'])
 def super_admin_Q1():
     if request.method == 'POST':
         # Get the selected year and month from the form
@@ -366,7 +368,7 @@ ORDER BY
     return render_template('super_admin_Q1.html', results=None)
 
 # Route for Query 3.1.2
-@app.route('/super_admin/Q2')
+@app.route('/super_admin/Q2',methods=['GET', 'POST'])
 def super_admin_Q2():
     # Get the list of book themes from the database
     themes = ['Fiction', 'Non-fiction','Dystopia','Gothic','Science Fiction', 'Science','Drama', 'Adventure','Mystery', 'Romance','War', 'Classic','Thriller', 'Horror', 'Fantasy', 'Biography', 'Autobiography', 'History', 'Poetry', 'Comics', 'Cookbooks', 'Travel', 'Religion', 'Self-help', 'Art', 'Music','Coming of Age', 'Sports', 'Humor', 'Children','Reference']
@@ -503,6 +505,16 @@ HAVING book_diff >= 5;
     # Render the template with the query results
     return render_template('super_admin_Q7.html', results=results)
 
-#Route for school admin
+# Exra route για να ελεγξει αιτήσεις σχολείων
 
+#Route for school admin
+@app.route('/school_admin')
+def school_admin():
+    shcool_id = session['school_id']
+    # maybe present info of admin
+    return render_template('hello.html')
 #Routes for school admin queriess
+
+# Extra Route για να ελεγξει αιτήσεις αξιολόγησης
+# Extra Route για να ελεγξει κρατήσεις -> να τις κανει δανεισμους
+# Extra Route για να εισάγει κατευθειαν δανεισμό
