@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Query 6: Top 3 Couples of Book Themes with Most Common Borrowings</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <h2>Query 6: Top 3 Couples of Book Themes with Most Common Borrowings</h2>
+  
+  {% if results %}
+    <table>
+      <tr>
+        <th>Theme 1</th>
+        <th>Theme 2</th>
+        <th>Number of Borrowings</th>
+      </tr>
+      {% for result in results %}
+      <tr>
+        <td>{{ result[0] }}</td>
+        <td>{{ result[1] }}</td>
+        <td>{{ result[2] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>No couples of book themes found with the specified criteria.</p>
+  {% endif %}
+</body>
+</html>

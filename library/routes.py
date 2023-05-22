@@ -36,7 +36,7 @@ def index():
         first_values = [t[0] for t in schools]
         # Render the template for the first page
         return render_template('index.html',schools=first_values)
-
+#!! Χρειάζεται αλλαγή για να μπαίνει o super_admin
 
 @app.route('/home')
 def home():
@@ -72,6 +72,7 @@ def login():
             role_name = cur.fetchone()
             session['role_name'] = role_name[0]
             cur.close()
+            ## Ελεγχος αν ειναι καποιος admin
             print("login -> ",role_name)
             return redirect(url_for('dashboard'))  # Redirect to the dashboard page after successful login
         else:
@@ -81,6 +82,9 @@ def login():
     
     # Render the template for the login page with the form
     return render_template('login.html')
+#!! Χρειάζεται αλλαγή για να μπαίνει o super_admin
+# ή να μπαίνει απο άλλο route μόνο για αυτόν
+# !! ΕΠΙΣΗΣ στο if user χρειάζεται και ένας άλλος έλεγχος αν εχω να κάνω με admin
 
 
 # Route for the dashboard page
@@ -364,7 +368,8 @@ ORDER BY
 # Route for Query 3.1.2
 @app.route('/super_admin/Q2')
 def super_admin_Q2():
-    # Connect to the database
+    # Get the list of book themes from the database
+    themes = ['Fiction', 'Non-fiction','Dystopia','Gothic','Science Fiction', 'Science','Drama', 'Adventure','Mystery', 'Romance','War', 'Classic','Thriller', 'Horror', 'Fantasy', 'Biography', 'Autobiography', 'History', 'Poetry', 'Comics', 'Cookbooks', 'Travel', 'Religion', 'Self-help', 'Art', 'Music','Coming of Age', 'Sports', 'Humor', 'Children','Reference']
 
     if request.method == 'POST':
         # Get the selected book theme from the form
@@ -385,38 +390,119 @@ def super_admin_Q2():
         # Render the template with the query results
         return render_template('super_admin_Q2.html', themes=themes, selected_theme=selected_theme, authors=authors, teachers=teachers)
 
-    # Get the list of book themes from the database
-    themes = ['Fiction', 'Non-fiction','Dystopia','Gothic','Science Fiction', 'Science','Drama', 'Adventure','Mystery', 'Romance','War', 'Classic','Thriller', 'Horror', 'Fantasy', 'Biography', 'Autobiography', 'History', 'Poetry', 'Comics', 'Cookbooks', 'Travel', 'Religion', 'Self-help', 'Art', 'Music','Coming of Age', 'Sports', 'Humor', 'Children','Reference']
-
     # Render the template initially without results
     return render_template('super_admin_Q2.html', themes=themes, selected_theme=None, authors=None, teachers=None)
 
 # Route for Query 3.1.3
 @app.route('/super_admin/Q3')
 def super_admin_Q3():
-    # Code for Query 3
-    return "Query 3"
+    cur = mydb.connection.cursor()
+    query = """
+        SELECT lib_user.user_name, COUNT(*) AS num_borrowings
+FROM book_status
+INNER JOIN lib_user ON book_status.user_id = lib_user.user_id
+WHERE lib_user.role_name = 'teacher'
+  AND lib_user.user_date_of_birth > UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 40 YEAR))
+  AND book_status.status = 'borrowed'
+GROUP BY lib_user.user_id
+ORDER BY num_borrowings DESC
+LIMIT 1;
+    """
+    cur.execute(query)
+    results = cur.fetchall()
+    cur.close()
+
+    # Render the template with the query results
+    return render_template('super_admin_Q3.html', results=results)
 
 # Route for Query 3.1.4
 @app.route('/super_admin/Q4')
 def super_admin_Q4():
-    # Code for Query 4
-    return "Query 4"
+    cur = mydb.connection.cursor()
+    query = """
+        SELECT DISTINCT book_author.author
+FROM book_author
+LEFT JOIN book_status ON book_author.book_id = book_status.book_id
+WHERE book_status.book_id IS NULL;
+    """
+    cur.execute(query)
+    results = cur.fetchall()
+    cur.close()
+
+    # Render the template with the query results
+    return render_template('super_admin_Q4.html', results=results)
 
 # Route for Query 3.1.5
 @app.route('/super_admin/Q5')
 def super_admin_Q5():
-    # Code for Query 5
-    return "Query 5"
+    cur = mydb.connection.cursor()
+    query = """
+        SELECT lib_user.user_name
+FROM book_status
+INNER JOIN lib_user ON book_status.user_id = lib_user.user_id
+WHERE lib_user.role_name = 'admin'
+  AND book_status.approval_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 YEAR) AND NOW()
+GROUP BY lib_user.user_id
+HAVING COUNT(*) >= 20;
+    """
+    cur.execute(query)
+    results = cur.fetchall()
+    cur.close()
+
+    # Render the template with the query results
+    return render_template('super_admin_Q5.html', results=results)
 
 # Route for Query 3.1.6
 @app.route('/super_admin/Q6')
 def super_admin_Q6():
-    # Code for Query 6
-    return "Query 6"
+    cur = mydb.connection.cursor()
+    query = """
+        SELECT 
+  CONCAT(bt1.theme,',',bt2.theme) AS theme_pair, 
+  COUNT(*) AS borrow_count
+FROM 
+  book_theme bt1
+  INNER JOIN book_theme bt2 ON bt1.book_id = bt2.book_id AND bt1.theme < bt2.theme
+  INNER JOIN book_status ON bt2.book_id = book_status.book_id
+WHERE 
+  book_status.status = 'borrowed'
+GROUP BY 
+  theme_pair
+ORDER BY 
+  borrow_count DESC
+LIMIT 3;
+    """
+    cur.execute(query)
+    results = cur.fetchall()
+    cur.close()
+
+    # Render the template with the query results
+    return render_template('super_admin_Q6.html', results=results)
 
 # Route for Query 3.1.7
 @app.route('/super_admin/Q7')
 def super_admin_Q7():
-    # Code for Query 7
-    return "Query 7"
+    cur = mydb.connection.cursor()
+    query = """
+        SELECT book_author.author, (max_books.num_books - COUNT(*)) AS book_diff
+FROM book_author
+INNER JOIN (
+  SELECT book_author.book_id, COUNT(*) AS num_books
+  FROM book_author
+  GROUP BY book_author.book_id
+  ORDER BY num_books DESC
+  LIMIT 1
+) AS max_books ON book_author.book_id = max_books.book_id
+GROUP BY book_author.author
+HAVING book_diff >= 5;
+    """
+    cur.execute(query)
+    results = cur.fetchall()
+    cur.close()
+
+    # Render the template with the query results
+    return render_template('super_admin_Q7.html', results=results)
+
+#Route for school admin
+
+#Routes for school admin queriess

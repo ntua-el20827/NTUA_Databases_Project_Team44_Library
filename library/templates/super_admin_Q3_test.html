@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Query 3: Young Teachers from Every School</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <h2>Query 3: Young Teachers from Every School</h2>
+  
+  {% if results %}
+    <table>
+      <tr>
+        <th>School Name</th>
+        <th>Teacher Name</th>
+        <th>Number of Borrowed Books</th>
+      </tr>
+      {% for result in results %}
+      <tr>
+        <td>{{ result[0] }}</td>
+        <td>{{ result[1] }}</td>
+        <td>{{ result[2] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>No young teachers with borrowed books found.</p>
+  {% endif %}
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Query 4: Authors of Books Never Borrowed</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <h2>Query 4: Authors of Books Never Borrowed</h2>
+  
+  {% if results %}
+    <ul>
+      {% for result in results %}
+        <li>{{ result[0] }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No authors found for books that have never been borrowed.</p>
+  {% endif %}
+</body>
+</html>
