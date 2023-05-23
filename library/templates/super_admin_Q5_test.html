@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Query 5: School Admins with Same Number of Approved Books (>20) in Past Year</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <h2>Query 5: School Admins with Same Number of Approved Books (>20) in Past Year</h2>
+  
+  {% if results %}
+    <table>
+      <tr>
+        <th>Admin Name</th>
+        <th>Number of Approved Books</th>
+      </tr>
+      {% for result in results %}
+      <tr>
+        <td>{{ result[0] }}</td>
+        <td>{{ result[1] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>No school admins found with the specified criteria.</p>
+  {% endif %}
+</body>
+</html>

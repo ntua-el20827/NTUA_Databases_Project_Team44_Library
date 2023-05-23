@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+	<head> 
+		<meta charset ="UTF-8"> 
+		<meta name = "description" content="This is an awesome website"> 
+		<title> School Library </title>
+		
+
+		<link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
+
+		
+	</head>
+<body>   
+<div class="topnav">		  
+    <a href="{{ url_for('contact') }}">Επικοινωνια με Υπεύθυνο Χειριστή </a> |
+    <a href="{{ url_for('school') }}">Επιστροφή στην Σχολική Βιβλιοθήκη</a>
+    
+
+    
+</div>
+<br>
+<h2 id="fh2">Η αξιολόγηση είναι σημαντική!</h2>
+<h3 id="fh6">Η αξιολόγησή σας βοηθάει τους υπόλοιπους χρήστες που ενδιαφέρονται για αυτό το βιβλίο.</h3>
+
+
+<form id="feedback" action="">
+<!--     <div class="pinfo">Τα στοιχεία σας:
+    </div> -->
+
+    <div class="form-group">
+
+
+
+<!--     <div class="input-group">
+        <span class="input-group-addon"> Όνομα </span>
+        <input  name="name" placeholder="" class="form-control"  type="text">
+    </div>
+    </div>
+
+<div class="input-group">
+    <span class="input-group-addon"> Επίθετο </span>
+    <input  name="name" placeholder="" class="form-control"  type="text">
+    </div> -->
+    
+
+
+    <div class="pinfo"> Μπορείτε να γράψετε ενα σύντομο σχόλιο για το βιβλίο:
+        
+    </div>
+
+
+    <div class="form-group">
+
+
+    <div class="input-group">
+        <span class="input-group-addon"> Αξιολόγηση </span>
+
+        <textarea class="form-control" id="review" rows="3"></textarea>
+
+    </div>
+    </div>
+    </div>
+
+</form>
+
+
+<div class="wrap">
+
+    <form action="">
+        <label class="statement"> Πόσο σας άρεσε αυτο το βιβλίο; </label>
+            <ul class='likert'>
+                <li>
+                    <input type="radio" name="likert" value="strong_agree">
+                    <label> 1 (Καθόλου) </label>
+                </li>
+                <li>
+                    <input type="radio" name="likert" value="strong_agree">
+                    <label> 2 (Λίγο) </label>
+                </li>
+                <li>
+                    <input type="radio" name="likert" value="strong_agree">
+                    <label>3 (ουδέτερο)</label>
+                </li>
+                <li>
+                    <input type="radio" name="likert" value="disagree">
+                    <label> 4 (Αρκετά) </label>
+                </li>
+                <li>
+                    <input type="radio" name="likert" value="strong_agree">
+                    <label> 5 (Πολύ)</label>
+                </li>
+            </ul>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+</body>

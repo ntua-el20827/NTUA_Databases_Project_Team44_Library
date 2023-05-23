@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Query 7: Authors with at Least 5 Fewer Books Than the Author with the Most Books</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <h2>Query 7: Authors with at Least 5 Fewer Books Than the Author with the Most Books</h2>
+  
+  {% if results %}
+    <ul>
+      {% for result in results %}
+      <li>{{ result[0] }} ({{ result[1] }} books)</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No authors found with the specified criteria.</p>
+  {% endif %}
+</body>
+</html>

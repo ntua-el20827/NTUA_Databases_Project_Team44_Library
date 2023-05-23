@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Query 2: Authors and Teachers for Book Theme</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <h2>Query 2: Authors and Teachers for Book Theme</h2>
+  <form method="POST" action="{{ url_for('super_admin_Q2') }}">
+    <label for="theme">Book Theme:</label>
+    <select id="theme" name="theme">
+      <option value="">Select a theme</option>
+      {% for theme in themes %}
+      <option value="{{ theme[0] }}" {% if selected_theme == theme[0] %}selected{% endif %}>{{ theme[0] }}</option>
+      {% endfor %}
+    </select>
+    <input type="submit" value="Search">
+  </form>
+  
+  {% if selected_theme %}
+    <h3>Selected Theme: {{ selected_theme }}</h3>
+
+    <h4>Authors:</h4>
+    <ul>
+      {% for author in authors %}
+      <li>{{ author[0] }}</li>
+      {% endfor %}
+    </ul>
+
+    <h4>Teachers who borrowed books of the selected theme last year:</h4>
+    <ul>
+      {% for teacher in teachers %}
+      <li>{{ teacher[0] }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</body>
+</html>
