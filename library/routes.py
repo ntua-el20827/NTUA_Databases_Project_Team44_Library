@@ -170,7 +170,7 @@ def request_form():
         #cur.close()
         return redirect(url_for('waiting'))
     else:
-        return render_template("request_form.html")
+        return render_template("request_library_form.html")
 
 @app.route("/waiting")
 def waiting():
