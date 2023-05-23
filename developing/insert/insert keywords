@@ -34,6 +34,209 @@ INSERT INTO book_keywords (keywords, book_id) VALUES ('ambition', 6);
 INSERT INTO book_keywords (keywords, book_id) VALUES ('unrequited love', 6);
 INSERT INTO book_keywords (keywords, book_id) VALUES ('social status', 6);
 
+-- Book 7: To the Lighthouse
+INSERT INTO book_keywords (keywords, book_id) VALUES ('modernist', 7);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('stream of consciousness', 7);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('family dynamics', 7);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('symbolism', 7);
+
+-- Book 8: Moby-Dick
+INSERT INTO book_keywords (keywords, book_id) VALUES ('whaling', 8);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('obsession', 8);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('revenge', 8);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('man vs. nature', 8);
+
+-- Book 9: The Picture of Dorian Gray
+INSERT INTO book_keywords (keywords, book_id) VALUES ('aestheticism', 9);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('morality', 9);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('corruption', 9);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('eternal youth', 9);
+
+-- Book 10: Frankenstein
+INSERT INTO book_keywords (keywords, book_id) VALUES ('gothic', 10);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('science fiction', 10);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('identity', 10);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('creation', 10);
+
+-- Book 11: A Game of Thrones
+INSERT INTO book_keywords (keywords, book_id) VALUES ('fantasy', 11);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('epic', 11);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('politics', 11);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('intrigue', 11);
+
+-- Book 12: The Fault in Our Stars
+INSERT INTO book_keywords (keywords, book_id) VALUES ('young adult', 12);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('cancer', 12);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('romance', 12);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('friendship', 12);
+
+-- Book 13: Gone Girl
+INSERT INTO book_keywords (keywords, book_id) VALUES ('thriller', 13);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('mystery', 13);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('suspense', 13);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('marriage', 13);
+
+-- Book 14: The Chronicles of Narnia
+INSERT INTO book_keywords (keywords, book_id) VALUES ('fantasy', 14);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('adventure', 14);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('magic', 14);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('children', 14);
+
+-- Book 15: The Da Vinci Code
+INSERT INTO book_keywords (keywords, book_id) VALUES ('conspiracy', 15);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('mystery', 15);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('religion', 15);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('art', 15);
+
+-- Book 16: The Kite Runner
+INSERT INTO book_keywords (keywords, book_id) VALUES ('coming of age', 16);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('friendship', 16);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('redemption', 16);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('Afghanistan', 16);
+
+-- Book 17: The Book Thief
+INSERT INTO book_keywords (keywords, book_id) VALUES ('historical fiction', 17);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('World War II', 17);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('theft', 17);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('books', 17);
+
+-- Book 18: The Secret Life of Bees
+INSERT INTO book_keywords (keywords, book_id) VALUES ('race', 18);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('family', 18);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('beekeeping', 18);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('South Carolina', 18);
+
+-- Book 19: The Road
+INSERT INTO book_keywords (keywords, book_id) VALUES ('post-apocalyptic', 19);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('father and son', 19);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('survival', 19);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('desolation', 19);
+
+-- Book 20: The Bell Jar
+INSERT INTO book_keywords (keywords, book_id) VALUES ('autobiographical', 20);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('mental health', 20);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('coming of age', 20);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('depression', 20);
+
+-- Book 21: The Help
+INSERT INTO book_keywords (keywords, book_id) VALUES ('racial segregation', 21);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('civil rights', 21);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('empowerment', 21);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('Southern United States', 21);
+
+-- Book 22: The Hunger Games
+INSERT INTO book_keywords (keywords, book_id) VALUES ('dystopian', 22);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('survival', 22);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('government control', 22);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('rebellion', 22);
+
+-- Book 23: The Da Vinci Code
+INSERT INTO book_keywords (keywords, book_id) VALUES ('conspiracy', 23);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('mystery', 23);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('religion', 23);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('art', 23);
+
+-- Book 24: The Kite Runner
+INSERT INTO book_keywords (keywords, book_id) VALUES ('coming of age', 24);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('friendship', 24);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('redemption', 24);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('Afghanistan', 24);
+
+-- Book 25: The Book Thief
+INSERT INTO book_keywords (keywords, book_id) VALUES ('historical fiction', 25);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('World War II', 25);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('theft', 25);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('books', 25);
+
+-- Book 26: The Secret Life of Bees
+INSERT INTO book_keywords (keywords, book_id) VALUES ('race', 26);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('family', 26);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('beekeeping', 26);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('South Carolina', 26);
+
+-- Book 27: The Road
+INSERT INTO book_keywords (keywords, book_id) VALUES ('post-apocalyptic', 27);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('father and son', 27);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('survival', 27);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('desolation', 27);
+
+-- Book 28: The Bell Jar
+INSERT INTO book_keywords (keywords, book_id) VALUES ('autobiographical', 28);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('mental health', 28);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('coming of age', 28);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('depression', 28);
+
+-- Book 29: The Help
+INSERT INTO book_keywords (keywords, book_id) VALUES ('racial segregation', 29);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('civil rights', 29);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('empowerment', 29);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('Southern United States', 29);
+
+-- Book 30: Alice's Adventures in Wonderland
+INSERT INTO book_keywords (keywords, book_id) VALUES ('fantasy', 30);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('imagination', 30);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('nonsense', 30);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('children', 30);
+
+-- Book 31: Frankenstein; or, The Modern Prometheus
+INSERT INTO book_keywords (keywords, book_id) VALUES ('gothic', 31);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('science fiction', 31);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('ambition', 31);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('creation', 31);
+
+-- Book 32: The Wonderful Wizard of Oz
+INSERT INTO book_keywords (keywords, book_id) VALUES ('fantasy', 32);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('adventure', 32);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('magic', 32);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('journey', 32);
+
+-- Book 33: The Lost World
+INSERT INTO book_keywords (keywords, book_id) VALUES ('adventure', 33);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('dinosaurs', 33);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('exploration', 33);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('prehistoric', 33);
+
+-- Book 34: Dracula
+INSERT INTO book_keywords (keywords, book_id) VALUES ('gothic', 34);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('vampires', 34);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('horror', 34);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('supernatural', 34);
+
+-- Book 35: Brave New World
+INSERT INTO book_keywords (keywords, book_id) VALUES ('dystopian', 35);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('social engineering', 35);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('technological control', 35);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('utopia', 35);
+
+-- Book 36: Nineteen Eighty-Four
+INSERT INTO book_keywords (keywords, book_id) VALUES ('dystopian', 36);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('totalitarianism', 36);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('surveillance', 36);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('thought control', 36);
+
+-- Book 37: The War of the Worlds
+INSERT INTO book_keywords (keywords, book_id) VALUES ('science fiction', 37);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('alien invasion', 37);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('Martians', 37);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('interplanetary', 37);
+
+-- Book 38: The Adventures of Tom Sawyer
+INSERT INTO book_keywords (keywords, book_id) VALUES ('adventure', 38);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('childhood', 38);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('Mississippi River', 38);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('friendship', 38);
+
+-- Book 39: The Adventures of Huckleberry Finn
+INSERT INTO book_keywords (keywords, book_id) VALUES ('adventure', 39);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('journey', 39);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('race', 39);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('social satire', 39);
+
+-- Book 40: The Lord of the Rings
+INSERT INTO book_keywords (keywords, book_id) VALUES ('fantasy', 40);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('adventure', 40);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('epic', 40);
+INSERT INTO book_keywords (keywords, book_id) VALUES ('quest', 40);
 -- Book 41: Vingt mille lieues sous les mers
 INSERT INTO book_keywords (keywords, book_id) VALUES ('adventure', 41);
 INSERT INTO book_keywords (keywords, book_id) VALUES ('underwater', 41);
@@ -57,10 +260,3 @@ INSERT INTO book_keywords (keywords, book_id) VALUES ('fantasy', 44);
 INSERT INTO book_keywords (keywords, book_id) VALUES ('imagination', 44);
 INSERT INTO book_keywords (keywords, book_id) VALUES ('nonsense', 44);
 INSERT INTO book_keywords (keywords, book_id) VALUES ('children', 44);
-
----
----
----
----
----
----
