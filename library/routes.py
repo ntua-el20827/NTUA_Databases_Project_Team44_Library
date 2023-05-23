@@ -150,8 +150,8 @@ def school():
         cur.close()
         return render_template('schooltry2.html',books = books ) 
 
-@app.route("/request_form", methods=["POST"])
-def request_form():
+@app.route("/request_library_form", methods=["POST"])
+def request_library_form():
     if request.method == "POST":
    #     newusername = request.form['newusername']
    #     newpassword = request.form['newpassword']
