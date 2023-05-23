@@ -36,6 +36,10 @@ body {
   padding: 14px 16px;
   text-decoration: none;
 }
+.topnav .logout{
+  float: right;
+}
+
 
 /* Change color on hover */
 .topnav a:hover {
@@ -351,3 +355,5 @@ form .likert li input[type=radio] {
   background-color: #025aa5;
   border-color: #01549b;
 }
+
+
