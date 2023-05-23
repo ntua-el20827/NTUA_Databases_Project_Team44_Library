@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>User Sign-up</title>
+	<link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
+</head>
+<body>
+	<div class="header">
+	<h1>Εγγραφή Σχολικής Βιβλιοθήκης</h1>
+	<hr color="black">
+</div>
+	
+	<br><br>
+	<div class="registration">
+      <h5>
+      Με την αίτηση Εγγραφής Σχολικής Μονάδας γίνεται αυτόματα
+        η αίτηση εγγραφής του υπεύθυνου της βιβλιοθήκης.
+      </h5>
+	<form method="POST" action="/signup" onsubmit="return validateForm()">
+		<div class="labels">
+		<label for="newusername">Username:</label> <br>
+		<input type="text" id="newusername" name="newusername" required>
+		</div>
+		<br>
+		<label for="newpassword">Κωδικός:</label> <br>
+		<input type="password" id="newpassword" name="newpassword" required>
+		<br> <br>
+		<label for="fname">Ονομα:</label><br>
+  		<input type="text" id="fname" name="fname" required><br>
+ 		<br>
+		<label for="lname">Επιθετο:</label><br>
+  		<input type="text" id="lname" name="lname" required> <br>
+		<br>
+		<label for="email">email:</label><br>
+		<input type="text" id="email" name="email" required><br>
+		<br>
+		<label for="phone">Κινητό:</label><br>
+		<input type="text" id="phone" name="phone" required><br><br>
+		
+		<label for="school">Όνομα Σχολείου: </label><br>
+		<input type="text" id="phone" name="phone" required>
+        <br><br>
+        <form action="{{ url_for('request_form') }}" method="POST">
+        <input type="submit" value="Υποβολή Αίτησης">	
+        </form>	
+        <p>Επιστροφη στην αρχικη <a href="{{ url_for('index') }}"> σελίδα </a></p>
+	</form>
+
+    </div>
+
+	<script>
+		function validateForm() {
+			var username = document.getElementById("newusername").value;
+			var password = document.getElementById("newpassword").value;
+			var fname = document.getElementById("fname").value;
+			var lname = document.getElementById("lname").value;
+			var email = document.getElementById("email").value;
+			var phone = document.getElementById("phone").value;
+
+			if (username === "" || password === "" || fname === "" || lname === "" || email === "" || phone === "" || school_name === "") {
+				alert("Please fill in all fields.");
+				return false;
+			}
+
+			return true;
+		}
+	</script>
+</body>
+</html>

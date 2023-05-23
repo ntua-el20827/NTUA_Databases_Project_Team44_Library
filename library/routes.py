@@ -150,6 +150,32 @@ def school():
         cur.close()
         return render_template('schooltry2.html',books = books ) 
 
+@app.route("/request_form", methods=["POST"])
+def request_form():
+    if request.method == "POST":
+   #     newusername = request.form['newusername']
+   #     newpassword = request.form['newpassword']
+    #    fname = request.form['fname']
+    #    lname = request.form['lname']
+    #    email = request.form['email']
+   #     phone = request.form['phone']
+    #    school_name = request.form['schoolname']
+    #    cur = mydb.connection.cursor()
+     #   query1 = "INSERT INTO users_applications (username, password, first_name, last_name, email, phone) VALUES (%s, %s, %s, %s, %s, %s)"
+     #   query2 = "INSERT INTO school_applications (username, first_name, last_name, email, phone, school_name) VALUES (%s, %s, %s, %s, %s, %s)"
+      #  values = (newusername, newpassword, fname, lname, email, phone, school_name)
+       # cur.execute(query1, values)
+        #cur.execute(query2, values)
+       # mydb.connection.commit()
+        #cur.close()
+        return redirect(url_for('waiting'))
+    else:
+        return render_template("request_form.html")
+
+@app.route("/waiting")
+def waiting():
+    return render_template("waiting.html")
+
 @app.route('/contact')
 def contact():
     school_id = session['school_id']
@@ -167,6 +193,9 @@ def contact():
     cur.close()
     return render_template('contact.html',admin=admin,school_info = school_info)
 
+@app.route('/contact_index')
+def contact_index():
+    return render_template("hello.html")
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
@@ -240,10 +269,10 @@ def book_display():
     cur = mydb.connection.cursor()
     print("ISBN is ", type(ISBN))
     print(int(ISBN))
-    query = "SELECT title, book_image,publisher, pages, ISBN, summary, number_of_available_books,book_id FROM book WHERE school_id = %s AND ISBN = %s" 
+    query = "SELECT ISBN, title, publisher, number_of_available_books, pages,book_language,summary,book_image,book_id FROM book WHERE school_id = %s AND ISBN = %s" 
     cur.execute(query,(school_id, int(ISBN)))
     book_info = cur.fetchone()
-    book_id = book_info[7]
+    book_id = book_info[8]
     session['book_id'] = book_id
     print(book_id)
     cur.close()
