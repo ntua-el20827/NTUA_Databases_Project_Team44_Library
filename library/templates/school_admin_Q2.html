@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Users with Overdue Books</title>
+</head>
+<body>
+    <h1>Search Users with Overdue Books</h1>
+
+    <form method="POST" action="{{ url_for('school_admin_Q2') }}">
+        <label for="search_text">Search Text:</label>
+        <input type="text" name="search_text" id="search_text">
+
+        <label for="search_type">Search Type:</label>
+        <select name="search_type" id="search_type">
+            <option value="first_name">First Name</option>
+            <option value="last_name">Last Name</option>
+            <option value="days_of_delay">Days of Delay</option>
+        </select>
+
+        <input type="submit" value="Search">
+    </form>
+
+    {% if no_results %}
+        <p>No results for your input value.</p>
+    {% else %}
+        <table>
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user[0] }}</td>
+                        <td>{{ user[1] }}</td>
+                        <td>{{ user[2] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</body>
+</html>

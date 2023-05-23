@@ -88,6 +88,10 @@ def login():
 # ή να μπαίνει απο άλλο route μόνο για αυτόν
 # !! ΕΠΙΣΗΣ στο if user χρειάζεται και ένας άλλος έλεγχος αν εχω να κάνω με admin
 
+""" @app.route('/super_admin_login', methods=['GET', 'POST'])
+def super_admin_login():
+     """
+
 
 # Route for the dashboard page
 @app.route('/dashboard')
@@ -360,6 +364,10 @@ def review():
 def super_admin():
     return render_template('super_admin_test.html')
 
+@app.route('/SA_queries')
+def SA_gueries():
+    return render_template("SA_queries.html")
+
 # Route for Query 3.1.1
 @app.route('/super_admin/Q1',methods=['GET', 'POST'])
 def super_admin_Q1():
@@ -539,12 +547,98 @@ HAVING book_diff >= 5;
 #Route for school admin
 @app.route('/school_admin')
 def school_admin():
-    shcool_id = session['school_id']
-    # maybe present info of admin
-    return render_template('hello.html')
-#Routes for school admin queriess
+    user_id = session['user_id']
+    cur = mydb.connection.cursor()
+    query = "SELECT school_id FROM lib_user WHERE user_id = %s"
+    cur.execute(query, (user_id,))
+    school_id_tuple = cur.fetchone()
+    school_id = school_id_tuple[0] if school_id_tuple else None
+    session['school_id'] = school_id
+    cur.close()
+    return render_template('admin.html')
+
+#Routes for school admin queries   
+@app.route('/school_admin_Q1', methods=['GET', 'POST'])
+def school_admin_Q1():
+    if request.method == 'POST':
+        search_text = request.form.get('search_text')
+        search_type = request.form.get('search_type')
+
+        # Connect to the database and execute the query based on the search type
+        cur = mydb.connection.cursor()
+
+        if search_type == 'title':
+            query = "SELECT title, author FROM books WHERE title LIKE %s"
+            cur.execute(query, (f'%{search_text}%',))
+        elif search_type == 'category':
+            query = "SELECT title, author FROM books WHERE category LIKE %s"
+            cur.execute(query, (f'%{search_text}%',))
+        elif search_type == 'author':
+            query = "SELECT title, author FROM books WHERE author LIKE %s"
+            cur.execute(query, (f'%{search_text}%',))
+        elif search_type == 'copies':
+            query = "SELECT title, author FROM books WHERE available_copies >= %s"
+            cur.execute(query, (search_text,))
+
+        books = cur.fetchall()
+        cur.close()
+
+        if len(books) == 0:
+            # Render the template with no results message
+            return render_template('school_admin_Q1.html', no_results=True)
+
+        # Render the template with the query results
+        return render_template('school_admin_Q1.html', books=books)
+    # Render the initial search form
+    return render_template('school_admin_Q1.html')
+
+@app.route('/school_admin_Q2', methods=['GET', 'POST'])
+def school_admin_Q2():
+    if request.method == 'POST':
+        search_text = request.form.get('search_text')
+        search_type = request.form.get('search_type')
+
+        # Connect to the database and execute the query based on the search type
+        cur = mydb.connection.cursor()
+        q1 = """ SELECT u.user_firstname, u.user_lastname, 
+       CASE u.role_name 
+           WHEN 'student' THEN DATEDIFF(NOW(), bs.approval_date) - 7 
+           WHEN 'teacher' THEN DATEDIFF(NOW(), bs.approval_date) - 14 
+       END AS days_of_delay
+FROM lib_user u
+JOIN book_status bs ON u.user_id = bs.user_id
+WHERE bs.status = 'borrowed' AND bs.return_date IS NULL """
+        if search_type == 'first_name':
+            query = q1+"AND u.user_firstname LIKE '%s'"
+            cur.execute(query, (f'%{search_text}%',))
+        elif search_type == 'last_name':
+            query = q1+"AND u.user_lastname LIKE '%s'"
+            cur.execute(query, (f'%{search_text}%',))
+        elif search_type == 'days_of_delay':
+            query = q1+"HAVING (days_of_delay > %s); "
+            cur.execute(query, (search_text,))
+
+        users = cur.fetchall()
+        cur.close()
+        mydb.close()
+
+        if len(users) == 0:
+            # Render the template with no results message
+            return render_template('school_admin_Q2.html', no_results=True)
+
+        # Render the template with the query results
+        return render_template('school_admin_Q2.html', users=users)
+
+    # Render the initial search form
+    return render_template('school_admin_Q2.html')
+
 
 # Extra Route για να ελεγξει αιτήσεις αξιολόγησης
+
 # Extra Route για να ελεγξει κρατήσεις -> να τις κανει δανεισμους
+
 # Extra Route για να εισάγει κατευθειαν δανεισμό
+
+# Extra Route Αιτήσεις εγγραφής χρηστών 
+
 # allagh

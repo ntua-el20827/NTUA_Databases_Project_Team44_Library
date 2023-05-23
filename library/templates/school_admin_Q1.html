@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>School Admin - Query 1</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <h2>Query 1 - Search Books</h2>
+  
+  <form method="POST">
+    <input type="text" name="search_text" placeholder="Enter search text" required>
+    <select name="search_type">
+      <option value="title">Title</option>
+      <option value="category">Category</option>
+      <option value="author">Author</option>
+      <option value="copies">Available Copies</option>
+    </select>
+    <input type="submit" value="Search">
+  </form>
+  {% if no_results %}
+    <p>No results for your input value.</p>
+   {% endif %}
+  {% if books %}
+    <h3>Search Results</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Category</th>
+          <th>Available Copies</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in books %}
+        <tr>
+          <td>{{ book[0] }}</td>
+          <td>{{ book[1] }}</td>
+          <td>{{ book[2] }}</td>
+          <td>{{ book[3] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+</body>
+</html>
