@@ -92,17 +92,16 @@ body {
     background: rgb(238,174,202);
     background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
     color:  rgb(18, 11, 19);
-    
+   
     display: block;
     text-align: center;
     width: 500px;
-    height: 620px;
     border: 10px;
     border-style: solid; 
     border-radius: 30px;
     border-width: 6px;
-    padding: 23px;
-    margin: -40px auto 0;
+    padding: 50px;
+    margin: auto;
     margin-bottom: 20px;
   
   }
