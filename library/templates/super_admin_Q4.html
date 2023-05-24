@@ -6,7 +6,7 @@
 </head>
 <body>
   <h2>Query 4: Authors of Books Never Borrowed</h2>
-  
+  <div class="school_list">
   {% if results %}
     <ul>
       {% for result in results %}
@@ -16,5 +16,9 @@
   {% else %}
     <p>No authors found for books that have never been borrowed.</p>
   {% endif %}
+</div>
+
+    <p> Επιστροφη στην σελιδα των <a href="{{ url_for('super_admin') }}"> queries </a></p>
+
 </body>
 </html>

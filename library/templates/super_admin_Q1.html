@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Query 1: Total Borrowed Books per School</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+<body>
+  <div class="super_admin">
+    <h2>Query 1: Total Borrowed Books per School</h2>
+    <form method="POST" action="{{ url_for('super_admin_Q1') }}">
+      <div class="form-group">
+        <label for="year">Year:</label>
+        <input type="text" id="year" name="year" required>
+      </div>
+      <div class="form-group">
+        <label for="month">Month:</label>
+        <input type="text" id="month" name="month" required>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Search" class="submit-button">
+      </div>
+    </form>
+
+    {% if results %}
+    <table>
+      <tr>
+        <th>School Name</th>
+        <th>Total Borrowed Books</th>
+      </tr>
+      {% for result in results %}
+      <tr>
+        <td>{{ result[0] }}</td>
+        <td>{{ result[1] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+  </div>
+  <p> Επιστροφη στην σελιδα των <a href="{{ url_for('super_admin') }}"> queries </a></p>
+</body>
+</html>

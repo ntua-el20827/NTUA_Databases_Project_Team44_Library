@@ -6,7 +6,7 @@
 </head>
 <body>
   <h2>Query 7: Authors with at Least 5 Fewer Books Than the Author with the Most Books</h2>
-  
+  <div class="school_list">
   {% if results %}
     <ul>
       {% for result in results %}
@@ -16,5 +16,8 @@
   {% else %}
     <p>No authors found with the specified criteria.</p>
   {% endif %}
+  
+</div>
+<p> Επιστροφη στην σελιδα των <a href="{{ url_for('super_admin') }}"> queries </a></p>
 </body>
 </html>

@@ -557,8 +557,8 @@ HAVING book_diff >= 5;
     return render_template('super_admin_Q7.html', results=results)
 
 # Exra route για να ελεγξει αιτήσεις σχολείων
-@app.route('/super_admin_school_applications')
-def super_admin_school_applications():
+
+
 
 #Route for school admin
 @app.route('/school_admin')
@@ -646,21 +646,6 @@ WHERE bs.status = 'borrowed' AND bs.return_date IS NULL """
         return render_template('school_admin_Q2.html', users=users)
 
     # Render the initial search form
-    return render_template('school_admin_Q2.html')
+    return render_template('school_admin_Q2_test.html')
 
 
-# Extra Route για να ελεγξει αιτήσεις αξιολόγησης
-@app.route('/school_admin_reviews')
-def school_admin_reviews():
-# Extra Route για να ελεγξει κρατήσεις -> να τις κανει δανεισμους
-@app.route('/school_admin_reservations')
-def school_admin_reservations():
-# Extra Route για να εισάγει κατευθειαν δανεισμό
-@app.route('/school_admin_new_booking')
-def school_admin_new_booking():
-# Extra Route Αιτήσεις εγγραφής χρηστών 
-@app.route('/school_admin_users_applications')
-def school_admin_users_applications():
-# Extra Route για να δηλώσει επιστροφή ενος βιβλίου
-@app.route('/school_admin_book_return')
-def school_admin_book_return():

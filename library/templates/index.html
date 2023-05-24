@@ -23,6 +23,7 @@
 					  <a href="{{ url_for('request_library_form') }}"> Εγγραφη Βιβλιοθηκης </a> |
 					  <a href="#" > Οδηγιες χρησης </a> |
 					  <a href="{{ url_for('contact_index') }}">Επικοινωνια</a>
+					  <a class="logout" href="{{ url_for('super_admin_login') }}" > Συνδεση Υπευθυνου Διαχεριστη</a>
 		  </div>
 		  <br>
 		  <div class ="welcome">
@@ -30,7 +31,7 @@
 		  </p>
 		
 		  <h2> Σχολεία: </h2>
-		</div>
+		  </div>
 		  <div class="search">
 			<form action="/action_page.php">
 				<input type="text" placeholder="Αναζητήστε Σχολείο.." name="search">

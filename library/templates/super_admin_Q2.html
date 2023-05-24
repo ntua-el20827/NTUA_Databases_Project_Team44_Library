@@ -11,14 +11,14 @@
     <select id="theme" name="theme">
       <option value="">Select a theme</option>
       {% for theme in themes %}
-      <option value="{{ theme[0] }}" {% if selected_theme == theme[0] %}selected{% endif %}>{{ theme[0] }}</option>
+      <option value=" theme " {% if selected_theme == theme %}selected{% endif %}>  {{ theme }}  </option>
       {% endfor %}
     </select>
     <input type="submit" value="Search">
   </form>
-  
+  <div class="school_list">
   {% if selected_theme %}
-    <h3>Selected Theme: {{ selected_theme }}</h3>
+    <h4>Selected Theme: {{ selected_theme }}</h4>
 
     <h4>Authors:</h4>
     <ul>
@@ -34,5 +34,7 @@
       {% endfor %}
     </ul>
   {% endif %}
+</div>
+<p> Επιστροφη στην σελιδα των <a href="{{ url_for('super_admin') }}"> queries </a></p>
 </body>
 </html>

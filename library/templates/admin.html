@@ -28,7 +28,7 @@
 		  <div class="topnav">
 			
 					  <a href="{{ url_for('school_admin') }}">Home</a> |
-					  <a href="{{ url_for('school_admin') }}"> Αιτήσεις εγγραφής Βιβλιοθήκης και Υπεύθυνων.</a> |
+					  <a href="{{ url_for('school_admin') }}"> Εγγραφες νεας Βιβλιοθήκης και Υπεύθυνου Χειριστη </a> |
                       <a href="{{ url_for('super_admin') }}"> Queries </a> |
                       <a href="{{ url_for('contact_index') }}">Επικοινωνια με τους Δημιουργούς</a>
                       <a href="#" > Οδηγός χρήσης </a> |
@@ -39,31 +39,24 @@
          </div>
 		  <br>
 		  <div class ="welcome">
-		  <p > <h3>Μπορειτε να αναζητήσετε παρακάτω το σχολείο στο οποίο ανήκετε. Αφού το βρείτε, πατήστε στο σχολείο, όπου και θα μπορέσετε να κάνετε αίτηση για έγγραφη.</h3> 
+		  <p > <h3>Καλως ηλθατε στην σελιδα του Υπευθυνου Διαχεριστη Βιβλιοθηκης. Μπλαμπλα</h3> 
 		  </p>
 		
-		  <h2> Σχολεία: </h2>
+		  
 		</div>
-		  <div class="search">
-			<form action="/action_page.php">
-				<input type="text" placeholder="Αναζητήστε Σχολείο.." name="search">
-					  <button>
-						<i class="fa fa-search"> </i>
-					</button>
-			   </form>
-		  </div>
+		  
+			
 			<div class ="school_list">
-              <ul>
-            	{% for school in schools %}
-				<li>
-					<form action="{{ url_for('index') }}" method="POST">
-						<input type="hidden" name="school_name" value="{{ school_name }}">
-						<button type="submit">{{ school }}</button>
-					</form></li>
-                {% endfor %}
-              </ul>
+				<ul>
+				  {% for school in schools %}
+				  <li>
+					  
+						  <p> {{ school_name }} ></p>
+						  
+					  </form></li>
+				  {% endfor %}
+				</ul>
 			</div>
-	
      </body>
 	 
 <html>   

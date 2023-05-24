@@ -48,6 +48,7 @@ body {
 }
 .welcome{
   
+  text-align: center;
   
   margin: 20px;
 }
@@ -356,4 +357,19 @@ form .likert li input[type=radio] {
   border-color: #01549b;
 }
 
+.super_admin {
+  margin-left: 20px;
+}
 
+.form-group {
+  margin-bottom: 10px;
+}
+
+.submit-button {
+  background: rgb(238,174,202);
+  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+}

@@ -6,7 +6,7 @@
 </head>
 <body>
   <h2>Query 6: Top 3 Couples of Book Themes with Most Common Borrowings</h2>
-  
+  <div class="school_list">
   {% if results %}
     <table>
       <tr>
@@ -25,5 +25,7 @@
   {% else %}
     <p>No couples of book themes found with the specified criteria.</p>
   {% endif %}
+</div>
+  <p> Επιστροφη στην σελιδα των <a href="{{ url_for('super_admin') }}"> queries </a></p>
 </body>
 </html>
