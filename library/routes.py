@@ -373,14 +373,14 @@ def review():
     # σε κάθε αλλή περίπτωση sorry δεν μπορεις να κάνεις review
     return render_template("review_test2.html")
 
-#route για την αρχική του super_admin 
-# Super Admin page with buttons
+#Route για την αρχική του super_admin
 @app.route('/super_admin')
 def super_admin():
     return render_template('super_admin_test.html')
 
+#Route για την αρχική των queries του super_admin
 @app.route('/SA_queries')
-def SA_gueries():
+def SA_queries():
     return render_template("SA_queries.html")
 
 # Route for Query 3.1.1
