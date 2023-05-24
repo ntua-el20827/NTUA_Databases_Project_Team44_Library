@@ -84,13 +84,27 @@ def login():
     
     # Render the template for the login page with the form
     return render_template('login.html')
-#!! Χρειάζεται αλλαγή για να μπαίνει o super_admin
-# ή να μπαίνει απο άλλο route μόνο για αυτόν
-# !! ΕΠΙΣΗΣ στο if user χρειάζεται και ένας άλλος έλεγχος αν εχω να κάνω με admin
 
-""" @app.route('/super_admin_login', methods=['GET', 'POST'])
+@app.route('/super_admin_login', methods=['GET', 'POST'])
 def super_admin_login():
-     """
+    if request.method == "POST":
+        # Get the entered username and password from the form
+        username = request.form['username']
+        password = request.form['password']
+        session['username'] = username
+        session['password'] = password
+        cur = mydb.connection.cursor()
+        query = "SELECT * FROM lib_user WHERE user_name = %s AND user_pwd = %s AND user_id=1"
+        cur.execute(query, (username, password))
+        super_admin = cur.fetchone()
+        cur.close()
+        if super_admin:
+            return render_template("super_admin_test.html")
+        else:
+            # Invalid credentials, show an error message
+            error_message = "Invalid username or password"
+            return render_template('login.html', error_message=error_message)
+    return render_template('login.html')
 
 
 # Route for the dashboard page
@@ -543,6 +557,8 @@ HAVING book_diff >= 5;
     return render_template('super_admin_Q7.html', results=results)
 
 # Exra route για να ελεγξει αιτήσεις σχολείων
+@app.route('/super_admin_school_applications')
+def super_admin_school_applications():
 
 #Route for school admin
 @app.route('/school_admin')
@@ -634,11 +650,17 @@ WHERE bs.status = 'borrowed' AND bs.return_date IS NULL """
 
 
 # Extra Route για να ελεγξει αιτήσεις αξιολόγησης
-
+@app.route('/school_admin_reviews')
+def school_admin_reviews():
 # Extra Route για να ελεγξει κρατήσεις -> να τις κανει δανεισμους
-
+@app.route('/school_admin_reservations')
+def school_admin_reservations():
 # Extra Route για να εισάγει κατευθειαν δανεισμό
-
+@app.route('/school_admin_new_booking')
+def school_admin_new_booking():
 # Extra Route Αιτήσεις εγγραφής χρηστών 
-
-# allagh
+@app.route('/school_admin_users_applications')
+def school_admin_users_applications():
+# Extra Route για να δηλώσει επιστροφή ενος βιβλίου
+@app.route('/school_admin_book_return')
+def school_admin_book_return():
