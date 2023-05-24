@@ -2,6 +2,7 @@ from flask import render_template, request, redirect, url_for, session, flash
 from flask_mysqldb import MySQL
 from library import app,mydb
 from library.forms import *
+import datetime
 
 
 # Route for the first page
@@ -105,7 +106,6 @@ def super_admin_login():
             error_message = "Invalid username or password"
             return render_template('login.html', error_message=error_message)
     return render_template('login.html')
-
 
 # Route for the dashboard page
 @app.route('/dashboard')
@@ -372,14 +372,14 @@ def review():
     # σε κάθε αλλή περίπτωση sorry δεν μπορεις να κάνεις review
     return render_template("review_test2.html")
 
-#route για την αρχική του super_admin 
-# Super Admin page with buttons
+#Route για την αρχική του super_admin
 @app.route('/super_admin')
 def super_admin():
     return render_template('super_admin_test.html')
 
+#Route για την αρχική των queries του super_admin
 @app.route('/SA_queries')
-def SA_gueries():
+def SA_queries():
     return render_template("SA_queries.html")
 
 # Route for Query 3.1.1
@@ -413,10 +413,10 @@ ORDER BY
         cur.close()
 
         # Render the template with the query results
-        return render_template('super_admin_Q1.html', results=results)
+        return render_template('super_admin_Q1_test.html', results=results)
 
     # Render the template initially without results
-    return render_template('super_admin_Q1.html', results=None)
+    return render_template('super_admin_Q1_test.html', results=None)
 
 # Route for Query 3.1.2
 @app.route('/super_admin/Q2',methods=['GET', 'POST'])
@@ -441,10 +441,10 @@ def super_admin_Q2():
         cur.close()
 
         # Render the template with the query results
-        return render_template('super_admin_Q2.html', themes=themes, selected_theme=selected_theme, authors=authors, teachers=teachers)
+        return render_template('super_admin_Q2_test.html', themes=themes, selected_theme=selected_theme, authors=authors, teachers=teachers)
 
     # Render the template initially without results
-    return render_template('super_admin_Q2.html', themes=themes, selected_theme=None, authors=None, teachers=None)
+    return render_template('super_admin_Q2_test.html', themes=themes, selected_theme=None, authors=None, teachers=None)
 
 # Route for Query 3.1.3
 @app.route('/super_admin/Q3')
@@ -557,8 +557,9 @@ HAVING book_diff >= 5;
     return render_template('super_admin_Q7.html', results=results)
 
 # Exra route για να ελεγξει αιτήσεις σχολείων
-
-
+@app.route('/super_admin_school_applications')
+def super_admin_school_applications():
+    
 
 #Route for school admin
 @app.route('/school_admin')

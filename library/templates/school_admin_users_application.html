@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Application</title>
+</head>
+<body>
+    <h1>User Application</h1>
+
+    <h2>User Applications</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for application in user_applications %}
+                <tr>
+                    <td>{{ application[0] }}</td>
+                    <td>{{ application[1] }}</td>
+                    <td>{{ application[2] }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('school_admin_users_application') }}">
+                            <input type="hidden" name="user_id" value="{{ application[0] }}">
+                            <button type="submit" name="action" value="accept">Accept</button>
+                            <button type="submit" name="action" value="deny">Deny</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
