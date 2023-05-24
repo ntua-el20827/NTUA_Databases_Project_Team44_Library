@@ -107,7 +107,6 @@ def super_admin_login():
             return render_template('login.html', error_message=error_message)
     return render_template('login.html')
 
-
 # Route for the dashboard page
 @app.route('/dashboard')
 def dashboard():
