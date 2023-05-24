@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Return</title>
+</head>
+<body>
+    <h1>Book Return</h1>
+
+    <h2>Booked Items</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Item ID</th>
+                <th>Title</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in booked_items %}
+                <tr>
+                    <td>{{ item[0] }}</td>
+                    <td>{{ item[1] }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('school_admin_book_return') }}">
+                            <input type="hidden" name="item_id" value="{{ item[0] }}">
+                            <button type="submit">Returned</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

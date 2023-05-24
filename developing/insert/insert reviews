@@ -33,12 +33,3 @@ VALUES (7, 27, 'The Road is a haunting post-apocalyptic tale.', '2022-02-28', '5
 
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
 VALUES (8, 33, 'The Lost World is a thrilling dinosaur adventure.', '2022-03-15', '4');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (9, 39, 'The Poison Belt is an intriguing sci-fi novel.', '2022-12-31', '3');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (10, 44, 'Alice''s Adventures in Wonderland is a whimsical classic.', '2022-02-20', '4');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (11, 43, 'The Secret Agent is a gripping spy thriller.', '2022-12-20', '4');

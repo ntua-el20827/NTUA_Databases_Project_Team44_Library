@@ -2,6 +2,7 @@ from flask import render_template, request, redirect, url_for, session, flash
 from flask_mysqldb import MySQL
 from library import app,mydb
 from library.forms import *
+import datetime
 
 
 # Route for the first page
@@ -413,10 +414,10 @@ ORDER BY
         cur.close()
 
         # Render the template with the query results
-        return render_template('super_admin_Q1.html', results=results)
+        return render_template('super_admin_Q1_test.html', results=results)
 
     # Render the template initially without results
-    return render_template('super_admin_Q1.html', results=None)
+    return render_template('super_admin_Q1_test.html', results=None)
 
 # Route for Query 3.1.2
 @app.route('/super_admin/Q2',methods=['GET', 'POST'])
@@ -441,10 +442,10 @@ def super_admin_Q2():
         cur.close()
 
         # Render the template with the query results
-        return render_template('super_admin_Q2.html', themes=themes, selected_theme=selected_theme, authors=authors, teachers=teachers)
+        return render_template('super_admin_Q2_test.html', themes=themes, selected_theme=selected_theme, authors=authors, teachers=teachers)
 
     # Render the template initially without results
-    return render_template('super_admin_Q2.html', themes=themes, selected_theme=None, authors=None, teachers=None)
+    return render_template('super_admin_Q2_test.html', themes=themes, selected_theme=None, authors=None, teachers=None)
 
 # Route for Query 3.1.3
 @app.route('/super_admin/Q3')
@@ -559,6 +560,7 @@ HAVING book_diff >= 5;
 # Exra route για να ελεγξει αιτήσεις σχολείων
 @app.route('/super_admin_school_applications')
 def super_admin_school_applications():
+    print("hi")
 
 #Route for school admin
 @app.route('/school_admin')
@@ -650,17 +652,193 @@ WHERE bs.status = 'borrowed' AND bs.return_date IS NULL """
 
 
 # Extra Route για να ελεγξει αιτήσεις αξιολόγησης
-@app.route('/school_admin_reviews')
+@app.route('/school_admin_reviews', methods=['GET', 'POST'])
 def school_admin_reviews():
+    if request.method == 'POST':
+        application_id = request.form.get('application_id')
+        action = request.form.get('action')
+
+        # Connect to the database
+        cur = mydb.connection.cursor()
+
+        if action == 'accept':
+            # Insert the review application into the 'review' table
+            query = "INSERT INTO review (application_id) VALUES (%s)"
+            cur.execute(query, (application_id,))
+            mydb.commit()
+        elif action == 'deny':
+            # Delete the review application from the 'review_applications' view
+            query = "DELETE FROM review_applications WHERE application_id = %s"
+            cur.execute(query, (application_id,))
+            mydb.commit()
+
+        cur.close()
+        mydb.close()
+
+    # Connect to the database to fetch the review applications
+    cur = mydb.connection.cursor()
+
+    # Fetch the review applications from the 'review_applications' view
+    query = "SELECT * FROM review_applications"
+    cur.execute(query)
+    review_applications = cur.fetchall()
+    cur.close()
+
+    # Render the template with the review applications
+    return render_template('school_admin_reviews.html', review_applications=review_applications)
+
 # Extra Route για να ελεγξει κρατήσεις -> να τις κανει δανεισμους
-@app.route('/school_admin_reservations')
+@app.route('/school_admin_reservations', methods=['GET', 'POST'])
 def school_admin_reservations():
+    if request.method == 'POST':
+        item_id = request.form.get('item_id')
+        action = request.form.get('action')
+
+        # Connect to the database
+        cur = mydb.connection.cursor()
+
+        if action == 'accept':
+            # Change the status to 'borrowed' in the 'book_status' table
+            query = "UPDATE book_status SET status = 'borrowed' WHERE item_id = %s"
+            cur.execute(query, (item_id,))
+            mydb.commit()
+            # Να βάλλουμε και current date το rent_date
+        elif action == 'deny':
+            # Delete the item from the 'book_status' table
+            query = "DELETE FROM book_status WHERE item_id = %s"
+            cur.execute(query, (item_id,))
+            mydb.commit()
+        elif action == 'delete':
+            # Delete the item from the 'book_query' view
+            query = "DELETE FROM book_query WHERE item_id = %s"
+            cur.execute(query, (item_id,))
+            mydb.commit()
+
+        cur.close()
+
+    # Connect to the database to fetch the data
+    cur = mydb.connection.cursor()
+
+    # Fetch data from the 'book_status' table with status='reserved'
+    query = "SELECT * FROM book_status WHERE status = 'reserved'"
+    cur.execute(query)
+    reserved_items = cur.fetchall()
+
+    # Fetch data from the 'book_query' view
+    query = "SELECT * FROM book_query"
+    cur.execute(query)
+    book_query_data = cur.fetchall()
+
+    cur.close()
+    mydb.close()
+
+    # Render the template with the data
+    return render_template('school_admin_reservations.html', reserved_items=reserved_items, book_query_data=book_query_data)
+
 # Extra Route για να εισάγει κατευθειαν δανεισμό
-@app.route('/school_admin_new_booking')
+@app.route('/school_admin_new_booking', methods=['GET', 'POST'])
 def school_admin_new_booking():
+    if request.method == 'POST':
+        user_id = request.form.get('user_id')
+        user_lastname = request.form.get('user_lastname')
+        user_firstname = request.form.get('user_firstname')
+        book_id = request.form.get('book_id')
+
+        if not user_id or not user_lastname or not user_firstname or not book_id:
+            flash('Please fill in all the required fields', 'error')
+        else:
+            # Connect to the database
+            cur = mydb.connection.cursor()
+
+            # Insert a new booking into the 'book_status' table
+            insert_query = "INSERT INTO book_status (book_id, status, rent_date, user_id, user_lastname, user_firstname) VALUES (%s, %s, CURDATE(), %s, %s, %s)"
+            cur.execute(insert_query, (book_id, 'borrowed', user_id, user_lastname, user_firstname))
+            mydb.commit()
+            cur.close()
+
+            flash('Booking successful', 'success')
+
+            # Redirect to the same page to refresh with blank texts
+            return redirect(url_for('school_admin_new_booking'))
+
+    # Connect to the database to fetch the data
+    cur = mydb.connection.cursor()
+
+    # Fetch data from the 'book' table
+    query = "SELECT book_id, title FROM book"
+    cur.execute(query)
+    books = cur.fetchall()
+    cur.close()
+
+    # Render the template with the data
+    return render_template('school_admin_new_booking.html', books=books)
+
 # Extra Route Αιτήσεις εγγραφής χρηστών 
-@app.route('/school_admin_users_applications')
-def school_admin_users_applications():
+@app.route('/school_admin_users_application', methods=['GET', 'POST'])
+def school_admin_users_application():
+    if request.method == 'POST':
+        user_id = request.form.get('user_id')
+        action = request.form.get('action')
+
+        # Connect to the database
+        cur = mydb.connection.cursor()
+
+        if action == 'accept':
+            # Fetch the user application details from the view
+            query = "SELECT * FROM users_application WHERE user_id = %s"
+            cur.execute(query, (user_id,))
+            user_application = cur.fetchone()
+
+            # Insert the user application details into the 'lib_user' table
+            insert_query = "INSERT INTO lib_user (user_id, name, email, status) VALUES (%s, %s, %s, %s)"
+            cur.execute(insert_query, (user_application[0], user_application[1], user_application[2], 'accepted'))
+            mydb.commit()
+
+        elif action == 'deny':
+            # Delete the user application from the view
+            delete_query = "DELETE FROM users_application WHERE user_id = %s"
+            cur.execute(delete_query, (user_id,))
+            mydb.commit()
+
+        cur.close()
+
+    # Connect to the database to fetch the data
+    cur = mydb.connection.cursor()
+
+    # Fetch data from the 'users_application' view
+    query = "SELECT * FROM users_application"
+    cur.execute(query)
+    user_applications = cur.fetchall()
+
+    cur.close()
+
+    # Render the template with the data
+    return render_template('school_admin_users_application.html', user_applications=user_applications)
+
 # Extra Route για να δηλώσει επιστροφή ενος βιβλίου
-@app.route('/school_admin_book_return')
+@app.route('/school_admin_book_return', methods=['GET', 'POST'])
 def school_admin_book_return():
+    if request.method == 'POST':
+        item_id = request.form.get('item_id')
+
+        # Connect to the database
+        cur = mydb.connection.cursor()
+
+        # Update the 'return_date' to the current date in the 'book_status' table
+        current_date = datetime.date.today()
+        query = "UPDATE book_status SET return_date = %s WHERE item_id = %s"
+        cur.execute(query, (current_date, item_id))
+        mydb.commit()
+        cur.close()
+
+    # Connect to the database to fetch the data
+    cur = mydb.connection.cursor()
+
+    # Fetch data from the 'book_status' table with status='booked' and return_date=NULL
+    query = "SELECT * FROM book_status WHERE status = 'booked' AND return_date IS NULL"
+    cur.execute(query)
+    booked_items = cur.fetchall()
+    cur.close()
+
+    # Render the template with the data
+    return render_template('school_admin_book_return.html', booked_items=booked_items)

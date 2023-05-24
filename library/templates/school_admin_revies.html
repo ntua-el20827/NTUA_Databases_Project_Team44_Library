@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Review Applications</title>
+</head>
+<body>
+    <h1>Review Applications</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Application ID</th>
+                <th>Application Details</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for application in review_applications %}
+                <tr>
+                    <td>{{ application[0] }}</td>
+                    <td>{{ application[1] }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('school_admin_reviews') }}">
+                            <input type="hidden" name="application_id" value="{{ application[0] }}">
+                            <button type="submit" name="action" value="accept">Accept</button>
+                            <button type="submit" name="action" value="deny">Deny</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

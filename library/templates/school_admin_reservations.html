@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Management</title>
+</head>
+<body>
+    <h1>Book Management</h1>
+
+    <h2>Reserved Items</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Item ID</th>
+                <th>Title</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in reserved_items %}
+                <tr>
+                    <td>{{ item[0] }}</td>
+                    <td>{{ item[1] }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('school_admin_reservations') }}">
+                            <input type="hidden" name="item_id" value="{{ item[0] }}">
+                            <button type="submit" name="action" value="accept">Accept</button>
+                            <button type="submit" name="action" value="deny">Deny</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Book Query Data</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Item ID</th>
+                <th>Title</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in book_query_data %}
+                <tr>
+                    <td>{{ data[0] }}</td>
+                    <td>{{ data[1] }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('school_admin_reservations') }}">
+                            <input type="hidden" name="item_id" value="{{ data[0] }}">
+                            <button type="submit" name="action" value="delete">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
