@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify School Application</title>
+    <style>
+        .accept-button {
+            background-color: green;
+            color: white;
+        }
+
+        .delete-button {
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Verify School Application</h1>
+
+    <h2>Application Details</h2>
+    <p><strong>Application ID:</strong> {{ application[0] }}</p>
+    <p><strong>School Name:</strong> {{ application[1] }}</p>
+    <p><strong>User First Name:</strong> {{ application[2] }}</p>
+    <p><strong>User Last Name:</strong> {{ application[3] }}</p>
+
+    <form method="POST" action="{{ url_for('verify_school_application', application_id=application[0]) }}">
+        <button type="submit" name="action" value="accept" class="accept-button">Accept</button>
+        <button type="submit" name="action" value="delete" class="delete-button">Delete</button>
+    </form>
+</body>
+</html>

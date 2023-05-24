@@ -100,12 +100,12 @@ def super_admin_login():
         super_admin = cur.fetchone()
         cur.close()
         if super_admin:
-            return render_template("super_admin_test.html")
+            return render_template("super_admin.html")
         else:
             # Invalid credentials, show an error message
             error_message = "Invalid username or password"
-            return render_template('login.html', error_message=error_message)
-    return render_template('login.html')
+            return render_template('super_admin_login.html', error_message=error_message)
+    return render_template('super_admin_login.html')
 
 # Route for the dashboard page
 @app.route('/dashboard')
@@ -142,9 +142,10 @@ def signup():
         lname = request.form['lname']
         email = request.form['email']
         phone = request.form['phone']
+        role_name = request.form['role_name']
         cur = mydb.connection.cursor()
-        query = "INSERT INTO users_applications (username, password, first_name, last_name, email, phone) VALUES (%s, %s, %s, %s, %s, %s)"
-        values = (newusername, newpassword, fname, lname, email, phone)
+        query = "INSERT INTO users_applications (username, password, first_name, last_name, email, phone, role_name) VALUES (%s, %s, %s, %s, %s, %s,%s)"
+        values = (newusername, newpassword, fname, lname, email, phone,role_name)
         cur.execute(query, values)
         mydb.connection.commit()
         cur.close()
@@ -331,6 +332,8 @@ def rent():
     return render_template("hello.html")
         
     # αν οχι πηγαίνει σε άλλη σελίδα για να μπεί σε ουρά κράτησης -> view book_queue 
+
+#route για επαναφορά στην σχολική βιβλιοθήκη
 @app.route('/back_to_school')
 def back_to_school():
     session.pop('ISBN', None)
@@ -375,12 +378,12 @@ def review():
 #Route για την αρχική του super_admin
 @app.route('/super_admin')
 def super_admin():
-    return render_template('super_admin_test.html')
+    return render_template('super_admin.html')
 
 #Route για την αρχική των queries του super_admin
-@app.route('/SA_queries')
-def SA_queries():
-    return render_template("SA_queries.html")
+@app.route('/super_admin_queries')
+def super_admin_queries():
+    return render_template("super_admin_queries.html")
 
 # Route for Query 3.1.1
 @app.route('/super_admin/Q1',methods=['GET', 'POST'])
@@ -557,9 +560,78 @@ HAVING book_diff >= 5;
     return render_template('super_admin_Q7.html', results=results)
 
 # Exra route για να ελεγξει αιτήσεις σχολείων
-@app.route('/super_admin_school_applications')
+@app.route('/super_admin_school_applications', methods=['GET', 'POST'])
 def super_admin_school_applications():
-    print("hi")
+    if request.method == 'POST':
+        school_name = request.form.get('school_name')
+        application_id = request.form.get('application_id')
+        session['application_id'] = application_id
+
+        if school_name and application_id:
+            return redirect(url_for('verify_school_application', school_name=school_name, application_id=application_id))
+
+    # Connect to the database to fetch the data
+    cur = mydb.connection.cursor()
+
+    # Fetch data from the 'library_applications' view
+    query = "SELECT application_id, school_name FROM library_applications"
+    cur.execute(query)
+    applications = cur.fetchall()
+    cur.close()
+
+    # Render the template with the data
+    return render_template('library_applications.html', applications=applications)
+
+@app.route('/verify_school_application/<int:application_id>', methods=['GET', 'POST'])
+def verify_school_application(application_id):
+    if request.method == 'POST':
+        action = request.form.get('action')
+
+        if action == 'accept':
+            # Connect to the database to perform database operations
+            cur = mydb.connection.cursor()
+            # Get application details from the database
+            query = "SELECT * FROM library_applications WHERE application_id = %s"
+            cur.execute(query, (application_id,))
+            application = cur.fetchone()
+
+            if application:
+                # Insert the school into the 'school' table
+                insert_query = "INSERT INTO school (school_name) VALUES (%s)"
+                cur.execute(insert_query, (application[1],))
+                mydb.commit()
+
+                # Get the school_id of the inserted school
+                school_id = cur.lastrowid
+
+                # Insert a user into the 'lib_user' table for the new school
+                insert_user_query = "INSERT INTO lib_user (user_firstname, user_lastname, school_id) VALUES (%s, %s, %s)"
+                cur.execute(insert_user_query, (application[2], application[3], school_id))
+                mydb.commit()
+
+            cur.close()
+
+        elif action == 'delete':
+            # Connect to the database to perform database operations
+            cur = mydb.connection.cursor()
+            # Delete the application from the 'library_applications' table
+            delete_query = "DELETE FROM library_applications WHERE application_id = %s"
+            cur.execute(delete_query, (application_id,))
+            mydb.commit()
+            cur.close()
+        # Redirect back to the library applications page
+        return redirect(url_for('library_applications'))
+
+    # Connect to the database to fetch the application details
+    cur = mydb.connection.cursor()
+    # Get application details from the database
+    query = "SELECT * FROM library_applications WHERE application_id = %s"
+    cur.execute(query, (application_id,))
+    application = cur.fetchone()
+    cur.close()
+
+    # Render the template with the application details
+    return render_template('verify_school_application.html', application=application)
 
 #Route for school admin
 @app.route('/school_admin')

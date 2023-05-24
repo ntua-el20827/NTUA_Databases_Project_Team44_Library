@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Applications</title>
+</head>
+<body>
+    <h1>Library Applications</h1>
+
+    <h2>List of Applications</h2>
+    <ul>
+        {% for application in applications %}
+            <li>
+                <form method="POST" action="{{ url_for('library_applications') }}">
+                    <input type="hidden" name="application_id" value="{{ application[0] }}">
+                    <button type="submit" name="school_name" value="{{ application[1] }}">{{ application[1] }}</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
