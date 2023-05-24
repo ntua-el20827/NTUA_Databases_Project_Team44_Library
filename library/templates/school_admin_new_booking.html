@@ -2,10 +2,24 @@
 <html>
 <head>
     <title>Book Booking</title>
+    <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
+    <script>
+        function confirmLogout() {
+          var result = confirm("Are you sure you want to logout?");
+          if (result) {
+            window.location.href = "{{ url_for('logout') }}";
+          }
+        }
+      </script>
 </head>
 <body>
-    <h1>Book Booking</h1>
-
+    <div class="header">
+        <h1>Εισαγωγή Νεου Δανεισμού</h1>
+    </div>
+    <div class="topnav">
+        <a href="{{ url_for('school_admin') }}">Home</a>  |
+        <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
+    </div>
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <div class="flash-messages">
@@ -16,20 +30,14 @@
         {% endif %}
     {% endwith %}
 
-    <h2>Book Booking Form</h2>
+    <h2>Στοιχεία Δανεισμού</h2>
     <form method="POST" action="{{ url_for('school_admin_new_booking') }}">
         <label for="user_id">User ID:</label>
         <input type="text" name="user_id" id="user_id" required>
         <br><br>
-        <label for="user_lastname">User Last Name:</label>
-        <input type="text" name="user_lastname" id="user_lastname" required>
-        <br><br>
-        <label for="user_firstname">User First Name:</label>
-        <input type="text" name="user_firstname" id="user_firstname" required>
-        <br><br>
-        <label for="book_id">Choose a Book:</label>
+        <label for="book_id">Διαλέξτε Ενα Βιβλίο:</label>
         <select name="book_id" id="book_id" required>
-            <option value="">Select a Book</option>
+            <option value="">Τιτλος Βιβλίου</option>
             {% for book in books %}
                 <option value="{{ book[0] }}">{{ book[1] }}</option>
             {% endfor %}

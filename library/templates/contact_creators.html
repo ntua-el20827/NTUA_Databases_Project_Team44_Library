@@ -14,10 +14,13 @@
 </head>
 <body>
     <div class="topnav">
-			
-        <a href="{{url_for('school')}}" > Home </a> |
-        <a href="#" > Οδηγιες χρησης </a> |
+        {% if super_admin_statement== True%}
+        <a href="{{url_for('super_admin')}}" > Home </a> |
         <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
+        {% else %}
+        <a href="{{url_for('index')}}" > Home </a> |
+        {% endif %}
+        <a href="#" > Οδηγιες χρησης </a> |
         
     </div>
     <div class="header">
@@ -25,9 +28,10 @@
 	</div>
 
     <div class="conctact">
-        <p><h3> Στοιχεία Υπευθυνου Βιβλιοθήκης</h3></p><br>
-        <p>Ονοματεπώνυμο: {{ admin[0]}} {{ admin[1] }}</p>
-        <p>Email: {{ admin[2] }}</p>
+        <p><h3> Δημιουργοί Βιβλιοθήκης</h3></p><br>
+        <p>Μπαμπαρούση Ιωάννα: iompampa@gmail.com</p>
+        <p>Νεοφώτιστος Μανος : manosneofotistos@gmail.com </p>
+        <p>Γεωργακόπουλος Γιωργος : georgegeo248@gmail.com</p>
     </div>
 
 </body>

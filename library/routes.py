@@ -76,6 +76,7 @@ def login():
             ## Ελεγχος αν ειναι καποιος admin
             print("login -> ",role_name)
             if (role_name[0]=='admin'):
+                    print("admin -> ",role_name)
                     return redirect(url_for('school_admin'))
             return redirect(url_for('dashboard'))  # Redirect to the dashboard page after successful login
         else:
@@ -212,9 +213,25 @@ def contact():
     cur.close()
     return render_template('contact.html',admin=admin,school_info = school_info)
 
+@app.route('/contact_super_admin')
+def contact_super_admin():
+    school_id = session['school_id']
+    # info for admin
+    cur = mydb.connection.cursor()
+    query = "SELECT user_firstname, user_lastname, user_email FROM lib_user WHERE  role_name = 'super_admin'" 
+    cur.execute(query)
+    admin = cur.fetchone()
+    cur.close()
+    return render_template('contact_super_admin.html',admin=admin)
+
 @app.route('/contact_index')
 def contact_index():
-    return render_template("hello.html")
+    return render_template("contact_creators.html")
+
+@app.route('/contact_index_super_admin')
+def contact_index_super_admin():
+    super_admin_statement = True
+    return render_template("contact_creators.html", super_admin_statement = super_admin_statement)
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
@@ -242,6 +259,9 @@ def user_profile():
     cur.close()
     # if statement -> true if user_role == teacher
     #print("user_profile ", role_name)
+    if (role_name == 'admin'):
+        can_edit = True
+        return render_template('school_admin_profile.html',user_info = user_info,school_info=school_info,can_edit=can_edit)
     if (role_name == 'teacher'):
         can_edit = True
         print("can edit = true")
@@ -338,6 +358,8 @@ def rent():
 def back_to_school():
     session.pop('ISBN', None)
     #print("from back to school ", session['ISBN']  )
+    if session['role_name'] == 'admin':
+        return redirect(url_for('school_admin'))
     return redirect(url_for('school'))
 
 #route για καταχώρηση αξιολόγησης απο τον χρήστη
@@ -397,29 +419,29 @@ def super_admin_Q1():
         cur = mydb.connection.cursor()
         #Το query θα ερθει απο ιωάννα
         query = """SELECT 
-  school.school_name,
-  COUNT(*) AS borrow_count
-FROM 
-  book_status
-  INNER JOIN book ON book_status.book_id = book.book_id
-  INNER JOIN school ON book.school_id = school.school_id
-WHERE 
-  book_status.status = 'borrowed' AND
-  YEAR(book_status.approval_date) = %s AND
-  MONTH(book_status.approval_date) = %s
-GROUP BY 
-  school.school_name
-ORDER BY 
-  borrow_count DESC;"""
+        school.school_name,
+        COUNT(*) AS borrow_count
+        FROM 
+        book_status
+        INNER JOIN book ON book_status.book_id = book.book_id
+        INNER JOIN school ON book.school_id = school.school_id
+        WHERE 
+        book_status.status = 'borrowed' AND
+        YEAR(book_status.approval_date) = %s AND
+        MONTH(book_status.approval_date) = %s
+        GROUP BY 
+        school.school_name
+        ORDER BY 
+        borrow_count DESC;"""
         cur.execute(query, (year, month))
         results = cur.fetchall()
         cur.close()
 
         # Render the template with the query results
-        return render_template('super_admin_Q1_test.html', results=results)
+        return render_template('super_admin_Q1.html', results=results)
 
     # Render the template initially without results
-    return render_template('super_admin_Q1_test.html', results=None)
+    return render_template('super_admin_Q1.html', results=None)
 
 # Route for Query 3.1.2
 @app.route('/super_admin/Q2',methods=['GET', 'POST'])
@@ -444,10 +466,10 @@ def super_admin_Q2():
         cur.close()
 
         # Render the template with the query results
-        return render_template('super_admin_Q2_test.html', themes=themes, selected_theme=selected_theme, authors=authors, teachers=teachers)
+        return render_template('super_admin_Q2.html', themes=themes, selected_theme=selected_theme, authors=authors, teachers=teachers)
 
     # Render the template initially without results
-    return render_template('super_admin_Q2_test.html', themes=themes, selected_theme=None, authors=None, teachers=None)
+    return render_template('super_admin_Q2.html', themes=themes, selected_theme=None, authors=None, teachers=None)
 
 # Route for Query 3.1.3
 @app.route('/super_admin/Q3')
@@ -455,15 +477,15 @@ def super_admin_Q3():
     cur = mydb.connection.cursor()
     query = """
         SELECT lib_user.user_name, COUNT(*) AS num_borrowings
-FROM book_status
-INNER JOIN lib_user ON book_status.user_id = lib_user.user_id
-WHERE lib_user.role_name = 'teacher'
-  AND lib_user.user_date_of_birth > UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 40 YEAR))
-  AND book_status.status = 'borrowed'
-GROUP BY lib_user.user_id
-ORDER BY num_borrowings DESC
-LIMIT 1;
-    """
+        FROM book_status
+        INNER JOIN lib_user ON book_status.user_id = lib_user.user_id
+        WHERE lib_user.role_name = 'teacher'
+        AND lib_user.user_date_of_birth > UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 40 YEAR))
+        AND book_status.status = 'borrowed'
+        GROUP BY lib_user.user_id
+        ORDER BY num_borrowings DESC
+        LIMIT 1;
+        """
     cur.execute(query)
     results = cur.fetchall()
     cur.close()
@@ -476,10 +498,10 @@ LIMIT 1;
 def super_admin_Q4():
     cur = mydb.connection.cursor()
     query = """
-        SELECT DISTINCT book_author.author
-FROM book_author
-LEFT JOIN book_status ON book_author.book_id = book_status.book_id
-WHERE book_status.book_id IS NULL;
+                SELECT DISTINCT book_author.author
+        FROM book_author
+        LEFT JOIN book_status ON book_author.book_id = book_status.book_id
+        WHERE book_status.book_id IS NULL;
     """
     cur.execute(query)
     results = cur.fetchall()
@@ -494,12 +516,12 @@ def super_admin_Q5():
     cur = mydb.connection.cursor()
     query = """
         SELECT lib_user.user_name
-FROM book_status
-INNER JOIN lib_user ON book_status.user_id = lib_user.user_id
-WHERE lib_user.role_name = 'admin'
-  AND book_status.approval_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 YEAR) AND NOW()
-GROUP BY lib_user.user_id
-HAVING COUNT(*) >= 20;
+        FROM book_status
+        INNER JOIN lib_user ON book_status.user_id = lib_user.user_id
+        WHERE lib_user.role_name = 'admin'
+        AND book_status.approval_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 YEAR) AND NOW()
+        GROUP BY lib_user.user_id
+        HAVING COUNT(*) >= 20;
     """
     cur.execute(query)
     results = cur.fetchall()
@@ -514,19 +536,19 @@ def super_admin_Q6():
     cur = mydb.connection.cursor()
     query = """
         SELECT 
-  CONCAT(bt1.theme,',',bt2.theme) AS theme_pair, 
-  COUNT(*) AS borrow_count
-FROM 
-  book_theme bt1
-  INNER JOIN book_theme bt2 ON bt1.book_id = bt2.book_id AND bt1.theme < bt2.theme
-  INNER JOIN book_status ON bt2.book_id = book_status.book_id
-WHERE 
-  book_status.status = 'borrowed'
-GROUP BY 
-  theme_pair
-ORDER BY 
-  borrow_count DESC
-LIMIT 3;
+        CONCAT(bt1.theme,',',bt2.theme) AS theme_pair, 
+        COUNT(*) AS borrow_count
+        FROM 
+        book_theme bt1
+        INNER JOIN book_theme bt2 ON bt1.book_id = bt2.book_id AND bt1.theme < bt2.theme
+        INNER JOIN book_status ON bt2.book_id = book_status.book_id
+        WHERE 
+        book_status.status = 'borrowed'
+        GROUP BY 
+        theme_pair
+        ORDER BY 
+        borrow_count DESC
+        LIMIT 3;
     """
     cur.execute(query)
     results = cur.fetchall()
@@ -540,17 +562,17 @@ LIMIT 3;
 def super_admin_Q7():
     cur = mydb.connection.cursor()
     query = """
-        SELECT book_author.author, (max_books.num_books - COUNT(*)) AS book_diff
-FROM book_author
-INNER JOIN (
-  SELECT book_author.book_id, COUNT(*) AS num_books
-  FROM book_author
-  GROUP BY book_author.book_id
-  ORDER BY num_books DESC
-  LIMIT 1
-) AS max_books ON book_author.book_id = max_books.book_id
-GROUP BY book_author.author
-HAVING book_diff >= 5;
+    SELECT book_author.author, (max_books.num_books - COUNT(*)) AS book_diff
+    FROM book_author
+    INNER JOIN (
+    SELECT book_author.book_id, COUNT(*) AS num_books
+    FROM book_author
+    GROUP BY book_author.book_id
+    ORDER BY num_books DESC
+    LIMIT 1
+    ) AS max_books ON book_author.book_id = max_books.book_id
+    GROUP BY book_author.author
+    HAVING book_diff >= 5;
     """
     cur.execute(query)
     results = cur.fetchall()
@@ -644,7 +666,18 @@ def school_admin():
     school_id = school_id_tuple[0] if school_id_tuple else None
     session['school_id'] = school_id
     cur.close()
-    return render_template('admin.html')
+    if request.method == "POST":
+        ISBN = request.form['ISBN']  
+        session['ISBN'] = ISBN  
+        return redirect(url_for('book_display'))
+    else:
+        cur = mydb.connection.cursor()
+        school_id = session['school_id']
+        query = "SELECT title, ISBN, book_image FROM book WHERE school_id = %s" 
+        cur.execute(query,(school_id,))
+        books = cur.fetchall()
+        cur.close()
+        return render_template('school_admin.html',books = books )
 
 #Routes for school admin queries   
 @app.route('/school_admin_Q1', methods=['GET', 'POST'])
@@ -809,35 +842,41 @@ def school_admin_reservations():
 # Extra Route για να εισάγει κατευθειαν δανεισμό
 @app.route('/school_admin_new_booking', methods=['GET', 'POST'])
 def school_admin_new_booking():
+    school_id = session['school_id']
     if request.method == 'POST':
-        user_id = request.form.get('user_id')
-        user_lastname = request.form.get('user_lastname')
-        user_firstname = request.form.get('user_firstname')
-        book_id = request.form.get('book_id')
+        user_id = request.form['user_id']
+        book_id = request.form['book_id']
 
-        if not user_id or not user_lastname or not user_firstname or not book_id:
+        if not user_id or not book_id:
             flash('Please fill in all the required fields', 'error')
         else:
             # Connect to the database
             cur = mydb.connection.cursor()
-
-            # Insert a new booking into the 'book_status' table
-            insert_query = "INSERT INTO book_status (book_id, status, rent_date, user_id, user_lastname, user_firstname) VALUES (%s, %s, CURDATE(), %s, %s, %s)"
-            cur.execute(insert_query, (book_id, 'borrowed', user_id, user_lastname, user_firstname))
-            mydb.commit()
+            query = "SElECT * FROM lib_user WHERE user_id = %s"
+            cur.execute(query,(user_id,))
+            user = cur.fetchone()
             cur.close()
+            if user:
+                # Insert a new booking into the 'book_status' table
+                cur = mydb.connection.cursor()
+                insert_query = "INSERT INTO book_status (book_id, status, rent_date, user_id) VALUES (%s, %s, CURDATE(), %s)"
+                cur.execute(insert_query, (book_id, 'borrowed', user_id))
+                mydb.commit()
+                cur.close()
 
-            flash('Booking successful', 'success')
+                flash('Booking successful', 'success')
 
-            # Redirect to the same page to refresh with blank texts
-            return redirect(url_for('school_admin_new_booking'))
+                # Redirect to the same page to refresh with blank texts
+                return redirect(url_for('school_admin_new_booking'))
+            else:
+                flash('Wrong User ID', 'failure')
 
     # Connect to the database to fetch the data
     cur = mydb.connection.cursor()
 
     # Fetch data from the 'book' table
-    query = "SELECT book_id, title FROM book"
-    cur.execute(query)
+    query = "SELECT book_id, title FROM book WHERE school_id = %s AND number_of_available_books > 0"
+    cur.execute(query,(school_id,))
     books = cur.fetchall()
     cur.close()
 

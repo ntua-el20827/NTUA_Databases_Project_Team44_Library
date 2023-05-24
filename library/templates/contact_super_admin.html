@@ -15,7 +15,7 @@
 <body>
     <div class="topnav">
 			
-        <a href="{{url_for('school')}}" > Home </a> |
+        <a href="{{url_for('school_admin')}}" > Home </a> |
         <a href="#" > Οδηγιες χρησης </a> |
         <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
         
@@ -25,7 +25,7 @@
 	</div>
 
     <div class="conctact">
-        <p><h3> Στοιχεία Υπευθυνου Βιβλιοθήκης</h3></p><br>
+        <p><h3> Στοιχεία Υπευθυνου Διαχειριστή Βιβλιοθήκης</h3></p><br>
         <p>Ονοματεπώνυμο: {{ admin[0]}} {{ admin[1] }}</p>
         <p>Email: {{ admin[2] }}</p>
     </div>
