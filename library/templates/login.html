@@ -3,7 +3,39 @@
 <head>
 	<title>User Login</title>
 	<link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
-	
+	<style>
+        .form-row {
+            margin-bottom: 20px;
+          }
+          
+          label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+          }
+          
+          input[type="text"],
+		  input[type="password"]
+          {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+          }
+          
+          button[type="submit"] {
+            background-color: #64a8e1;
+            color: rgb(6, 6, 6);
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+          }
+          
+          button[type="submit"]:hover {
+            background-color: rgb(238, 174, 202);;
+          }
+    </style>
 </head>
 <body>
 	
@@ -15,15 +47,18 @@
 	<br>
 	
 		<form method="POST" action="/login">
+			
 			<label for="username">Ονομα Χρηστη:</label> <br>
 			<input type="text" id="username" name="username" required>
 			<br><br>
 			<label for="password">Κωδικος:</label> <br>
 			<input type="password" id="password" name="password" required>
 			<br> <br>
-			<input type="submit" value="Login">
-
-			<br> <br>
+			<div class="form-row">
+				<button type="submit">Login</button>
+			
+		    </div>
+			
 		</form>
 		<p>Δεν εχετε λογαριασμό; <a href="{{ url_for('signup') }}">Εγγραφειτε! </a> </p>
 		<p>Επιστροφη στην αρχικη <a href="{{ url_for('index') }}"> σελίδα </a></p>
