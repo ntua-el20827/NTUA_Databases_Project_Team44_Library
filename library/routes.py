@@ -683,8 +683,8 @@ def school_admin():
 @app.route('/school_admin_Q1', methods=['GET', 'POST'])
 def school_admin_Q1():
     if request.method == 'POST':
-        search_text = request.form.get('search_text')
-        search_type = request.form.get('search_type')
+        search_text = request.form['search_text']
+        search_type = request.form['search_type']
 
         # Connect to the database and execute the query based on the search type
         cur = mydb.connection.cursor()
@@ -717,8 +717,8 @@ def school_admin_Q1():
 @app.route('/school_admin_Q2', methods=['GET', 'POST'])
 def school_admin_Q2():
     if request.method == 'POST':
-        search_text = request.form.get('search_text')
-        search_type = request.form.get('search_type')
+        search_text = request.form['search_text']
+        search_type = request.form['search_type']
 
         # Connect to the database and execute the query based on the search type
         cur = mydb.connection.cursor()
@@ -759,8 +759,8 @@ WHERE bs.status = 'borrowed' AND bs.return_date IS NULL """
 @app.route('/school_admin_reviews', methods=['GET', 'POST'])
 def school_admin_reviews():
     if request.method == 'POST':
-        application_id = request.form.get('application_id')
-        action = request.form.get('action')
+        application_id = request.form['application_id']
+        action = request.form['action']
 
         # Connect to the database
         cur = mydb.connection.cursor()
@@ -795,8 +795,8 @@ def school_admin_reviews():
 @app.route('/school_admin_reservations', methods=['GET', 'POST'])
 def school_admin_reservations():
     if request.method == 'POST':
-        item_id = request.form.get('item_id')
-        action = request.form.get('action')
+        item_id = request.form['item_id']
+        action = request.form['action']
 
         # Connect to the database
         cur = mydb.connection.cursor()
@@ -887,8 +887,8 @@ def school_admin_new_booking():
 @app.route('/school_admin_users_application', methods=['GET', 'POST'])
 def school_admin_users_application():
     if request.method == 'POST':
-        user_id = request.form.get('user_id')
-        action = request.form.get('action')
+        user_id = request.form['user_id']
+        action = request.form['action']
 
         # Connect to the database
         cur = mydb.connection.cursor()
@@ -929,7 +929,7 @@ def school_admin_users_application():
 @app.route('/school_admin_book_return', methods=['GET', 'POST'])
 def school_admin_book_return():
     if request.method == 'POST':
-        item_id = request.form.get('item_id')
+        item_id = request.form['item_id']
 
         # Connect to the database
         cur = mydb.connection.cursor()
