@@ -38,12 +38,14 @@
       
     <div class="topnav">
                   <a href="{{ url_for('user_profile') }}" > Το προφιλ μου </a> |
-        
-                  <a href="{{ url_for('home') }}">Home</a>  |
+                  
+                  <a href="{{ url_for('school') }}">Home</a>  |
+                  
                   <a href="page2.html"> Τα βιβλια μου </a> |
                   <a href="{{ url_for('contact') }}" > Επικοινωνια με τον Υπεύθυνο Βιβλιοθήκης </a>
-                  <a href="#" onclick="confirmLogout()">Logout</a>
+                  
                   <a href="{{ url_for('contact') }}">Επικοινωνια με τον Υπευθυνο Βιβλιοθηκης</a>
+                  <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
     </div>
     <br>
     <div class ="welcome">
@@ -58,7 +60,9 @@
               <input type="hidden" name="ISBN" value="{{ book[1] }}">
               <button type="submit" style="border: none; background: none; padding: 0;">
                 <img src="{{ book[2] }}" alt="{{ book[0] }}">
-                <h3>{{ book[0] }}</h3>
+                <h2>{{ book[0] }}</h2>
+                <h2 style="font-style: italic;
+                color: #8B0000; font-size: 15px; margin-bottom: 100px;">{{ book[1] }}</h2>
               </button>
             </form>
             

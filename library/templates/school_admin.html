@@ -33,7 +33,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>Καλώς Ήλθατε στην βιβλιοθήκη του Σχολείου σας </h1>
+        <h1>Καλώς Ήλθατε στην βιβλιοθήκη του Σχολείου σας. Αυτή είναι η σελίδα του Υπεύθυνου Χειριστή </h1>
     </div>
       
     <div class="topnav">
@@ -50,7 +50,7 @@
     </div>
     <br>
     <div class ="welcome">
-    <p > <h3>Ειστε ο Υπευθυνος Χειριστής του Σχολείου σας</h3> 
+    <p > <h3>Παρακάτω φαίνονται όλα τα βιβλία της σχολικής βιβλιοθήκης</h3> 
     </p>
     
     
@@ -61,11 +61,16 @@
               <input type="hidden" name="ISBN" value="{{ book[1] }}">
               <button type="submit" style="border: none; background: none; padding: 0;">
                 <img src="{{ book[2] }}" alt="{{ book[0] }}">
-                <h3>{{ book[0] }}</h3>
+                <h2>{{ book[0] }}</h2>
+                
+                <h2 style="font-style: italic;
+                color: #8B0000; font-size: 15px; margin-bottom: 100px;">{{ book[1] }}</h2>
               </button>
+              
             </form>
             
           </div>  
+      
       {% endfor %}
     </div>
     </body>
