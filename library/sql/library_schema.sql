@@ -95,7 +95,7 @@ CREATE TABLE book_status (
   book_status_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   book_id INT UNSIGNED NOT NULL,
   user_id INT UNSIGNED NOT NULL,
-  status ENUM('borrowed', 'reserved') NOT NULL,
+  status ENUM('borrowed','reserved') NOT NULL,
   request_date DATE,
   approval_date DATE,
   return_date DATE,
@@ -120,7 +120,7 @@ CREATE TABLE book_keywords (
 
 -- Table 'book_theme'
 CREATE TABLE book_theme (
-  theme ENUM('Fiction', 'Non-fiction','Dystopia','Gothic','Science Fiction', 'Science','Drama', 'Adventure','Mystery', 'Romance','War', 'Classic','Thriller', 'Horror', 'Fantasy', 'Biography', 'Autobiography', 'History', 'Poetry', 'Comics', 'Cookbooks', 'Travel', 'Religion', 'Self-help', 'Art', 'Music','Coming of Age', 'Sports', 'Humor', 'Children','Reference') NOT NULL,
+  theme ENUM('Fiction', 'Non-fiction','Dystopia','Gothic','Tragedy','Science Fiction', 'Science','Drama', 'Adventure','Mystery', 'Romance','War', 'Classic','Thriller', 'Horror', 'Fantasy', 'Biography', 'Autobiography', 'History', 'Poetry', 'Comics', 'Cookbooks', 'Travel', 'Religion', 'Self-help', 'Art', 'Music','Coming of Age', 'Sports', 'Humor', 'Children','Reference') NOT NULL,
   book_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (theme, book_id),
@@ -143,9 +143,10 @@ CREATE TABLE review (
   rev_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id INT UNSIGNED NOT NULL,
   book_id INT UNSIGNED NOT NULL,
-  review_text VARCHAR(100),
+  review_text VARCHAR(400),
   rev_date DATE NULL,
   rating ENUM('1', '2', '3', '4', '5') NOT NULL, 
+  review_pending_flag ENUM('pending'),
   PRIMARY KEY (rev_id,user_id,book_id),
   KEY fk_review_user_id (user_id),
   CONSTRAINT fk_review_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT,
@@ -163,6 +164,28 @@ CREATE VIEW all_schools AS
 SELECT school_id, school_name
 FROM school;
 
+CREATE VIEW library_applications AS
+SELECT s.school_name, s.city, s.street, s.postal_code, s.email, s.principal_lastname, s.principal_firstname, s.school_admin_lastname, s.school_admin_firstname, sp.phone, lu.user_pwd, lu.user_name, lu.user_email, lu.user_firstname, lu.user_lastname, lu.user_date_of_birth, lu.user_pending_flag
+FROM school s
+JOIN school_phone sp ON s.school_id = sp.school_id
+JOIN lib_user lu ON s.school_id = lu.school_id
+WHERE s.pending_flag = 'pending' AND lu.user_pending_flag = 'waiting' AND lu.role_name = 'admin';
+
+---only include reviews submitted by users with the student role,
+---and with a NULL rev_date indicating that they require approval
+/* CREATE VIEW review_approval AS 
+SELECT *
+FROM review r
+JOIN lib_user u ON r.user_id = u.user_id
+WHERE u.role_name = 'student' AND r.rev_date IS NULL ;
+
+CREATE VIEW reservation_queue AS
+SELECT lu.user_id, lu.user_firstname, lu.user_lastname, b.book_id, b.book_name, bs.request_date
+FROM lib_user lu
+JOIN book_status bs ON lu.user_id = bs.user_id
+JOIN book b ON bs.book_id = b.book_id
+WHERE bs.number_of_available_books = 0 AND bs.
+ORDER BY b.book_id, bs.request_date; */
 
 -- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --> WORKING SO FAR
 /* ---All the books with image, title, name, review
@@ -171,37 +194,6 @@ SELECT b.book_image, b.title, CONCAT(u.user_firstname, ' ', u.user_lastname) AS 
 FROM book b
 INNER JOIN lib_user u ON b.user_id = u.user_id
 LEFT JOIN review r ON b.book_id = r.book_id;
-
----Reservations without available copies(grouped by date)
-CREATE VIEW no_available_copies_reservations AS
-SELECT bs.request_date AS reservation_date, COUNT(*) AS reservation_count
-FROM book_status bs
-INNER JOIN book b ON bs.book_id = b.book_id
-WHERE b.number_of_available_books = 0 AND bs.status = 'reserved'
-GROUP BY bs.request_date;
-
-CREATE VIEW library_applications AS
-SELECT s.school_name, s.city, s.street, s.postal_code, s.email, s.principal_lastname, s.principal_firstname, s.school_admin_lastname, s.school_admin_firstname, sp.phone, lu.user_pwd, lu.user_name, lu.user_email, lu.user_firstname, lu.user_lastname, lu.user_date_of_birth, lu.user_pending_flag
-FROM school s
-JOIN school_phone sp ON s.school_id = sp.school_id
-JOIN lib_user lu ON s.school_id = lu.school_id
-WHERE s.pending_flag = 'pending' AND lu.user_pending_flag = 'waiting' AND lu.role_name = 'admin'
-
----only include reviews submitted by users with the student role,
----and with a NULL rev_date indicating that they require approval
-CREATE VIEW review_approval AS 
-SELECT *
-FROM review r
-JOIN lib_user u ON r.user_id = u.user_id
-WHERE u.role_name = 'student' AND r.rev_date IS NULL 
-
-CREATE VIEW reservation_queue AS
-SELECT lu.user_id, lu.user_firstname, lu.user_lastname, b.book_id, b.book_name, bs.request_date
-FROM lib_user lu
-JOIN book_status bs ON lu.user_id = bs.user_id
-JOIN book b ON bs.book_id = b.book_id
-WHERE bs.number_of_available_books = 0 AND bs.
-ORDER BY b.book_id, bs.request_date
  */
 
 
