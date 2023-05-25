@@ -272,9 +272,9 @@ CREATE INDEX idx_book_title ON book (title);
 ---
 --- Functions
 ---
-/* DELIMITER //
+DELIMITER //
 
-CREATE PROCEDURE decrease_available_books( book_id INT)
+CREATE PROCEDURE decrease_available_books(IN _book_id INT)
 BEGIN
     UPDATE book
     SET number_of_available_books = number_of_available_books - 1
@@ -283,25 +283,13 @@ END //
 
 DELIMITER ;
 
-
 DELIMITER //
 
-CREATE FUNCTION increase_available_books(book_id INT)
-RETURNS INT
+CREATE PROCEDURE increase_available_books(IN _book_id INT)
 BEGIN
-    DECLARE available_books INT;
-    
-    -- Get the current number of available books
-    SET available_books = (SELECT number_of_available_books FROM book WHERE book_id = book_id);
-    
-    -- Update the number of available books by adding 1
-    SET available_books = available_books + 1;
-    
-    -- Update the book record with the new number of available books
-    UPDATE book SET number_of_available_books = available_books WHERE book_id = book_id;
-    
-    -- Return the updated number of available books
-
+    UPDATE book
+    SET number_of_available_books = number_of_available_books + 1
+    WHERE book_id = book_id;
 END //
 
-DELIMITER ; */
+DELIMITER ;

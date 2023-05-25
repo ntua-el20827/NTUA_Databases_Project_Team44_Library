@@ -762,7 +762,7 @@ WHERE bs.status = 'borrowed' AND bs.return_date IS NULL """
     return render_template('school_admin_Q2.html')
 
 
-# Extra Route για να ελεγξει αιτήσεις αξιολόγησης
+# Extra Route για να ελεγξει αιτήσεις αξιολόγησης 
 @app.route('/school_admin_reviews', methods=['GET', 'POST'])
 def school_admin_reviews():
     if request.method == 'POST':
@@ -798,7 +798,7 @@ def school_admin_reviews():
     # Render the template with the review applications
     return render_template('school_admin_reviews.html', review_applications=review_applications)
 
-# Extra Route για να ελεγξει κρατήσεις -> να τις κανει δανεισμους
+# Extra Route για να ελεγξει κρατήσεις -> να τις κανει δανεισμους [ΟΚ]
 @app.route('/school_admin_reservations', methods=['GET', 'POST'])
 def school_admin_reservations():
     if request.method == 'POST':
@@ -814,16 +814,15 @@ def school_admin_reservations():
             query = "UPDATE book_status SET status = 'borrowed', approval_date = %s WHERE book_id = %s AND user_id = %s "
             cur.execute(query, (datetime.now(),item_id, user_id,))
             mydb.connection.commit()
-            query = "SELECT decrease_available_books(%s)"
+            query = "CALL decrease_available_books(%s)"
             cur.execute(query,(int(item_id),))
-            new_number = cur.fetchone()
-            print(new_number)
+            mydb.connection.commit()
 
             # Να βάλλουμε και current date το rent_date
         elif action == 'deny':
             # Delete the item from the 'book_status' table
             query = "DELETE FROM book_status WHERE item_id = %s"
-            cur.execute(query, (item_id,))
+            cur.execute(query, (int(item_id),))
             mydb.connection.commit()
 
         cur.close()
@@ -884,7 +883,7 @@ def school_admin_new_booking():
     # Render the template with the data
     return render_template('school_admin_new_booking.html', books=books)
 
-# Extra Route Αιτήσεις εγγραφής χρηστών 
+# Extra Route Αιτήσεις εγγραφής χρηστών [ΟΚ]
 @app.route('/school_admin_users_application', methods=['GET', 'POST'])
 def school_admin_users_application():
     if request.method == 'POST':
@@ -926,22 +925,26 @@ def school_admin_users_application():
 def school_admin_book_return():
     if request.method == 'POST':
         item_id = request.form['item_id']
+        user_id = request.form['user_id']
 
         # Connect to the database
         cur = mydb.connection.cursor()
 
         # Update the 'return_date' to the current date in the 'book_status' table
         current_date = datetime.date.today()
-        query = "UPDATE book_status SET return_date = %s WHERE item_id = %s"
+        query = "UPDATE book_status SET return_date = %s WHERE item_id = %s AND  user_id = %s"
         cur.execute(query, (current_date, item_id))
-        mydb.commit()
+        mydb.connection.commit()
+        query = "CALL increase_available_books(%s)"
+        cur.execute(query,(int(item_id),))
+        mydb.connection.commit()
         cur.close()
 
     # Connect to the database to fetch the data
     cur = mydb.connection.cursor()
 
     # Fetch data from the 'book_status' table with status='booked' and return_date=NULL
-    query = "SELECT * FROM book_status WHERE status = 'booked' AND return_date IS NULL"
+    query = "SELECT * FROM book_status WHERE status = 'borrowed' AND retdurn_date IS NULL"
     cur.execute(query)
     booked_items = cur.fetchall()
     cur.close()
