@@ -19,6 +19,7 @@ CREATE TABLE school (
   principal_firstname VARCHAR(45) NOT NULL,
   school_admin_lastname VARCHAR(45) NOT NULL,
   school_admin_firstname VARCHAR(45) NOT NULL,
+  pending_flag ENUM('pending'),
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CHECK(postal_code > 9999 and postal_code < 100000),
   PRIMARY KEY  (school_id)
@@ -44,7 +45,8 @@ CREATE TABLE lib_user(
     user_email VARCHAR(45) NOT NULL,
     user_firstname VARCHAR(45) NOT NULL, 
     user_lastname VARCHAR(45) NOT NULL,
-    user_date_of_birth DATE NOT NULL,
+    user_date_of_birth DATE NOT NULL, 
+    user_pending_flag ENUM('waiting'),
     last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id),
     KEY fk_user_school_id (school_id),
@@ -118,7 +120,7 @@ CREATE TABLE book_keywords (
 
 -- Table 'book_theme'
 CREATE TABLE book_theme (
-  theme ENUM('Fiction', 'Non-fiction','Dystopia','Gothic','Science Fiction', 'Science','Mythology','Drama', 'Adventure','Mystery', 'Romance','War', 'Classic','Thriller', 'Horror', 'Fantasy', 'Biography', 'Autobiography', 'History', 'Poetry', 'Comics', 'Cookbooks', 'Travel', 'Religion', 'Self-help', 'Art', 'Music','Coming of Age','Tragedy','Sports', 'Humor', 'Children','Reference') NOT NULL,
+  theme ENUM('Fiction', 'Non-fiction','Dystopia','Gothic','Science Fiction', 'Science','Drama', 'Adventure','Mystery', 'Romance','War', 'Classic','Thriller', 'Horror', 'Fantasy', 'Biography', 'Autobiography', 'History', 'Poetry', 'Comics', 'Cookbooks', 'Travel', 'Religion', 'Self-help', 'Art', 'Music','Coming of Age', 'Sports', 'Humor', 'Children','Reference') NOT NULL,
   book_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (theme, book_id),
@@ -177,8 +179,31 @@ FROM book_status bs
 INNER JOIN book b ON bs.book_id = b.book_id
 WHERE b.number_of_available_books = 0 AND bs.status = 'reserved'
 GROUP BY bs.request_date;
+
+CREATE VIEW library_applications AS
+SELECT s.school_name, s.city, s.street, s.postal_code, s.email, s.principal_lastname, s.principal_firstname, s.school_admin_lastname, s.school_admin_firstname, sp.phone, lu.user_pwd, lu.user_name, lu.user_email, lu.user_firstname, lu.user_lastname, lu.user_date_of_birth, lu.user_pending_flag
+FROM school s
+JOIN school_phone sp ON s.school_id = sp.school_id
+JOIN lib_user lu ON s.school_id = lu.school_id
+WHERE s.pending_flag = 'pending' AND lu.user_pending_flag = 'waiting' AND lu.role_name = 'admin'
+
+---only include reviews submitted by users with the student role,
+---and with a NULL rev_date indicating that they require approval
+CREATE VIEW review_approval AS 
+SELECT *
+FROM review r
+JOIN lib_user u ON r.user_id = u.user_id
+WHERE u.role_name = 'student' AND r.rev_date IS NULL 
+
+CREATE VIEW reservation_queue AS
+SELECT lu.user_id, lu.user_firstname, lu.user_lastname, b.book_id, b.book_name, bs.request_date
+FROM lib_user lu
+JOIN book_status bs ON lu.user_id = bs.user_id
+JOIN book b ON bs.book_id = b.book_id
+WHERE bs.number_of_available_books = 0 AND bs.
+ORDER BY b.book_id, bs.request_date
  */
---- 
+
 
 
 ---
@@ -192,9 +217,9 @@ FOR EACH ROW
 BEGIN
     IF NEW.role_name = 'super_admin' OR IF OLD.role_name = 'super_admin' THEN
         IF (SELECT COUNT(*) FROM lib_user WHERE role_name = 'super_admin') > 0 THEN
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'There can be only one superadmin in the lib_user table';
-        END IF;
-    END IF;
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'There can be only one superadmin in the lib_user table'
+        END IF
+    END IF
 END;
 
 ---Ensure that the insertion of second admin for a school is forbidden
@@ -219,7 +244,25 @@ BEGIN
   IF cnt > 0 THEN
     SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Each user can only submit one review per book title';
   END IF;
-END;*/
+END;
+
+---When a reserved book becomes available
+CREATE TRIGGER update_book_status AFTER UPDATE ON book_status
+FOR EACH ROW
+BEGIN
+    IF NEW.number_of_available_books = 1 AND OLD.number_of_available_books = 0 THEN
+        -- Delete row from reservation_queue
+        DELETE FROM reservation_queue
+        WHERE user_id = OLD.user_id
+        AND book_id = OLD.book_id
+        AND request_date = OLD.request_date;
+
+        -- Insert new row into book_status with status set to reserved
+        INSERT INTO book_status (user_id, book_id, request_date, status)
+        VALUES (OLD.user_id, OLD.book_id, OLD.request_date, 'reserved');
+    END IF;
+END;
+*/
 
 ---
 ---Indexes
