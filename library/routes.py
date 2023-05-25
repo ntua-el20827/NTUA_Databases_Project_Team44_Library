@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, session, flash
 from flask_mysqldb import MySQL
 from library import app,mydb
 from library.forms import *
-import datetime
+from datetime import datetime
 
 
 # Route for the first page
@@ -57,7 +57,7 @@ def login():
         
         # Query the database to validate the user's credentials
         cur = mydb.connection.cursor()
-        query = "SELECT * FROM lib_user WHERE user_name = %s AND user_pwd = %s"
+        query = "SELECT * FROM lib_user WHERE user_name = %s AND user_pwd = %s AND user_pending_flag IS NULL"
         cur.execute(query, (username, password))
         user = cur.fetchone()
         cur.close()
@@ -136,17 +136,24 @@ def dashboard():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    school_name = session['school_name']
+    print(school_name)
+    cur = mydb.connection.cursor()
+    query = "SELECT school_id FROM school WHERE school_name = %s"
+    cur.execute(query, (school_name,))
+    school_id = cur.fetchone()[0]
+    print (school_id)
     if request.method == "POST":
         newusername = request.form['newusername']
         newpassword = request.form['newpassword']
         fname = request.form['fname']
         lname = request.form['lname']
         email = request.form['email']
-        phone = request.form['phone']
+        date_of_birth = request.form['dob']
         role_name = request.form['role_name']
         cur = mydb.connection.cursor()
-        query = "INSERT INTO users_applications (username, password, first_name, last_name, email, phone, role_name) VALUES (%s, %s, %s, %s, %s, %s,%s)"
-        values = (newusername, newpassword, fname, lname, email, phone,role_name)
+        query = "INSERT INTO lib_user (user_name, user_pwd, user_firstname,user_date_of_birth, user_lastname, user_email, school_id,role_name,user_pending_flag) VALUES (%s, %s,%s, %s, %s,%s, %s,%s,'waiting')"
+        values = (newusername, newpassword, fname, date_of_birth ,lname, email,school_id,role_name)
         cur.execute(query, values)
         mydb.connection.commit()
         cur.close()
@@ -796,27 +803,28 @@ def school_admin_reviews():
 def school_admin_reservations():
     if request.method == 'POST':
         item_id = request.form['item_id']
+        user_id = request.form['user_id']
         action = request.form['action']
 
         # Connect to the database
         cur = mydb.connection.cursor()
-
+        print(type(item_id))
         if action == 'accept':
             # Change the status to 'borrowed' in the 'book_status' table
-            query = "UPDATE book_status SET status = 'borrowed' WHERE item_id = %s"
-            cur.execute(query, (item_id,))
-            mydb.commit()
+            query = "UPDATE book_status SET status = 'borrowed', approval_date = %s WHERE book_id = %s AND user_id = %s "
+            cur.execute(query, (datetime.now(),item_id, user_id,))
+            mydb.connection.commit()
+            query = "SELECT decrease_available_books(%s)"
+            cur.execute(query,(int(item_id),))
+            new_number = cur.fetchone()
+            print(new_number)
+
             # Να βάλλουμε και current date το rent_date
         elif action == 'deny':
             # Delete the item from the 'book_status' table
             query = "DELETE FROM book_status WHERE item_id = %s"
             cur.execute(query, (item_id,))
-            mydb.commit()
-        elif action == 'delete':
-            # Delete the item from the 'book_query' view
-            query = "DELETE FROM book_query WHERE item_id = %s"
-            cur.execute(query, (item_id,))
-            mydb.commit()
+            mydb.connection.commit()
 
         cur.close()
 
@@ -824,20 +832,13 @@ def school_admin_reservations():
     cur = mydb.connection.cursor()
 
     # Fetch data from the 'book_status' table with status='reserved'
-    query = "SELECT * FROM book_status WHERE status = 'reserved'"
+    query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'reserved'"
     cur.execute(query)
     reserved_items = cur.fetchall()
-
-    # Fetch data from the 'book_query' view
-    query = "SELECT * FROM book_query"
-    cur.execute(query)
-    book_query_data = cur.fetchall()
-
     cur.close()
-    mydb.close()
 
     # Render the template with the data
-    return render_template('school_admin_reservations.html', reserved_items=reserved_items, book_query_data=book_query_data)
+    return render_template('school_admin_reservations.html', reserved_items=reserved_items)
 
 # Extra Route για να εισάγει κατευθειαν δανεισμό
 @app.route('/school_admin_new_booking', methods=['GET', 'POST'])
@@ -894,21 +895,16 @@ def school_admin_users_application():
         cur = mydb.connection.cursor()
 
         if action == 'accept':
-            # Fetch the user application details from the view
-            query = "SELECT * FROM users_application WHERE user_id = %s"
-            cur.execute(query, (user_id,))
-            user_application = cur.fetchone()
-
-            # Insert the user application details into the 'lib_user' table
-            insert_query = "INSERT INTO lib_user (user_id, name, email, status) VALUES (%s, %s, %s, %s)"
-            cur.execute(insert_query, (user_application[0], user_application[1], user_application[2], 'accepted'))
-            mydb.commit()
+            # Update the user application details into the 'lib_user' table
+            insert_query = "UPDATE lib_user SET user_pending_flag = NULL WHERE user_id = %s "
+            cur.execute(insert_query, (user_id,))
+            mydb.connection.commit()
 
         elif action == 'deny':
             # Delete the user application from the view
-            delete_query = "DELETE FROM users_application WHERE user_id = %s"
+            delete_query = "DELETE FROM lib_user WHERE user_id = %s AND user_pending_flag = 'waiting'"
             cur.execute(delete_query, (user_id,))
-            mydb.commit()
+            mydb.connection.commit()
 
         cur.close()
 
@@ -916,7 +912,7 @@ def school_admin_users_application():
     cur = mydb.connection.cursor()
 
     # Fetch data from the 'users_application' view
-    query = "SELECT * FROM users_application"
+    query = "SELECT * FROM lib_user WHERE user_pending_flag = 'waiting'"
     cur.execute(query)
     user_applications = cur.fetchall()
 

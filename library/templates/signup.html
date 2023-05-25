@@ -30,9 +30,8 @@
 		<label for="email">email:</label><br>
 		<input type="text" id="email" name="email" required><br>
 		<br>
-		<label for="phone">Κινητό:</label><br>
-		<input type="text" id="phone" name="phone" required><br><br>
-		<br>
+		<label for="dob">Ημερομηνία Γέννησης:</label><br>
+		<input type="date" id="dob" name="dob" required><br><br>
 		<label for="cars">Επιλέξτε Ιδιότητα:</label>
 		<select name="role_name" id="role_name">
 			<option value="teacher">Εκπαιδευτικος</option>
@@ -52,9 +51,9 @@
 			var fname = document.getElementById("fname").value;
 			var lname = document.getElementById("lname").value;
 			var email = document.getElementById("email").value;
-			var phone = document.getElementById("phone").value;
+			var dob = document.getElementById("dob").value;
 
-			if (username === "" || password === "" || fname === "" || lname === "" || email === "" || phone === "") {
+			if (username === "" || password === "" || fname === "" || lname === "" || email === "" ||  dob === "") {
 				alert("Please fill in all fields.");
 				return false;
 			}

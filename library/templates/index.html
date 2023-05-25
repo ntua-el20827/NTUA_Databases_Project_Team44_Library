@@ -45,7 +45,7 @@
             	{% for school in schools %}
 				<li>
 					<form action="{{ url_for('index') }}" method="POST">
-						<input type="hidden" name="school_name" value="{{ school_name }}">
+						<input type="hidden" name="school_name" value="{{ school }}">
 						<button type="submit">{{ school }}</button>
 					</form></li>
                 {% endfor %}

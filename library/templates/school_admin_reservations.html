@@ -10,8 +10,10 @@
     <table>
         <thead>
             <tr>
-                <th>Item ID</th>
+                <th>Book ID</th>
                 <th>Title</th>
+                <th>User ID</th>
+                <th>User Last Name</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -20,9 +22,12 @@
                 <tr>
                     <td>{{ item[0] }}</td>
                     <td>{{ item[1] }}</td>
+                    <td>{{ item[2] }}</td>
+                    <td>{{ item[3] }}</td>
                     <td>
                         <form method="POST" action="{{ url_for('school_admin_reservations') }}">
                             <input type="hidden" name="item_id" value="{{ item[0] }}">
+                            <input type="hidden" name="user_id" value="{{ item[2] }}">
                             <button type="submit" name="action" value="accept">Accept</button>
                             <button type="submit" name="action" value="deny">Deny</button>
                         </form>
