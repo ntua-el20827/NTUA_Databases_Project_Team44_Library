@@ -16,7 +16,7 @@
       Με την αίτηση Εγγραφής Σχολικής Μονάδας γίνεται αυτόματα
         η αίτηση εγγραφής του υπεύθυνου της βιβλιοθήκης.
       </h5>
-	<form method="POST" action=" {{ url_for(request_library_form) }} " onsubmit="return validateForm()">
+	<form method="POST" action=" {{ url_for('request_library_form') }} " onsubmit="return validateForm()">
 		<div class="labels">
 		<label for="newusername">Username:</label> <br>
 		<input type="text" id="newusername" name="newusername" required>
