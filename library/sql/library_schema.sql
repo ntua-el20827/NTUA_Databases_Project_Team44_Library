@@ -272,9 +272,9 @@ CREATE INDEX idx_book_title ON book (title);
 ---
 --- Functions
 ---
-DELIMITER //
+/* DELIMITER //
 
-CREATE PROCEDURE decrease_available_books(IN book_id INT)
+CREATE PROCEDURE decrease_available_books( book_id INT)
 BEGIN
     UPDATE book
     SET number_of_available_books = number_of_available_books - 1
@@ -304,4 +304,4 @@ BEGIN
 
 END //
 
-DELIMITER ;
+DELIMITER ; */
