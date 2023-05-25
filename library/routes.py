@@ -613,8 +613,8 @@ def verify_school_application(application_id):
             # Connect to the database to perform database operations
             cur = mydb.connection.cursor()
             # Get application details from the database
-            query = "SELECT * FROM library_applications WHERE application_id = %s"
-            cur.execute(query, (application_id,))
+            query = "SELECT * FROM library_applications "
+            cur.execute(query)
             application = cur.fetchone()
 
             if application:

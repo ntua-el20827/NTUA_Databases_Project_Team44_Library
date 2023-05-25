@@ -44,7 +44,7 @@ CREATE TABLE lib_user(
     user_email VARCHAR(45) NOT NULL,
     user_firstname VARCHAR(45) NOT NULL, 
     user_lastname VARCHAR(45) NOT NULL,
-    user_date_of_birth DATE NOT NULL, 
+    user_date_of_birth DATE NOT NULL,
     last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id),
     KEY fk_user_school_id (school_id),
