@@ -251,19 +251,22 @@ CREATE TRIGGER check_borrow_limit
 BEFORE INSERT ON book_status
 FOR EACH ROW
 BEGIN
-    DECLARE borrow_count INT;
-    SET borrow_count = (
-        SELECT COUNT(*) AS count
-        FROM book_status
-        WHERE user_id = NEW.user_id
-          AND status IN ('Borrowed', 'Reserved')
-          AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-    );
-    IF borrow_count >= 2 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'You have exceeded the limit on the number of books you can borrow or reserve in the last seven days.';
+    IF NEW.user_id IN (SELECT user_id FROM students) THEN
+        DECLARE borrow_count INT;
+        SET borrow_count = (
+            SELECT COUNT(*) AS count
+            FROM book_status
+            WHERE user_id = NEW.user_id
+              AND status IN ('Borrowed', 'Reserved')
+              AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+        );
+        IF borrow_count >= 2 THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'You have exceeded the limit on the number of books you can borrow or reserve in the last seven days.';
+        END IF;
     END IF;
 END $$
 DELIMITER ;
+
 /* ---Ensure that our db has only one superadmin
 CREATE TRIGGER trg_lib_user_super_admin
 BEFORE INSERT OR UPDATE ON lib_user
