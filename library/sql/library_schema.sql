@@ -238,7 +238,7 @@ BEGIN
     ORDER BY request_date LIMIT 1
   ) THEN
     UPDATE book_status 
-    SET status = 'reserved', approval_date = CURRENT_DATE 
+    SET status = 'reserved', request_date = CURRENT_DATE 
     WHERE book_id = NEW.book_id AND status = 'queue' 
     ORDER BY request_date LIMIT 1;
   END IF;
