@@ -190,8 +190,9 @@ WHERE s.pending_flag = 'pending' AND lu.user_pending_flag = 'waiting' AND lu.rol
 
 ---only include reviews submitted by users with the student role,
 ---and with a NULL rev_date indicating that they require approval
-/* CREATE VIEW review_approval AS 
-SELECT *
+/* CREATE VIEW review_approval AS
+SELECT r.rev_id, r.user_id, r.book_id, r.review_text, r.rev_date, r.rating, r.review_pending_flag,
+       u.user_id, u.user_name, u.school_id, u.user_email, u.user_firstname, u.user_lastname, u.user_date_of_birth, u.role_name, u.user_pending_flag
 FROM review r
 JOIN lib_user u ON r.user_id = u.user_id
 WHERE u.role_name = 'student' AND r.rev_date IS NULL ;
@@ -245,6 +246,24 @@ BEGIN
 END$$
 DELIMITER ;
 
+DELIMITER $$
+CREATE TRIGGER check_borrow_limit
+BEFORE INSERT ON book_status
+FOR EACH ROW
+BEGIN
+    DECLARE borrow_count INT;
+    SET borrow_count = (
+        SELECT COUNT(*) AS count
+        FROM book_status
+        WHERE user_id = NEW.user_id
+          AND status IN ('Borrowed', 'Reserved')
+          AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+    );
+    IF borrow_count >= 2 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'You have exceeded the limit on the number of books you can borrow or reserve in the last seven days.';
+    END IF;
+END $$
+DELIMITER ;
 /* ---Ensure that our db has only one superadmin
 CREATE TRIGGER trg_lib_user_super_admin
 BEFORE INSERT OR UPDATE ON lib_user
