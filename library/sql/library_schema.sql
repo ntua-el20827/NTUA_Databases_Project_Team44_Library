@@ -95,7 +95,7 @@ CREATE TABLE book_status (
   book_status_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   book_id INT UNSIGNED NOT NULL,
   user_id INT UNSIGNED NOT NULL,
-  status ENUM('borrowed','reserved') NOT NULL,
+  status ENUM('borrowed','reserved','queue') NOT NULL,
   request_date DATE,
   approval_date DATE,
   return_date DATE,
