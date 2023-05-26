@@ -814,15 +814,15 @@ def school_admin_reservations():
             query = "UPDATE book_status SET status = 'borrowed', approval_date = %s WHERE book_id = %s AND user_id = %s "
             cur.execute(query, (datetime.now(),item_id, user_id,))
             mydb.connection.commit()
-            query = "CALL decrease_available_books(%s)"
-            cur.execute(query,(int(item_id),))
-            mydb.connection.commit()
 
             # Να βάλλουμε και current date το rent_date
         elif action == 'deny':
             # Delete the item from the 'book_status' table
             query = "DELETE FROM book_status WHERE item_id = %s"
             cur.execute(query, (int(item_id),))
+            mydb.connection.commit()
+            query = "CALL increase_available_books(%s)"
+            cur.execute(query,(int(item_id),))
             mydb.connection.commit()
 
         cur.close()
