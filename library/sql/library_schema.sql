@@ -227,6 +227,24 @@ WHERE user_pending_flag = 'waiting';
 --- Triggers
 ---
 
+DELIMITER $$
+CREATE TRIGGER tr_book_status_queue_to_reserved 
+AFTER UPDATE ON book
+FOR EACH ROW
+BEGIN
+  IF NEW.number_of_available_books = 1 AND OLD.number_of_available_books = 0 AND EXISTS (
+    SELECT * FROM book_status 
+    WHERE book_id = NEW.book_id AND status = 'queue' 
+    ORDER BY request_date LIMIT 1
+  ) THEN
+    UPDATE book_status 
+    SET status = 'reserved', approval_date = CURRENT_DATE 
+    WHERE book_id = NEW.book_id AND status = 'queue' 
+    ORDER BY request_date LIMIT 1;
+  END IF;
+END$$
+DELIMITER ;
+
 /* ---Ensure that our db has only one superadmin
 CREATE TRIGGER trg_lib_user_super_admin
 BEFORE INSERT OR UPDATE ON lib_user
