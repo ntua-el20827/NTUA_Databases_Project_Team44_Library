@@ -42,3 +42,8 @@ def super_admin():
 @app.route("/admin")
 def admin():
     return render_template("admin.html")
+
+@app.route("/mybooks")
+def mybooks():
+    school_id  =session
+    return render_template("mybooks.html")

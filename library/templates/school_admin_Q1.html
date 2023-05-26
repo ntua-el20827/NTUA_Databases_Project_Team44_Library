@@ -19,7 +19,7 @@
       <option value="title">Title</option>
       <option value="category">Category</option>
       <option value="author">Author</option>
-      <option value="copies">Available Copies</option>
+      <option value="copies">Copies</option>
     </select>
     </div>
       <div class="form-group">
@@ -38,8 +38,6 @@
         <tr>
           <th>Title</th>
           <th>Author</th>
-          <th>Category</th>
-          <th>Available Copies</th>
         </tr>
       </thead>
       <tbody>
@@ -47,8 +45,6 @@
         <tr>
           <td>{{ book[0] }}</td>
           <td>{{ book[1] }}</td>
-          <td>{{ book[2] }}</td>
-          <td>{{ book[3] }}</td>
         </tr>
         {% endfor %}
       </tbody>

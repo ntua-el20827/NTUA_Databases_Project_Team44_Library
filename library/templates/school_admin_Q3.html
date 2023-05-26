@@ -9,7 +9,7 @@
 <div class="super_admin">
    <h1>Search Users with Overdue Books</h1>
   
-    <form method="POST" action="{{ url_for('school_admin_Q2') }}">
+    <form method="POST" action="{{ url_for('school_admin_Q3') }}">
       <div class="super_admin">
         
      
@@ -20,9 +20,8 @@
 <div class="super_admin">
         <label for="search_type">Search Type:</label>
         <select name="search_type" id="search_type">
-            <option value="first_name">First Name</option>
-            <option value="last_name">Last Name</option>
-            <option value="days_of_delay">Days of Delay</option>
+            <option value="Full Name">Full Name</option>
+            <option value="Category">Category</option>
         </select>
       </div>
       <br>
@@ -42,19 +41,17 @@
         <table>
             <thead>
                 <tr>
-                    <th>User ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Days Of Delay</th>
+                    <th>User </th>
+                    <th>Category</th>
+                    <th>Average Rating</th>
                 </tr>
             </thead>
             <tbody>
-                {% for user in users %}
+                {% for rating in ratings %}
                     <tr>
-                        <td>{{ user[0] }}</td>
-                        <td>{{ user[1] }}</td>
-                        <td>{{ user[2] }}</td>
-                        <td>{{ user[3] }}</td>
+                        <td>{{ rating[0] }}</td>
+                        <td>{{ rating[1] }}</td>
+                        <td>{{ rating[2] }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
