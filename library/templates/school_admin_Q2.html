@@ -4,25 +4,40 @@
     <title>Search Users with Overdue Books</title>
 </head>
 <body>
-    <h1>Search Users with Overdue Books</h1>
-
+   
+<div class="super_admin">
+   <h1>Search Users with Overdue Books</h1>
+  
     <form method="POST" action="{{ url_for('school_admin_Q2') }}">
+      <div class="super_admin">
+        
+     
         <label for="search_text">Search Text:</label>
         <input type="text" name="search_text" id="search_text">
-
+      </div>     
+      <br>
+<div class="super_admin">
         <label for="search_type">Search Type:</label>
         <select name="search_type" id="search_type">
             <option value="first_name">First Name</option>
             <option value="last_name">Last Name</option>
             <option value="days_of_delay">Days of Delay</option>
         </select>
-
-        <input type="submit" value="Search">
+      </div>
+      <br>
+      <div class="super_admin">
+        
+      
+        <input type="submit" value="Search" class="edit-btn">
+      </div>  
     </form>
 
     {% if no_results %}
         <p>No results for your input value.</p>
     {% else %}
+     <div class="school_list">
+       
+  
         <table>
             <thead>
                 <tr>
@@ -42,5 +57,7 @@
             </tbody>
         </table>
     {% endif %}
+       </div>
+  </div>
 </body>
 </html>

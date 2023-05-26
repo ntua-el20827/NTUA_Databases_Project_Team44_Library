@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function confirmLogout() {
+          var result = confirm("Are you sure you want to logout?");
+          if (result) {
+            window.location.href = "{{ url_for('logout') }}";
+          }
+        }
+      </script>
+</head>
+<body>
+    <div class="topnav">
+        <a href="{{ url_for('school') }}">Home</a> |
+        <a href="page2.html">Τα βιβλία μου</a> |
+        <a href="{{ url_for('contact') }}">Επικοινωνία με τον Υπεύθυνο Βιβλιοθήκης</a> |
+        <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
+    </div>
+    
+    <div class="header">
+        <h1>Προφίλ Χρήστη</h1>
+    </div>
+
+    <div class="profile">
+        
+        <p><strong>Όνομα χρήστη:</strong> {{ user_info[2] }}</p>
+        
+        <form action="{{ url_for('super_admin_edit_profile') }}" method="GET">
+            <button type="submit" class="edit-btn">Edit Profile</button>
+        </form>
+    
+    </div>
+</body>
+</html>
