@@ -71,8 +71,20 @@ body {
 	margin: 20px;
     background-color: black;
   color:  rgb(91, 186, 221);
-    width: 400px;
-    border-radius:30px
+    width: 800px;
+    border-radius:30px;
+    
+}
+
+.school_list table {
+  padding: 10px; 
+}
+
+.school_list th,
+.school_list td {
+  padding: 10px; 
+  text-align: center;
+  vertical-align: middle;
 }
 .school_list a{
 	color: rgb(150, 150, 18);
@@ -400,7 +412,4 @@ form .likert li input[type=radio] {
   margin: auto;
   margin-bottom: 20px;
 
-}
-.form-row{
-  
 }
