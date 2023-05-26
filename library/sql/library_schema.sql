@@ -155,6 +155,23 @@ CREATE TABLE review (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --- Ειναι σωστο το primary key?
 
+/*
+---
+--- Events (?)
+---
+
+---Every day the db needs to check whether a reservation deadline has expired
+CREATE EVENT delete_old_reservations
+ON SCHEDULE EVERY 1 DAY
+DO
+BEGIN
+    -- Delete old reservations
+    DELETE FROM book_status
+    WHERE status = 'reserved'
+    AND request_date < DATE_SUB(NOW(), INTERVAL 1 WEEK);
+END;
+*/
+
 ---
 --- Views
 ---
@@ -194,6 +211,14 @@ SELECT b.book_image, b.title, CONCAT(u.user_firstname, ' ', u.user_lastname) AS 
 FROM book b
 INNER JOIN lib_user u ON b.user_id = u.user_id
 LEFT JOIN review r ON b.book_id = r.book_id;
+
+---List of user applications
+CREATE VIEW new_user_application AS
+SELECT *
+FROM lib_user
+WHERE user_pending_flag = 'waiting';
+
+
  */
 
 
@@ -253,6 +278,17 @@ BEGIN
         INSERT INTO book_status (user_id, book_id, request_date, status)
         VALUES (OLD.user_id, OLD.book_id, OLD.request_date, 'reserved');
     END IF;
+END;
+
+---Delete from book_status=> Delete from reservation_queue
+CREATE TRIGGER trg_delete_reservation_queue
+AFTER DELETE ON book_status
+FOR EACH ROW
+BEGIN
+    DELETE FROM reservation_queue
+    WHERE user_id = OLD.user_id
+    AND book_id = OLD.book_id
+    AND request_date = OLD.request_date;
 END;
 */
 
