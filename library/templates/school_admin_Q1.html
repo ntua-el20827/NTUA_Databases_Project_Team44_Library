@@ -5,23 +5,34 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+  <div class ="super_admin">
+    
+  
   <h2>Query 1 - Search Books</h2>
   
   <form method="POST">
-    <input type="text" name="search_text" placeholder="Enter search text" required>
+    <div class="form-group">
+    <input type="text" name="search_text" placeholder="Πληκτρολογηστε" required>
+    </div>
+      <div class="form-group">
     <select name="search_type">
       <option value="title">Title</option>
       <option value="category">Category</option>
       <option value="author">Author</option>
       <option value="copies">Available Copies</option>
     </select>
-    <input type="submit" value="Search">
-  </form>
+    </div>
+      <div class="form-group">
+    <input type="submit" value="Search" class="edit-btn">
+    </div>
+   </form>
+  
   {% if no_results %}
     <p>No results for your input value.</p>
    {% endif %}
   {% if books %}
     <h3>Search Results</h3>
+    <div class ="school_list">
     <table>
       <thead>
         <tr>
@@ -43,5 +54,6 @@
       </tbody>
     </table>
   {% endif %}
+  </div>
+  </div>
 </body>
-</html>

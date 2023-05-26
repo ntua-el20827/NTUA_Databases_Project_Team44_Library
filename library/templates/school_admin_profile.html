@@ -31,11 +31,10 @@
         <p><strong>Ημερομηνία γέννησης:</strong> {{ user_info[4] }}</p>
         <p><strong>Σχολείο:</strong> {{ school_info[2] }}</p>
         <p><strong>Διευθυντής Σχολείου: </strong>{{ school_info[1]}} </p>
-    </div>
-    {% if can_edit %}
-        <div class="row">
-            <a href="{{ url_for('edit_profile') }}" class="edit-btn">Edit Profile</a>
-        </div>
-    {% endif %}
+        <form action="{{ url_for('edit_profile') }}" method="GET">
+            <button type="submit" class="edit-btn">Edit Profile</button>
+        </form>
+    
+</div>
 </body>
 </html>

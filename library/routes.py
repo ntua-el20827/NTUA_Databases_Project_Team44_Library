@@ -686,6 +686,14 @@ def school_admin():
         cur.close()
         return render_template('school_admin.html',books = books )
 
+
+
+
+#Route για την αρχική των queries του school_admin
+@app.route('/school_admin_queries')
+def school_admin_queries():
+    return render_template("school_admin_queries.html")
+
 #Routes for school admin queries   
 @app.route('/school_admin_Q1', methods=['GET', 'POST'])
 def school_admin_Q1():

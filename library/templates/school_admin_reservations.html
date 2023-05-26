@@ -2,11 +2,13 @@
 <html>
 <head>
     <title>Book Management</title>
+    <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
 </head>
 <body>
     <h1>Book Management</h1>
 
     <h2>Reserved Items</h2>
+    <div class = "school_list">
     <table>
         <thead>
             <tr>
@@ -35,8 +37,9 @@
                 </tr>
             {% endfor %}
         </tbody>
+    <div class = "school_list">
     </table>
-
+    </div>
     <h2>Book Query Data</h2>
     <table>
         <thead>
@@ -61,5 +64,6 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
 </body>
 </html>
