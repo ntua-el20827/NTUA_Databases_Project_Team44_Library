@@ -100,6 +100,10 @@ def super_admin_login():
         cur.execute(query, (username, password))
         super_admin = cur.fetchone()
         cur.close()
+        school_id = user_id =1
+        session['school_id'] = school_id
+        session['user_id'] = user_id
+        session['role_name'] = 'super_admin'
         if super_admin:
             return render_template("super_admin.html")
         else:
@@ -274,6 +278,9 @@ def user_profile():
     if (role_name == 'teacher'):
         can_edit = True
         print("can edit = true")
+    if (role_name == 'super_admin'):
+        can_edit = True
+        return render_template('super_admin_user_profile.html',user_info = user_info,school_info=school_info,can_edit=can_edit)
     return render_template('profile.html',user_info = user_info,school_info=school_info,can_edit=can_edit)
 
 @app.route('/edit_profile',methods=['GET', 'POST'])
@@ -309,6 +316,29 @@ def edit_profile():
     cur.close()
     return render_template('edit_profile.html',user_info = user_info,school_info=school_info)
 
+@app.route('/edit_password',methods=['GET', 'POST'])
+def edit_password():
+    if request.method == 'POST':
+        # Retrieve the updated user information from the form
+        user_new_password = request.form['user_new_password']
+
+        # Perform the necessary database update query using the new information
+        cur = mydb.connection.cursor()
+        query = "UPDATE lib_user SET user_pwd = %s WHERE user_id = %s"
+        cur.execute(query, (user_new_password, session['user_id']))
+        mydb.connection.commit()
+        cur.close()
+        # Redirect the user to the updated profile page or any other desired page
+        return redirect(url_for('user_profile'))
+    school_id = session['school_id']
+    user_id = session['user_id']
+    # info for user
+    cur = mydb.connection.cursor()
+    query = "SELECT user_pwd FROM lib_user WHERE user_id = %s" 
+    cur.execute(query,(user_id,))
+    user_info = cur.fetchone()
+    cur.close()
+    return render_template('edit_password.html',user_info = user_info)
 #route για το βιβλίο που ο χρηστης επέλεξε
 @app.route('/book_display')
 def book_display():

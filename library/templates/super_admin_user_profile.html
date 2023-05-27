@@ -14,9 +14,7 @@
 </head>
 <body>
     <div class="topnav">
-        <a href="{{ url_for('school') }}">Home</a> |
-        <a href="page2.html">Τα βιβλία μου</a> |
-        <a href="{{ url_for('contact') }}">Επικοινωνία με τον Υπεύθυνο Βιβλιοθήκης</a> |
+        <a href="{{ url_for('super_admin') }}">Home</a> |
         <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
     </div>
     
@@ -25,11 +23,16 @@
     </div>
 
     <div class="profile">
-        
+        <p><strong>Όνομα:</strong> {{ user_info[0] }}</p>
+        <p><strong>Επώνυμο:</strong> {{ user_info[1] }}</p>
         <p><strong>Όνομα χρήστη:</strong> {{ user_info[2] }}</p>
-        
-        <form action="{{ url_for('super_admin_edit_profile') }}" method="GET">
+        <p><strong>Email:</strong> {{ user_info[3] }}</p>
+        <p><strong>Ημερομηνία γέννησης:</strong> {{ user_info[4] }}</p>
+        <form action="{{ url_for('edit_profile') }}" method="GET">
             <button type="submit" class="edit-btn">Edit Profile</button>
+        </form>
+        <form action="{{ url_for('edit_password') }}" method="GET">
+            <button type="submit" class="edit-btn">Edit Password</button>
         </form>
     
     </div>
