@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+	<head> 
+		<meta charset ="UTF-8"> 
+		<meta name = "description" content="This is an awesome website"> 
+		<title> Non valid borrowing </title>
+		
+
+		<link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
+
+		
+	</head>
+    <body>
+
+        <div class="topnav">
+			
+            <a href="{{ url_for('back_to_school') }}">Επιστροφή Στην Σχολική Βιβλιοθήκη</a> |
+            
+        </div>
+        <br>
+        <h3>
+            {{error mesage}}
+        </h3>
+
+
+
+    </body>
