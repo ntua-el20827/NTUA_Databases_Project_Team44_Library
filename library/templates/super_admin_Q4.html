@@ -3,8 +3,23 @@
 <head>
   <title>Query 4: Authors of Books Never Borrowed</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script>
+    function confirmLogout() {
+      var result = confirm("Are you sure you want to logout?");
+      if (result) {
+        window.location.href = "{{ url_for('logout') }}";
+      }
+    }
+</script>
 </head>
 <body>
+  
+  <div class="topnav">
+    <a href="{{ url_for('super_admin') }}" class="btn">Home</a>
+    <a href="{{ url_for('super_admin_queries') }}" class="btn"> Queries</a>
+    <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
+  </div>
+  <div class="super_admin">
   <h2>Query 4: Authors of Books Never Borrowed</h2>
   <div class="school_list">
   {% if results %}
@@ -18,7 +33,7 @@
   {% endif %}
 </div>
 
-    <p> Επιστροφη στην σελιδα των <a href="{{ url_for('super_admin') }}"> queries </a></p>
-
+   
+</div>
 </body>
 </html>

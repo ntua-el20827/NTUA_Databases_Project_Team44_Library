@@ -39,7 +39,7 @@
     <div class="topnav">
                   <a href="{{ url_for('user_profile') }}" > Το προφιλ μου </a> |
                   <a href="{{ url_for('school_admin') }}">Home</a>  |
-                  <a href="{{ url_for('my_books') }}"> Τα βιβλια μου </a> |
+                  
                   <a href="{{ url_for('contact_super_admin') }}" > Επικοινωνια με τον Διαχειριστή Βιβλιοθήκης </a>
                   <a href="{{ url_for('school_admin_reviews') }}" > Αιτήσεις Αξιολόγησης </a>
                   <a href="{{ url_for('school_admin_reservations') }}" > Κρατήσεις Βιβλίων </a>
@@ -55,11 +55,12 @@
     </p>
     
     
-      <div class="row">
+       <div class="row">
       {% for book in books %}
           <div class="book">
             <form action="{{ url_for('school') }}" method="POST">
               <input type="hidden" name="ISBN" value="{{ book[1] }}">
+              <input type="hidden" name="book_id" value="{{ book[3] }}">
               <button type="submit" style="border: none; background: none; padding: 0;">
                 <img src="{{ book[2] }}" alt="{{ book[0] }}">
                 <h2>{{ book[0] }}</h2>
@@ -76,5 +77,3 @@
   
   <!-- Add more rows with books as needed -->
   
-</body>
-</html>

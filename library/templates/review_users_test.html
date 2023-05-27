@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="This is an awesome website">
+  <title>School Library</title>
+  <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}"> 
+  <style>
+    .review-container {
+      width: 500px;
+      margin: 0 auto;
+    }
+
+    .review {
+      background-color: #687bd1;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .review .username {
+      font-weight: bold;
+    }
+
+    .review .date {
+      color: #888;
+      font-size: 0.8em;
+    }
+
+    .review .content {
+      margin-top: 5px;
+    }
+  </style>
+</head>
+
+<body>
+    <div class="topnav">
+        <a href="{{ url_for('school') }}">Home</a>  |
+      <a href="{{ url_for('book_display') }}"> Πίσω </a>  |
+    </div>
+<br> 
+  <div class="welcome">
+  <h2>Αξιολογήσεις Χρηστών</h2>
+</div>
+  <div class="review-container">
+    <div class="review">
+      <div class="username">John Doe</div>
+      
+      <div class="content">This book was absolutely amazing! I couldn't put it down.</div>
+      <div class="rating">
+        <span class="label">Rating:</span>
+        <span class="value">4.5</span>
+      </div>
+    
+    </div>
+
+    <div class="review">
+      <div class="username">John Doe</div>
+      
+      <div class="content">This book was absolutely amazing! I couldn't put it down.</div>
+      <div class="rating">
+        <span class="label">Rating:</span>
+        <span class="value">4.5</span>
+      </div>
+    
+    </div>
+
+    <div class="review">
+      <div class="username">John Doe</div>
+      
+      <div class="content">This book was absolutely amazing! I couldn't put it down.</div>
+      <div class="rating">
+        <span class="label">Rating:</span>
+        <span class="value">4.5</span>
+        <br>
+        <span><button type="submit" name="action" value="accept">Accept</button>
+          <button type="submit" name="action" value="deny">Deny</button>
+        </span>
+        </div>
+    
+    </div>
+    <div class="review">
+        <div class="username">John Doe</div>
+        
+        <div class="content">This book was absolutely amazing! I couldn't put it down.</div>
+        <div class="rating">
+          <span class="label">Rating:</span>
+          <span class="value">4.5</span>
+        </div>
+      
+      </div>
+      <div class="review">
+        <div class="username">John Doe</div>
+        
+        <div class="content">This book was absolutely amazing! I couldn't put it down.</div>
+        <div class="rating">
+          <span class="label">Rating:</span>
+          <span class="value">4.5</span>
+        </div>
+      
+      </div>
+      <div class="review">
+        <div class="username">John Doe</div>
+        
+        <div class="content">This book was absolutely amazing! I couldn't put it down.</div>
+        <div class="rating">
+          <span class="label">Rating:</span>
+          <span class="value">4.5</span>
+        </div>
+        
+      </div>
+      <div class="review">
+        <div class="username">John Doe</div>
+        
+        <div class="content">This book was absolutely amazing! I couldn't put it down.</div>
+        <div class="rating">
+          <span class="label">Rating:</span>
+          <span class="value">4.5</span>
+        </div>
+      
+      </div>
+
+       <div class="review">
+      <div class="username">John Doe</div>
+      
+      <div class="content">This book was absolutely amazing! I couldn't put it down.</div>
+      <div class="rating">
+        <span class="label">Rating:</span>
+        <span class="value">4.5</span>
+      </div>
+    
+    </div>
+  </div>
+
+</body>
+
+</html>

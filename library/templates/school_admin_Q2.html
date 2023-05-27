@@ -5,7 +5,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-   
+    <div class="topnav">
+        <a href="{{ url_for('school_admin') }}">Home</a>  |
+        <a href="{{ url_for('school_admin_queries') }}"> Queries </a> |
+        <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
+    </div>
 <div class="super_admin">
    <h1>Search Users with Overdue Books</h1>
   

@@ -5,7 +5,10 @@
     <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
 </head>
 <body>
-    
+    <div class="topnav">
+        <a href="{{ url_for('school_admin') }}">Home</a>  |
+       
+    </div>
       
   
     <h1>User Application</h1>
@@ -25,7 +28,8 @@
             
             {% for application in user_applications %}
                 <tr>
-                    <td>{{ application[0] }}</td>
+                    
+                    <td> {{ application[0] }}</td>
                     <td>{{ application[1] }}</td>
                     <td>{{ application[2] }}</td>
                     <td>

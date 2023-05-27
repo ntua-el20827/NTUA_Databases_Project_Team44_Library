@@ -3,6 +3,46 @@
 <head>
     <title>Book Booking</title>
     <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
+    <style>
+        .form-row {
+            margin-bottom: 20px;
+          }
+          
+          label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+          }
+          
+          input[type="text"]
+          {
+            width: 30%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+          }
+
+          select {
+            width: 30%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+          }
+
+          
+          button[type="submit"] {
+            background-color: #64a8e1;
+            color: rgb(6, 6, 6);
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+          }
+          
+          button[type="submit"]:hover {
+            background-color: rgb(238, 174, 202);;
+          }
+    </style>
     <script>
         function confirmLogout() {
           var result = confirm("Are you sure you want to logout?");
@@ -13,12 +53,14 @@
       </script>
 </head>
 <body>
-    <div class="header">
-        <h1>Εισαγωγή Νεου Δανεισμού</h1>
-    </div>
+   
     <div class="topnav">
         <a href="{{ url_for('school_admin') }}">Home</a>  |
         <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
+    </div>
+
+    <div class="header">
+        <h1>Εισαγωγή Νεου Δανεισμού</h1>
     </div>
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -29,21 +71,27 @@
             </div>
         {% endif %}
     {% endwith %}
-
+    <div class="login">
     <h2>Στοιχεία Δανεισμού</h2>
+    <br>
     <form method="POST" action="{{ url_for('school_admin_new_booking') }}">
         <label for="user_id">User ID:</label>
         <input type="text" name="user_id" id="user_id" required>
         <br><br>
+        <br>
         <label for="book_id">Διαλέξτε Ενα Βιβλίο:</label>
+        
         <select name="book_id" id="book_id" required>
             <option value="">Τιτλος Βιβλίου</option>
             {% for book in books %}
                 <option value="{{ book[0] }}">{{ book[1] }}</option>
             {% endfor %}
         </select>
-        <br><br>
-        <input type="submit" value="Apply">
+        <br><br><br>
+        <div class="form-row">
+        <button type="submit"> Apply </button> 
+        </div>
     </form>
+</div>
 </body>
 </html>
