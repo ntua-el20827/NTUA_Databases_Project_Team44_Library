@@ -165,13 +165,15 @@ def signup():
 @app.route('/school', methods=['GET', 'POST'])
 def school():
     if request.method == "POST":
-        ISBN = request.form['ISBN']  
+        ISBN = request.form['ISBN'] 
+        book_id = request.form['book_id'] 
         session['ISBN'] = ISBN  
+        session['book_id'] = book_id  
         return redirect(url_for('book_display'))
     else:
         cur = mydb.connection.cursor()
         school_id = session['school_id']
-        query = "SELECT title, ISBN, book_image FROM book WHERE school_id = %s" 
+        query = "SELECT title, ISBN, book_image, book_id FROM book WHERE school_id = %s" 
         cur.execute(query,(school_id,))
         books = cur.fetchall()
         cur.close()
@@ -311,15 +313,14 @@ def edit_profile():
 @app.route('/book_display')
 def book_display():
     ISBN = session['ISBN']
+    book_id = session['book_id']
     school_id = session['school_id']
     cur = mydb.connection.cursor()
     print("ISBN is ", type(ISBN))
     print(int(ISBN))
-    query = "SELECT ISBN, title, publisher, number_of_available_books, pages,book_language,summary,book_image,book_id FROM book WHERE school_id = %s AND ISBN = %s" 
-    cur.execute(query,(school_id, int(ISBN)))
+    query = "SELECT ISBN, title, publisher, number_of_available_books, pages,book_language,summary,book_image,book_id FROM book WHERE school_id = %s AND ISBN = %s AND book_id=%s" 
+    cur.execute(query,(school_id, int(ISBN),book_id))
     book_info = cur.fetchone()
-    book_id = book_info[8]
-    session['book_id'] = book_id
     print(book_id)
     cur.close()
     return render_template("book_display.html",book_info= book_info)
@@ -330,40 +331,62 @@ def rent():
     ISBN = session['ISBN']
     school_id = session['school_id']
     user_id = session['user_id']
+    role_name = session['role_name'] 
+    book_id = session['book_id']
+
+    #5 
+    cur = mydb.connection.cursor()
+    query = """ SELECT bs.book_id
+FROM book_status bs
+WHERE bs.status = 'Borrowed'
+  AND bs.return_date IS NULL
+  AND bs.approval_date <= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+  AND bs.user_id = %s"""
+    cur.execute(query,(user_id,))
+    oxi_ekprothesmo = cur.fetchall()
+    if oxi_ekprothesmo:
+        query = """ SELECT book_id FROM book_status WHERE user_id = %s AND book_id %s AND status='borrowed' AND returned_date = NULL """
+        cur.execute(query,(user_id, book_id,))
+        exei_daneistei = cur.fetchone()
+        if exei_daneistei:
+            error_message = "Εχετε δανειστεί ηδη αυτό το βιβλίο"
+            return render_template('non_valid_borrowing.html',error_message)
+        else:    
+            query = "INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date) VALUES (%s, %s, 'reserved', %s)"
+            cur.execute(query,(book_id,user_id,datetime.time.now()))  # Execute your INSERT statement here
+
+            # Fetch the MESSAGE_TEXT from the last executed statement
+            cur.execute("SELECT MESSAGE_TEXT FROM mysql_error_info")
+            error_info = cur.fetchone()
+
+            if error_info:
+                error_message = "Εχετε περάσει τον αριθμό δανεισμών/κρατήσεων"
+                return render_template('non_valid_borrowing.html',error_message)
+            else:
+                mydb.connection.commit()
+                query = "CALL increase_available_books(%s)"
+                cur.execute(query,(book_id,))
+                mydb.connection.commit()
+                cur.close()
+                return render_template('reserved_test.html')
+
+    else:
+        error_message = "Δεν εχετε επιστρεψει καποιο βιβλίο"
+        return render_template('non_valid_borrowing.html',error_message)
 
     # ΓΕΝΙΚΑ ΕΔΩ ΠΡΕΠΕΙ ΝΑ ΚΑΝΟΥΜΕ ΠΟΛΛΑ QUERIES ΚΑΙ ΝΑ ΕΚΤΕΛΕΣΟΥΜΕ ΟΛΟΥΣ ΤΟΥΣ ΕΛΕΓΧΟΥΣ
-    #1. 2 ΔΑΝΕΙΣΜΟΙ ΤΗΝ ΒΔΟΜΑΔΑ ΑΝΑ ΒΔΟΜΑΔΑ ΓΙΑ ΤΟΝ ΜΑΘΗΤΗ
+    #1. 2 ΔΑΝΕΙΣΜΟΙ ΤΗΝ ΒΔΟΜΑΔΑ ΑΝΑ ΒΔΟΜΑΔΑ ΓΙΑ ΤΟΝ ΜΑΘΗΤΗ -> 1 εως 4 σε trigger
     #2. 1 ΔΑΝΕΙΣΜΟΣ ΤΗΝ ΕΒΔΟΜΑΔΑ ΑΝΑ ΒΔΟΜΑΔΑ ΓΙΑ ΤΟΝ ΚΑΘΗΓΗΤΗ
     #3. 2 ΚΡΑΤΗΣΕΙΣ ΤΗΝ ΕΒΔΟΜΑΔΑ ΑΝΑ ΕΒΔΟΜΑΔΑ ΓΙΑ ΤΟ ΜΑΘΗΤΗ
     #4. 1 ΚΡΑΤΗΣΗ ΤΗΝ ΕΒΔΟΜΑΔΑ ΑΝΑ ΕΒΔΟΑΜΔΑ ΓΙΑ ΤΟΝ ΚΑΘΗΓΗΤΗ
     #5. ΔΕΝ ΕΠΙΤΡΕΠΕΤΑΙ ΚΡΑΤΗΣΗ ΑΝ ΧΡΩΣΤΑΕΙ ΝΑ ΕΠΙΣΤΡΕΨΕΙ ΕΚΠΡΟΘΕΣΜΟ ΒΙΒΛΙΟ -> ΠΡΟΘΕΣΜΙΑ = 1 ΒΔΟΜΑΔΑ
     #6. ΔΕΝ ΕΠΙΤΡΕΠΕΤΑΙ ΚΡΑΤΗΣΗ ΑΝ ΕΧΕΙ ΉΔΗ ΔΑΝΕΙΣΤΕΙ ΑΥΤΟ ΤΟ ΒΙΒΛΙΟ / Η ΕΧΕΙ ΚΑΝΕΙ ΚΡΑΤΗΣΗ ΑΥΤΟ ΤΟ ΒΙΒΛΊΟ
 
-
-    # Ελεγχος αν υπάρχει άλλο διαθέσιμο βιβλίο
-    cur = mydb.connection.cursor()
-    query = "SELECT number_of_available_books FROM book WHERE school_id = %s AND ISBN = %s" 
-    cur.execute(query,(school_id, int(ISBN)))
-    available_books = cur.fetchone()
-    cur.close()
-    if (int(available_books[0])>0):
-        # Ελεγχος αν μπορει να δανειστει κιαλλο βιβλίο
-        cur = mydb.connection.cursor()
-        #query = "" #->ισως με τις τελευταίες ημερομηνίες που τον αφορουν απο το book_status
-        #query = "Select "   
-        #cur.execute(query,(school_id, int(ISBN)))
-        #able_to_rent = cur.fetchone()
-        cur.close()
-        # if (able_to_rent): 
-        return render_template('reserved_test.html')
-    return render_template("hello.html")
-        
-    # αν οχι πηγαίνει σε άλλη σελίδα για να μπεί σε ουρά κράτησης -> view book_queue 
-
 #route για επαναφορά στην σχολική βιβλιοθήκη
 @app.route('/back_to_school')
 def back_to_school():
     session.pop('ISBN', None)
+    session.pop('book_id', None)
     #print("from back to school ", session['ISBN']  )
     if session['role_name'] == 'admin':
         return redirect(url_for('school_admin'))
@@ -687,88 +710,162 @@ def school_admin():
         return render_template('school_admin.html',books = books )
 
 
-
-
 #Route για την αρχική των queries του school_admin
 @app.route('/school_admin_queries')
 def school_admin_queries():
     return render_template("school_admin_queries.html")
 
 #Routes for school admin queries   
+#3.2.1 OK
 @app.route('/school_admin_Q1', methods=['GET', 'POST'])
 def school_admin_Q1():
+    school_id = session['school_id']
+    cur = mydb.connection.cursor()
+    query = """ SELECT b.title, GROUP_CONCAT(ba.author) AS authors
+FROM book AS b
+JOIN book_author AS ba ON b.book_id = ba.book_id
+WHERE b.school_id = %s
+GROUP BY b.book_id;
+ """
+    cur.execute(query, (school_id,))
+    
     if request.method == 'POST':
         search_text = request.form['search_text']
         search_type = request.form['search_type']
+        print(search_text)
 
         # Connect to the database and execute the query based on the search type
         cur = mydb.connection.cursor()
 
         if search_type == 'title':
-            query = "SELECT title, author FROM books WHERE title LIKE %s"
-            cur.execute(query, (f'%{search_text}%',))
+            query = """ SELECT b.title, GROUP_CONCAT(ba.author) AS authors
+FROM book AS b
+JOIN book_author AS ba ON b.book_id = ba.book_id
+WHERE b.school_id = %s AND b.title = %s
+GROUP BY b.book_id """
+            cur.execute(query, (school_id,str(search_text),))
         elif search_type == 'category':
-            query = "SELECT title, author FROM books WHERE category LIKE %s"
-            cur.execute(query, (f'%{search_text}%',))
+            print("category")
+            query = """ SELECT book.title, GROUP_CONCAT(DISTINCT book_author.author SEPARATOR ', ') AS authors, GROUP_CONCAT(DISTINCT book_theme.theme SEPARATOR ', ') AS themes, book.number_of_books 
+FROM book 
+LEFT JOIN book_author ON book.book_id = book_author.book_id 
+LEFT JOIN book_theme ON book.book_id = book_theme.book_id 
+WHERE book.school_id = %s AND book_theme.theme = %s
+GROUP BY book.book_id
+"""
+            cur.execute(query, (school_id,str(search_text),))
         elif search_type == 'author':
-            query = "SELECT title, author FROM books WHERE author LIKE %s"
-            cur.execute(query, (f'%{search_text}%',))
+            query = """SELECT book.title, GROUP_CONCAT(DISTINCT book_author.author SEPARATOR ', ') AS authors, GROUP_CONCAT(DISTINCT book_theme.theme SEPARATOR ', ') AS themes, book.number_of_books 
+FROM book 
+LEFT JOIN book_author ON book.book_id = book_author.book_id 
+LEFT JOIN book_theme ON book.book_id = book_theme.book_id 
+WHERE book.school_id = %s AND book_author.author = %s
+GROUP BY book.book_id
+"""
+            cur.execute(query, (school_id,str(search_text),))
         elif search_type == 'copies':
-            query = "SELECT title, author FROM books WHERE available_copies >= %s"
-            cur.execute(query, (search_text,))
+            query =""" SELECT b.title, GROUP_CONCAT(ba.author) AS authors
+FROM book AS b
+JOIN book_author AS ba ON b.book_id = ba.book_id
+WHERE b.school_id = %s AND b.number_of_books = %s
+GROUP BY b.book_id
+"""
+            cur.execute(query, (school_id,str(search_text),))
 
-        books = cur.fetchall()
-        cur.close()
+    books = cur.fetchall()
+    cur.close()
 
-        if len(books) == 0:
-            # Render the template with no results message
-            return render_template('school_admin_Q1.html', no_results=True)
+    if len(books) == 0:
+        # Render the template with no results message
+        return render_template('school_admin_Q1.html', no_results=True)
 
-        # Render the template with the query results
-        return render_template('school_admin_Q1.html', books=books)
-    # Render the initial search form
-    return render_template('school_admin_Q1.html')
+    # Render the template with the query results
+    return render_template('school_admin_Q1.html', books=books)
 
+#3.2.2 OK
 @app.route('/school_admin_Q2', methods=['GET', 'POST'])
 def school_admin_Q2():
+    school_id = session['school_id']
+    cur = mydb.connection.cursor()
+    query = """ SELECT u.user_id, u.user_firstname, u.user_lastname,DATEDIFF(NOW(), bs.approval_date)
+FROM lib_user u
+JOIN book_status bs ON u.user_id = bs.user_id
+WHERE bs.status = 'borrowed' AND bs.return_date IS NULL AND u.school_id = %s AND (DATEDIFF(NOW(), bs.approval_date) > 7)
+            """
+    cur.execute(query, (school_id,))
     if request.method == 'POST':
         search_text = request.form['search_text']
         search_type = request.form['search_type']
+        print(search_text)
 
         # Connect to the database and execute the query based on the search type
-        cur = mydb.connection.cursor()
-        q1 = """ SELECT u.user_firstname, u.user_lastname, 
-       CASE u.role_name 
-           WHEN 'student' THEN DATEDIFF(NOW(), bs.approval_date) - 7 
-           WHEN 'teacher' THEN DATEDIFF(NOW(), bs.approval_date) - 14 
-       END AS days_of_delay
+        
+        q1 = """ SELECT u.user_id, u.user_firstname, u.user_lastname,DATEDIFF(NOW(), bs.approval_date)
 FROM lib_user u
 JOIN book_status bs ON u.user_id = bs.user_id
-WHERE bs.status = 'borrowed' AND bs.return_date IS NULL """
+WHERE bs.status = 'borrowed' AND bs.return_date IS NULL AND u.school_id = %s AND (DATEDIFF(NOW(), bs.approval_date) > 7)"""
         if search_type == 'first_name':
-            query = q1+"AND u.user_firstname LIKE '%s'"
-            cur.execute(query, (f'%{search_text}%',))
+            query = q1+"AND u.user_firstname LIKE %s"
+            cur.execute(query,(school_id,search_text,))
         elif search_type == 'last_name':
-            query = q1+"AND u.user_lastname LIKE '%s'"
-            cur.execute(query, (f'%{search_text}%',))
+            query = q1+"AND u.user_lastname LIKE %s"
+            cur.execute(query,(school_id,search_text,))
         elif search_type == 'days_of_delay':
-            query = q1+"HAVING (days_of_delay > %s); "
-            cur.execute(query, (search_text,))
+            query = q1+"AND (DATEDIFF(NOW(), bs.approval_date) >= %s); "
+            cur.execute(query,(school_id,search_text,))
 
-        users = cur.fetchall()
-        cur.close()
-        mydb.close()
+    users = cur.fetchall()
+    cur.close()
 
-        if len(users) == 0:
-            # Render the template with no results message
-            return render_template('school_admin_Q2.html', no_results=True)
+    if len(users) == 0:
+        # Render the template with no results message
+        return render_template('school_admin_Q2.html', no_results=True)
 
-        # Render the template with the query results
-        return render_template('school_admin_Q2.html', users=users)
+    # Render the template with the query results
+    return render_template('school_admin_Q2.html', users=users)
 
-    # Render the initial search form
-    return render_template('school_admin_Q2.html')
+#3.2.3 OK
+@app.route('/school_admin_Q3', methods=['GET', 'POST'])
+def school_admin_Q3():
+    school_id = session['school_id']
+    cur = mydb.connection.cursor()
+    query = """ SELECT CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bt.theme, AVG(r.rating) AS avg_rating
+FROM lib_user u
+INNER JOIN review r ON u.user_id = r.user_id
+INNER JOIN book b ON r.book_id = b.book_id
+INNER JOIN book_theme bt ON b.book_id = bt.book_id
+WHERE u.school_id = %s
+GROUP BY u.user_id, bt.theme
+            """
+    cur.execute(query, (school_id,))
+    if request.method == 'POST':
+        search_text = request.form['search_text']
+        search_type = request.form['search_type']
+        print(search_text)
 
+        # Connect to the database and execute the query based on the search type
+        
+        q1 = """  SELECT CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bt.theme, AVG(r.rating) AS avg_rating
+FROM lib_user u
+INNER JOIN review r ON u.user_id = r.user_id
+INNER JOIN book b ON r.book_id = b.book_id
+INNER JOIN book_theme bt ON b.book_id = bt.book_id
+WHERE u.school_id = %s"""
+        if search_type == 'Full name':
+            query = q1+" AND borrower_name = %s GROUP BY u.user_id, bt.theme"
+            cur.execute(query,(school_id, search_text, ))
+        elif search_type == 'Category':
+            query = q1+" AND bt.theme = %s GROUP BY u.user_id, bt.theme"
+            cur.execute(query,(school_id, search_text, ))
+    ratings = cur.fetchall()
+    cur.close()
+
+    if len(ratings) == 0:
+        # Render the template with no results message
+        return render_template('school_admin_Q3.html', no_results=True)
+
+    # Render the template with the query results
+    return render_template('school_admin_Q3.html', ratings=ratings)
 
 # Extra Route για να ελεγξει αιτήσεις αξιολόγησης 
 @app.route('/school_admin_reviews', methods=['GET', 'POST'])
