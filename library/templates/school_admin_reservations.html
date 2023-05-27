@@ -5,8 +5,13 @@
     <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
 </head>
 <body>
-    <h1>Book Management</h1>
+   
 
+    
+    <div class="topnav">
+        <a href="{{ url_for('school_admin') }}">Home</a>  |
+       
+</div>
     <h2>Reserved Items</h2>
     <div class = "school_list">
     <table>

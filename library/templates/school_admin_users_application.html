@@ -2,11 +2,16 @@
 <html>
 <head>
     <title>User Application</title>
+    <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
 </head>
 <body>
+    
+      
+  
     <h1>User Application</h1>
 
     <h2>User Applications</h2>
+  <div class = "school_list">
     <table>
         <thead>
             <tr>
@@ -17,6 +22,7 @@
             </tr>
         </thead>
         <tbody>
+            
             {% for application in user_applications %}
                 <tr>
                     <td>{{ application[0] }}</td>
@@ -33,5 +39,6 @@
             {% endfor %}
         </tbody>
     </table>
+      </div>
 </body>
 </html>

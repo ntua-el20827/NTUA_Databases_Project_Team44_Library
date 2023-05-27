@@ -39,7 +39,7 @@
     <div class="topnav">
                   <a href="{{ url_for('user_profile') }}" > Το προφιλ μου </a> |
                   <a href="{{ url_for('school_admin') }}">Home</a>  |
-                  <a href="page2.html"> Τα βιβλια μου </a> |
+                  <a href="{{ url_for('my_books') }}"> Τα βιβλια μου </a> |
                   <a href="{{ url_for('contact_super_admin') }}" > Επικοινωνια με τον Διαχειριστή Βιβλιοθήκης </a>
                   <a href="{{ url_for('school_admin_reviews') }}" > Αιτήσεις Αξιολόγησης </a>
                   <a href="{{ url_for('school_admin_reservations') }}" > Κρατήσεις Βιβλίων </a>
@@ -63,15 +63,12 @@
               <button type="submit" style="border: none; background: none; padding: 0;">
                 <img src="{{ book[2] }}" alt="{{ book[0] }}">
                 <h2>{{ book[0] }}</h2>
-                
                 <h2 style="font-style: italic;
                 color: #8B0000; font-size: 15px; margin-bottom: 100px;">{{ book[1] }}</h2>
               </button>
-              
             </form>
             
           </div>  
-      
       {% endfor %}
     </div>
     </body>

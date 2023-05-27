@@ -427,6 +427,10 @@ def review():
     # σε κάθε αλλή περίπτωση sorry δεν μπορεις να κάνεις review
     return render_template("review_test2.html")
 
+@app.route('/review_users_test')
+def review_users_test():
+    return render_template("review_users_test.html")
+
 #Route για την αρχική του super_admin
 @app.route('/super_admin')
 def super_admin():
