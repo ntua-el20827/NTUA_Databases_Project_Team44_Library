@@ -34,12 +34,39 @@
 		<label for="email">email:</label><br>
 		<input type="text" id="email" name="email" required><br>
 		<br>
-		<label for="phone">Κινητό:</label><br>
-		<input type="text" id="phone" name="phone" required><br><br>
-		
+		<label for="dob">Ημερομηνία Γέννησης:</label><br>
+		<input type="date" id="dob" name="dob" required><br>
+		<br>
 		<label for="school">Όνομα Σχολείου: </label><br>
 		<input type="text" id="phone" name="phone" required>
-        <br><br>
+		<br><br>
+		<label for="city">Πολη: </label><br>
+		<input type="text" id="city" name="city" required>
+		<br><br>
+		<label for="street">Όδος: </label><br>
+		<input type="text" id="street" name="street" required>
+		<br><br>
+		<label for="postal_code">Ταχυδρομικός Κώδικας: </label><br>
+		<input type="text" id="postal_code" name="postal_code" required>
+		<br><br>
+		<label for="school_email">Email Σχολείου: </label><br>
+		<input type="text" id="school_email" name="school_email" required>
+		<br><br>
+		<label for="pfname">Όνομα Διευθυντή: </label><br>
+		<input type="text" id="pfname" name="pfname" required>
+		<br><br>
+		<label for="plname">Επώνυμο Διευθυντή: </label><br>
+		<input type="text" id="plname" name="plname" required>
+		<br><br>
+
+		<label for="phone">1o Τηλεφωνο Σχολειου:</label><br>
+		<input type="text" id="phone" name="phone" required><br><br>
+
+   
+		<label for="2phone">2o Τηλεφωνο Σχολειου:</label><br>
+		<input type="text" id="2phone" name="2phone" ><br><br>
+
+      
         <form action="{{ url_for('request_library_form') }}" method="POST">
         <input type="submit" value="Υποβολή Αίτησης">	
         </form>	
