@@ -35,6 +35,14 @@
           button[type="submit"]:hover {
             background-color: rgb(238, 174, 202);;
           }
+         
+		
+
+		.error-message {
+			color: rgb(226, 0, 0);
+			margin-top: 10px;
+		}
+	
     </style>
 </head>
 <body>
@@ -43,9 +51,12 @@
 	<h1>Σύνδεση Στην βιβλιοθήκη Του σχολείου Σας</h1>
 	<hr color="black">
 </div><br><br>
+
 	<div class="login">
-	<br>
 	
+  {% if error_message %}
+  <p class="error-message">{{ error_message }}</p>
+  {% endif %}
 		<form method="POST" action="/login">
 			
 			<label for="username">Ονομα Χρηστη:</label> <br>
@@ -62,6 +73,7 @@
 		</form>
 		<p>Δεν εχετε λογαριασμό; <a href="{{ url_for('signup') }}">Εγγραφειτε! </a> </p>
 		<p>Επιστροφη στην αρχικη <a href="{{ url_for('index') }}"> σελίδα </a></p>
-	</div>
+   
+  </div>
 </body>
 </html>

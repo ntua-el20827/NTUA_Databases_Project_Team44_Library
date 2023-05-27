@@ -3,7 +3,12 @@
 <head>
 	<title>Super Admin Login</title>
 	<link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
-	
+	<style>
+		.error-message {
+			color: rgb(226, 0, 0);
+			margin-top: 10px;
+		}
+	</style>
 </head>
 <body>
 	
@@ -12,6 +17,9 @@
 	<hr color="black">
 </div><br><br>
 	<div class="login">
+		{% if error_message %}
+		<p class="error-message">{{ error_message }}</p>
+		{% endif %}
 	<br>
 	
 		<form method="POST" action="/super_admin_login">
