@@ -157,8 +157,19 @@ CREATE TABLE review (
 
 /*
 ---
---- Events (?)
+--- Events
 ---
+
+---Every day the db needs to check whether a queue deadline has expired
+CREATE EVENT delete_from_queue
+ON SCHEDULE EVERY 1 DAY
+DO
+BEGIN
+    -- Delete old queued reservations
+    DELETE FROM book_status
+    WHERE status = 'queue'
+    AND request_date < DATE_SUB(NOW(), INTERVAL 1 WEEK);
+END;
 
 ---Every day the db needs to check whether a reservation deadline has expired
 CREATE EVENT delete_old_reservations
