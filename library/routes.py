@@ -737,7 +737,7 @@ def school_admin():
     else:
         cur = mydb.connection.cursor()
         school_id = session['school_id']
-        query = "SELECT title, ISBN, book_image FROM book WHERE school_id = %s" 
+        query = "SELECT title, ISBN, book_image,book_id FROM book WHERE school_id = %s" 
         cur.execute(query,(school_id,))
         books = cur.fetchall()
         cur.close()
