@@ -368,7 +368,7 @@ def rent():
     cur = mydb.connection.cursor()
     query = """ SELECT bs.book_id
 FROM book_status bs
-WHERE bs.status = 'Borrowed'
+WHERE bs.status = 'borrowed'
   AND bs.return_date IS NULL
   AND bs.approval_date <= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
   AND bs.user_id = %s"""

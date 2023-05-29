@@ -20,14 +20,14 @@ ORDER BY
 SELECT DISTINCT book_author.author
 FROM book_theme
 INNER JOIN book_author ON book_theme.book_id = book_author.book_id
-WHERE book_theme.theme = 'your_book_theme';
+WHERE book_theme.theme = <your_book_theme>;
 ---3.1.2(b) Teachers who have borrowed books of a given book theme in the last year
 SELECT DISTINCT lib_user.user_name
 FROM book_theme
 INNER JOIN book ON book_theme.book_id = book.book_id
 INNER JOIN book_status ON book.book_id = book_status.book_id
 INNER JOIN lib_user ON book_status.user_id = lib_user.user_id
-WHERE book_theme.theme = 'your_book_theme'
+WHERE book_theme.theme = <your_book_theme>
   AND book_status.status = 'borrowed'
   AND book_status.approval_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 YEAR) AND NOW()
   AND lib_user.role_name = 'teacher';
@@ -75,15 +75,15 @@ ORDER BY
 LIMIT 3;
 
 ---3.1.7 Authors who have written at least 5 books less than the author who has written the most books
-SELECT book_author.author, (max_books.num_books - COUNT(DISTINCT book_author.book_id)) AS book_diff
+SELECT book_author.author, (max_books.num_books - COUNT(*)) AS book_diff
 FROM book_author
 INNER JOIN (
-  SELECT book_author.author, COUNT(DISTINCT book_author.book_id) AS num_books
+  SELECT book_author.book_id, COUNT(*) AS num_books
   FROM book_author
-  GROUP BY book_author.author
+  GROUP BY book_author.book_id
   ORDER BY num_books DESC
   LIMIT 1
-) AS max_books ON book_author.author = max_books.author
+) AS max_books ON book_author.book_id = max_books.book_id
 GROUP BY book_author.author
 HAVING book_diff >= 5;
 
