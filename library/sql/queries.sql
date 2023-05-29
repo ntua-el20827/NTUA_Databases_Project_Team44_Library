@@ -89,28 +89,30 @@ HAVING book_diff >= 5;
 
 ---3.2 Αdmin Queries
 ---3.2.1 Present all books by title, author (search criteria: book title/book theme/book author/number of books)
-SELECT book.title, GROUP_CONCAT(DISTINCT book_author.author SEPARATOR ', ') AS authors, GROUP_CONCAT(DISTINCT book_theme.theme SEPARATOR ', ') AS themes, book.number_of_books 
-FROM book 
-LEFT JOIN book_author ON book.book_id = book_author.book_id 
-LEFT JOIN book_theme ON book.book_id = book_theme.book_id 
-WHERE book.title LIKE '%search_criteriar%' 
-OR book_author.author LIKE '%search_criteria%' 
-OR book_theme.theme LIKE '%search_criteria%' 
-GROUP BY book.book_id 
-ORDER BY book.title ASC;
+SELECT b.title, GROUP_CONCAT(ba.author) AS authors
+FROM book AS b
+JOIN book_author AS ba ON b.book_id = ba.book_id
+WHERE b.school_id = <school_id>
+GROUP BY b.book_id;
+/*Example for search by title
+SELECT b.title, GROUP_CONCAT(ba.author) AS authors
+FROM book AS b
+JOIN book_author AS ba ON b.book_id = ba.book_id
+WHERE b.school_id = <school_id> AND b.title = <book_title>
+GROUP BY b.book_id
+*/
 
 ---3.2.2 Find all borrowers who have at their pocession at least one book and they have delayed the return
-SELECT u.user_firstname, u.user_lastname, 
-       CASE u.role_name 
-           WHEN 'student' THEN DATEDIFF(NOW(), bs.approval_date) - 7 
-           WHEN 'teacher' THEN DATEDIFF(NOW(), bs.approval_date) - 14 
-       END AS days_of_delay
+SELECT u.user_id, u.user_firstname, u.user_lastname,DATEDIFF(NOW(), bs.approval_date)
 FROM lib_user u
 JOIN book_status bs ON u.user_id = bs.user_id
-WHERE bs.status = 'borrowed' AND bs.return_date IS NULL
-AND u.user_firstname LIKE '%<first_name>%'   -- replace <first_name> with the user's input for first name
-AND u.user_lastname LIKE '%<last_name>%'     -- replace <last_name> with the user's input for last name
-HAVING (days_of_delay > <days_of_delay>);     -- replace <days_of_delay> with the user's input for days of delay
+WHERE bs.status = 'borrowed' AND bs.return_date IS NULL AND u.school_id = <school_id> AND (DATEDIFF(NOW(), bs.approval_date) > 7)
+/*Example for search by first_name
+SELECT u.user_id, u.user_firstname, u.user_lastname,DATEDIFF(NOW(), bs.approval_date)
+FROM lib_user u
+JOIN book_status bs ON u.user_id = bs.user_id
+WHERE bs.status = 'borrowed' AND bs.return_date IS NULL AND u.school_id = <school_id> AND (DATEDIFF(NOW(), bs.approval_date) > 7) AND u.user_firstname LIKE <user_firstname>
+*/
 
 ---3.2.3 Average of reviews by borrower and book theme(search criteria: user/book theme)
 SELECT CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bt.theme, AVG(r.rating) AS avg_rating
@@ -118,6 +120,7 @@ FROM lib_user u
 INNER JOIN review r ON u.user_id = r.user_id
 INNER JOIN book b ON r.book_id = b.book_id
 INNER JOIN book_theme bt ON b.book_id = bt.book_id
+WHERE u.school_id = <school_id>
 GROUP BY u.user_id, bt.theme;
 
 
