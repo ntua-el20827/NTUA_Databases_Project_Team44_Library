@@ -241,14 +241,15 @@ BEGIN
 END$$
 DELIMITER ;
 
-/*DELIMITER $$
+DELIMITER $$
 CREATE TRIGGER check_borrow_limit
 BEFORE INSERT ON book_status
 FOR EACH ROW
 BEGIN
-    IF NEW.user_id IN (SELECT user_id FROM lib_user WHERE role='student') THEN
-        DECLARE borrow_count INT;
-        DECLARE queue_count INT;
+    DECLARE borrow_count INT;
+    DECLARE queue_count INT;
+
+    IF NEW.user_id IN (SELECT user_id FROM lib_user WHERE role_name='student') THEN
         SET borrow_count = (
             SELECT COUNT(*) AS count
             FROM book_status
@@ -270,9 +271,7 @@ BEGIN
                 SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This book has already been queued in the last seven days.';
             END IF;
         END IF;
-    ELSEIF NEW.user_id IN (SELECT user_id FROM lib_user WHERE role='teacher' OR role='admin') THEN
-        DECLARE borrow_count INT;
-        DECLARE queue_count INT;
+    ELSEIF NEW.user_id IN (SELECT user_id FROM lib_user WHERE role_name='teacher' OR role_name='admin') THEN
         SET borrow_count = (
             SELECT COUNT(*) AS count
             FROM book_status
@@ -296,7 +295,10 @@ BEGIN
         END IF;
     END IF;
 END$$
-DELIMITER ;*/
+DELIMITER ;
+
+
+
 /*DELIMITER $$
 CREATE TRIGGER check_borrow_limit
 BEFORE INSERT ON book_status

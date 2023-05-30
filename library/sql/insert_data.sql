@@ -958,24 +958,6 @@ VALUES (13, 32, 'borrowed', '2023-05-13', '2023-05-16', '2023-05-18');
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (14, 33, 'borrowed', '2023-05-14', '2023-05-17', '2023-05-19');
 
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (15, 3, 'borrowed', '2023-05-15', '2023-05-18', '2023-05-20');
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (16, 8, 'borrowed', '2023-05-16', '2023-05-19', '2023-05-21');
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (17, 9, 'borrowed', '2023-05-17', '2023-05-20', '2023-05-22');
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (18, 10, 'borrowed', '2023-05-18', '2023-05-21', '2023-05-23');
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (19, 20, 'borrowed', '2023-05-19', '2023-05-22', '2023-05-24');
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (20, 21, 'borrowed', '2023-05-20', '2023-05-23', '2023-05-25');
-
 --- Reviews
 --- School 1
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
@@ -1163,34 +1145,10 @@ VALUES (15, 33, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
 
 --- School 2
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (23, 3, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (24, 8, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (25, 9, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (26, 10, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (27, 20, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (28, 21, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (29, 22, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (30, 23, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (31, 24, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (32, 34, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (33, 35, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
@@ -1204,8 +1162,6 @@ VALUES (35, 37, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (36, 38, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
 
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (37, 3, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
 
 --- School 3
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
@@ -1234,6 +1190,3 @@ VALUES (51, 28, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (52, 29, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (53, 39, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
