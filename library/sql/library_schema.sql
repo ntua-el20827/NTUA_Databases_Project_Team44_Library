@@ -74,23 +74,7 @@ CREATE TABLE book (
   CONSTRAINT fk_book_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*-- Table 'reservation'
-CREATE TABLE reservation (
-  book_id INT UNSIGNED NOT NULL,
-  res_date DATE NOT NULL,
-  res_id INT NOT NULL AUTO_INCREMENT,
-  user_id INT UNSIGNED NOT NULL,
-  school_id INT UNSIGNED NOT NULL,
-  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (res_id,user_id,book_id),
-  KEY fk_reserv_user_id (user_id),
-  CONSTRAINT fk_reserv_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-  KEY fk_reserv_school_id (school_id),
-  CONSTRAINT fk_reserv_school_id FOREIGN KEY(school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
---- Ειναι σωστο το primary key?*/
-
-
+-- Table book_status
 CREATE TABLE book_status (
   book_status_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   book_id INT UNSIGNED NOT NULL,

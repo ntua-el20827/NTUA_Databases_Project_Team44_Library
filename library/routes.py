@@ -957,7 +957,7 @@ def school_admin_reservations():
             # Να βάλλουμε και current date το rent_date
         elif action == 'deny':
             # Delete the item from the 'book_status' table
-            query = "DELETE FROM book_status WHERE item_id = %s"
+            query = "DELETE FROM book_status WHERE book_id = %s"
             cur.execute(query, (int(item_id),))
             mydb.connection.commit()
             query = "CALL increase_available_books(%s)"
@@ -998,9 +998,9 @@ def school_admin_new_booking():
             if user:
                 # Insert a new booking into the 'book_status' table
                 cur = mydb.connection.cursor()
-                insert_query = "INSERT INTO book_status (book_id, status, rent_date, user_id) VALUES (%s, %s, CURDATE(), %s)"
+                insert_query = "INSERT INTO book_status (book_id, status, request_date, user_id) VALUES (%s, %s, CURDATE(), %s)"
                 cur.execute(insert_query, (book_id, 'borrowed', user_id))
-                mydb.commit()
+                mydb.connection.commit()
                 cur.close()
 
                 flash('Booking successful', 'success')
@@ -1083,7 +1083,7 @@ def school_admin_book_return():
     cur = mydb.connection.cursor()
 
     # Fetch data from the 'book_status' table with status='booked' and return_date=NULL
-    query = "SELECT * FROM book_status WHERE status = 'borrowed' AND retdurn_date IS NULL"
+    query = "SELECT * FROM book_status WHERE status = 'borrowed' AND return_date IS NULL"
     cur.execute(query)
     booked_items = cur.fetchall()
     cur.close()
