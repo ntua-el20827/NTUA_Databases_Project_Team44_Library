@@ -305,7 +305,7 @@ BEGIN
     DECLARE borrow_count INT;
     DECLARE queue_count INT;
     
-    IF NEW.user_id IN (SELECT user_id FROM lib_user WHERE role='student') THEN
+    IF NEW.user_id IN (SELECT user_id FROM lib_user WHERE lib_user.role='student') THEN
         SET borrow_count = (
             SELECT COUNT(*) AS count
             FROM book_status
@@ -327,7 +327,7 @@ BEGIN
                 SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This book has already been queued in the last seven days.';
             END IF;
         END IF;
-    ELSEIF NEW.user_id IN (SELECT user_id FROM lib_user WHERE role='teacher' OR role='admin') THEN
+    ELSEIF NEW.user_id IN (SELECT user_id FROM lib_user WHERE lib_user.role='teacher' OR lib_user.role='admin') THEN
         SET borrow_count = (
             SELECT COUNT(*) AS count
             FROM book_status
