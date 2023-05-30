@@ -297,7 +297,7 @@ BEGIN
     END IF;
 END$$
 DELIMITER ;*/
-DELIMITER $$
+/*DELIMITER $$
 CREATE TRIGGER check_borrow_limit
 BEFORE INSERT ON book_status
 FOR EACH ROW
@@ -351,7 +351,7 @@ BEGIN
     END IF;
 END$$
 DELIMITER ;
-
+*/
 /* ---Ensure that our db has only one superadmin
 CREATE TRIGGER trg_lib_user_super_admin
 BEFORE INSERT OR UPDATE ON lib_user
