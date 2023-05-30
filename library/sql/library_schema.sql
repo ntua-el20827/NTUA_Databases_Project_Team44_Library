@@ -246,7 +246,7 @@ CREATE TRIGGER check_borrow_limit
 BEFORE INSERT ON book_status
 FOR EACH ROW
 BEGIN
-    IF NEW.user_id IN (SELECT user_id FROM students) THEN
+    IF NEW.user_id IN (SELECT user_id FROM lib_user WHERE role='student') THEN
         DECLARE borrow_count INT;
         DECLARE queue_count INT;
         SET borrow_count = (
@@ -270,7 +270,7 @@ BEGIN
                 SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This book has already been queued in the last seven days.';
             END IF;
         END IF;
-    ELSEIF NEW.user_id IN (SELECT user_id FROM teachers) THEN
+    ELSEIF NEW.user_id IN (SELECT user_id FROM lib_user WHERE role='teacher' OR role='admin') THEN
         DECLARE borrow_count INT;
         DECLARE queue_count INT;
         SET borrow_count = (
@@ -292,30 +292,6 @@ BEGIN
             );
             IF queue_count >= 1 THEN
                 SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This book has already been queued in the last seven days.';
-            END IF;
-        END IF;
-    ELSEIF NEW.user_id IN (SELECT user_id FROM admin) THEN
-        DECLARE borrow_count INT;
-        DECLARE queue_count INT;
-        SET borrow_count = (
-            SELECT COUNT(*) AS count
-            FROM book_status
-            WHERE user_id = NEW.user_id
-              AND status IN ('borrowed', 'reserved')
-              AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-        );
-        IF borrow_count >= 5 THEN
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'You have exceeded the limit on the number of books you can borrow or reserve in the last seven days.';
-        ELSEIF NEW.status = 'queue' THEN
-            SET queue_count = (
-                SELECT COUNT(*) AS count
-                FROM book_status
-                WHERE book_id = NEW.book_id
-                  AND status = 'queue'
-                  AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-            );
-            IF queue_count >= 2 THEN
-                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This book has already been queued twice in the last seven days.';
             END IF;
         END IF;
     END IF;
