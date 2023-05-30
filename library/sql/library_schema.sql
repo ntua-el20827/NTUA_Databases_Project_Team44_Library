@@ -319,14 +319,14 @@ BEGIN
             SET queue_count = (
                 SELECT COUNT(*) AS count
                 FROM book_status
-                WHERE book_id = NEW.book_id
-                  AND status ='queue'
+                WHERE book_id = NEW.book_id                  AND status ='queue'
                   AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
             );
             IF queue_count >= 1 THEN
                 SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This book has already been queued in the last seven days.';
             END IF;
         END IF;
+    -- Fix the syntax error in the following line
     ELSEIF NEW.user_id IN (SELECT user_id FROM lib_user WHERE lib_user.role='teacher' OR lib_user.role='admin') THEN
         SET borrow_count = (
             SELECT COUNT(*) AS count
@@ -347,7 +347,6 @@ BEGIN
             );
             IF queue_count >= 1 THEN
                 SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This book has already been queued in the last seven days.';
-            END IF;
         END IF;
     END IF;
 END$$
