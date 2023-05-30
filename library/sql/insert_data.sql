@@ -931,8 +931,8 @@ VALUES (4, 7, 'borrowed', '2023-05-04', '2023-05-07', '2023-05-09');
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (5, 14, 'borrowed', '2023-05-05', '2023-05-08', '2023-05-10');
 
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (6, 15, 'borrowed', '2023-05-06', '2023-05-09', '2023-05-11');
+/* INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
+VALUES (6, 15, 'borrowed', '2023-05-06', '2023-05-09', '2023-05-11'); */
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (7, 16, 'borrowed', '2023-05-07', '2023-05-10', '2023-05-12');
@@ -1114,10 +1114,7 @@ INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, 
 VALUES (5, 7, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (6, 14, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (7, 15, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+VALUES (6, 14, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);S
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (8, 16, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
