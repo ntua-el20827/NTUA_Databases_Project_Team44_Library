@@ -348,12 +348,24 @@ def book_display():
     cur = mydb.connection.cursor()
     print("ISBN is ", type(ISBN))
     print(int(ISBN))
-    query = "SELECT ISBN, title, publisher, number_of_available_books, pages,book_language,summary,book_image,book_id FROM book WHERE school_id = %s AND ISBN = %s AND book_id=%s" 
+    query = """SELECT b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, 
+        GROUP_CONCAT(ba.author SEPARATOR ',') AS authors,
+        b.summary, b.book_image, b.book_id
+        FROM book b
+        JOIN book_author ba ON b.book_id = ba.book_id
+        WHERE b.school_id = %s AND b.ISBN = %s AND b.book_id = %s
+        GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id;
+        """
     cur.execute(query,(school_id, int(ISBN),book_id))
     book_info = cur.fetchone()
     print(book_id)
     cur.close()
-    return render_template("book_display.html",book_info= book_info)
+
+    
+    role_name = session['role_name']
+    is_admin = role_name == 'admin'
+
+    return render_template("book_display.html", book_info=book_info, is_admin= is_admin)
 
 #route για τον χρήστη που θέλει να δανειστεί το βιβλίο
 @app.route('/rent',methods=['GET', 'POST'])
@@ -423,39 +435,39 @@ def back_to_school():
     return redirect(url_for('school'))
 
 #route για καταχώρηση αξιολόγησης απο τον χρήστη
-@app.route('/review',methods=['GET', 'POST'])
+@app.route('/review', methods=['GET', 'POST'])
 def review():
     school_id = session['school_id']
     user_id = session['user_id']
     book_id = session['book_id']
+    
     if request.method == 'POST':
-        ISBN = request.form['ISBN']
         review_text = request.form['review-text']
         rating = request.form['rating']
-        print(f"ISBN: {ISBN}")
         print(f"Review Text: {review_text}")
         print(f"Rating: {rating}")
+
         cur = mydb.connection.cursor()
-        # query που στελνει το review στον ΥΧ για να το κάνει accept
-        # θελουμε ενα view με τις αιτήσεις για καταχώρηση αξιολόγησης
+        # Check if the user has already reviewed the book
+        query = "SELECT review_id FROM book_status WHERE user_id = %s AND book_id = %s"
+        cur.execute(query, (user_id, book_id))
+        existing_review = cur.fetchone()
         cur.close()
-        return redirect(url_for("back_to_school"))
-    # Ελεγχος αν έχει στο παρελθον δανειστει βιβλίο για να μπορεί να το κάνει review
-    cur = mydb.connection.cursor()
-    query = "SELECT book_status_id FROM book_status WHERE user_id = %s AND book_id = %s AND status = 'borrowed'" 
-    cur.execute(query,(user_id,book_id))
-    been_rented = cur.fetchone()
-    cur.close()
-    if been_rented:
-        #ελεγχος αν έχει ξανακάνει review
+
+        if existing_review:
+            flash("You have already reviewed this book", "error")
+            return redirect(url_for("back_to_school"))
+
+        # Store the review and rating in the database
         cur = mydb.connection.cursor()
-        query = "SELECT review_id FROM book_status WHERE user_id = %s AND book_id = %s" 
-        cur.execute(query,(user_id,book_id))
-        been_rented = cur.fetchone()
+        # Perform the necessary database insert/update operations to store the review
         cur.close()
-        return render_template("review.html")
-    # σε κάθε αλλή περίπτωση sorry δεν μπορεις να κάνεις review
-    return render_template("review_test2.html")
+
+        flash("Your review is going to be checked", "success")
+        return redirect(url_for("review"))
+    role_name = session['role_name']
+    is_admin = role_name == 'admin' 
+    return render_template("review_test2.html", is_admin=is_admin)
 
 @app.route('/review_users_test')
 def review_users_test():
@@ -599,20 +611,21 @@ def super_admin_Q5():
 def super_admin_Q6():
     cur = mydb.connection.cursor()
     query = """
-        SELECT 
-        CONCAT(bt1.theme,',',bt2.theme) AS theme_pair, 
-        COUNT(*) AS borrow_count
-        FROM 
-        book_theme bt1
-        INNER JOIN book_theme bt2 ON bt1.book_id = bt2.book_id AND bt1.theme < bt2.theme
-        INNER JOIN book_status ON bt2.book_id = book_status.book_id
-        WHERE 
-        book_status.status = 'borrowed'
-        GROUP BY 
-        theme_pair
-        ORDER BY 
-        borrow_count DESC
-        LIMIT 3;
+        SELECT
+    bt1.theme AS theme1,
+    bt2.theme AS theme2,
+    COUNT(*) AS borrow_count
+    FROM
+    book_theme bt1
+    INNER JOIN book_theme bt2 ON bt1.book_id = bt2.book_id AND bt1.theme < bt2.theme
+    INNER JOIN book_status ON bt2.book_id = book_status.book_id
+    WHERE
+    book_status.status = 'borrowed'
+    GROUP BY
+    bt1.theme, bt2.theme
+    ORDER BY
+    borrow_count DESC
+    LIMIT 3;
     """
     cur.execute(query)
     results = cur.fetchall()
