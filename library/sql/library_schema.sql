@@ -223,23 +223,70 @@ WHERE user_pending_flag = 'waiting';
 --- Triggers
 ---
 
+--- Trigger ωστε μια κράτηση να περνάει αυτόματα σε επίπεδο 'reserved' οταν ενα βιβλίο αποκτήσει διαθεσιμο αντιτυπο και 
+--- εφόσον ο χρήστης που εχει αιτηθεί κράτηση δεν υπερβαίνει τα όρια του δανεισμού. Σε αυτή την περίπτωση επιλέγεται ο επόμενος στην σειρά 
+--- προτεραιότητας χρηστης.
+--- Ο χρήστης ενημερώνεται για αυτή την αλλαγή απο την καρτέλα MyBooks στο προφιλ του.
 DELIMITER $$
 CREATE TRIGGER tr_book_status_queue_to_reserved 
 AFTER UPDATE ON book
 FOR EACH ROW
 BEGIN
-  IF NEW.number_of_available_books = 1 AND OLD.number_of_available_books = 0 AND EXISTS (
-    SELECT * FROM book_status 
-    WHERE book_id = NEW.book_id AND status = 'queue' 
-    ORDER BY request_date LIMIT 1
-  ) THEN
-    UPDATE book_status 
-    SET status = 'reserved', request_date = CURRENT_DATE 
-    WHERE book_id = NEW.book_id AND status = 'queue' 
-    ORDER BY request_date LIMIT 1;
+DECLARE borrow_count INT;
+DECLARE reserved_count INT;
+DECLARE _user_id INT UNSIGNED;
+DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR
+      SELECT user_id AS _user_id FROM book_status 
+      WHERE book_id = NEW.book_id AND status = 'queue' 
+      ORDER BY request_date;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+  IF NEW.number_of_available_books = 1 AND OLD.number_of_available_books = 0  THEN 
+
+    OPEN cur;
+    read_loop: LOOP
+      FETCH cur INTO _user_id;
+      IF done THEN
+        LEAVE read_loop;
+      END IF;
+      SET borrow_count = (
+        SELECT COUNT(*) AS count
+        FROM book_status
+        WHERE user_id = _user_id
+          AND status IN ('borrowed')
+          AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+      );
+      SET reserved_count = (
+            SELECT COUNT(*) AS count
+            FROM book_status
+            WHERE user_id = _user_id
+              AND status IN ('reserved')
+              AND request_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+      );
+      IF _user_id IN (SELECT user_id FROM lib_user WHERE role_name='student') THEN
+          IF borrow_count+reserved_count <2 THEN
+            UPDATE book_status 
+            SET status = 'reserved', request_date = CURRENT_DATE 
+            WHERE book_id = NEW.book_id AND status = 'queue' AND user_id = _user_id
+            ORDER BY request_date;
+            SET done = TRUE;
+          END IF;
+      ELSEIF _user_id IN (SELECT user_id FROM lib_user WHERE role_name='teacher' OR role_name = 'admin') THEN
+        IF borrow_count+reserved_count <1 THEN
+            UPDATE book_status 
+            SET status = 'reserved', request_date = CURRENT_DATE 
+            WHERE book_id = NEW.book_id AND status = 'queue' AND user_id = _user_id
+            ORDER BY request_date;
+            SET done = TRUE;
+          END IF;
+      END IF;
+    END LOOP;
+    CLOSE cur;
   END IF;
 END$$
+
 DELIMITER ;
+
 
 DELIMITER $$
 CREATE TRIGGER check_borrow_limit
@@ -249,127 +296,49 @@ BEGIN
     DECLARE borrow_count INT;
     DECLARE queue_count INT;
     DECLARE reserved_count INT;
+    IF (NEW.status = 'reserved' OR NEW.status = 'borrowed') THEN
+      IF NEW.user_id IN (SELECT user_id FROM lib_user WHERE role_name='student') THEN
+          SET borrow_count = (
+              SELECT COUNT(*) AS count
+              FROM book_status
+              WHERE user_id = NEW.user_id
+                AND status IN ('borrowed')
+                AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+          );
+          SET reserved_count = (
+              SELECT COUNT(*) AS count
+              FROM book_status
+              WHERE user_id = NEW.user_id
+                AND status IN ('reserved')
+                AND request_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+          );
 
-    IF NEW.user_id IN (SELECT user_id FROM lib_user WHERE role_name='student') THEN
-        SET borrow_count = (
-            SELECT COUNT(*) AS count
-            FROM book_status
-            WHERE user_id = NEW.user_id
-              AND status IN ('borrowed')
-              AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-        );
-        SET reserved_count = (
-            SELECT COUNT(*) AS count
-            FROM book_status
-            WHERE user_id = NEW.user_id
-              AND status IN ('reserved')
-              AND request_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-        );
-
-        IF (borrow_count+reserved_count) >= 2 THEN
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'You have exceeded the limit on the number of books you can borrow or reserve in the last seven days.';
-        ELSEIF NEW.status = 'queue' THEN
-            SET queue_count = (
-                SELECT COUNT(*) AS count
-                FROM book_status
-                WHERE book_id = NEW.book_id
-                  AND status = 'queue'
-                  AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-            );
-            IF queue_count >= 1 THEN
-                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This book has already been queued in the last seven days.';
-            END IF;
-        END IF;
-    ELSEIF NEW.user_id IN (SELECT user_id FROM lib_user WHERE role_name='teacher' OR role_name='admin') THEN
-        SET borrow_count = (
-            SELECT COUNT(*) AS count
-            FROM book_status
-            WHERE user_id = NEW.user_id
-              AND status IN ('borrowed')
-              AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-        );
-        SET reserved_count = (
-            SELECT COUNT(*) AS count
-            FROM book_status
-            WHERE user_id = NEW.user_id
-              AND status IN ('reserved')
-              AND request_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-        );
-        IF (borrow_count+reserved_count) >= 1 THEN
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'You have exceeded the limit on the number of books you can borrow or reserve in the last seven days.';
-        ELSEIF NEW.status = 'queue' THEN
-            SET queue_count = (
-                SELECT COUNT(*) AS count
-                FROM book_status
-                WHERE book_id = NEW.book_id
-                  AND status = 'queue'
-                  AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-            );
-            IF queue_count >= 1 THEN
-                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This book has already been queued in the last seven days.';
-            END IF;
-        END IF;
+          IF (borrow_count+reserved_count) >= 2 THEN
+              SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'You have exceeded the limit on the number of books you can borrow or reserve in the last seven days.';
+          END IF;
+      ELSEIF NEW.user_id IN (SELECT user_id FROM lib_user WHERE role_name='teacher' OR role_name='admin') THEN
+          SET borrow_count = (
+              SELECT COUNT(*) AS count
+              FROM book_status
+              WHERE user_id = NEW.user_id
+                AND status IN ('borrowed')
+                AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+          );
+          SET reserved_count = (
+              SELECT COUNT(*) AS count
+              FROM book_status
+              WHERE user_id = NEW.user_id
+                AND status IN ('reserved')
+                AND request_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+          );
+          IF (borrow_count+reserved_count) >= 1 THEN
+              SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'You have exceeded the limit on the number of books you can borrow or reserve in the last seven days.';
+          END IF;
+      END IF;
     END IF;
 END$$
 DELIMITER ;
 
-
-
-/*DELIMITER $$
-CREATE TRIGGER check_borrow_limit
-BEFORE INSERT ON book_status
-FOR EACH ROW
-BEGIN
-    DECLARE borrow_count INT;
-    DECLARE queue_count INT;
-    
-    IF NEW.user_id IN (SELECT user_id FROM lib_user WHERE lib_user.role='student') THEN
-        SET borrow_count = (
-            SELECT COUNT(*) AS count
-            FROM book_status
-            WHERE user_id = NEW.user_id
-              AND status IN ('borrowed', 'reserved')
-              AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-        );
-        IF borrow_count >= 2 THEN
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'You have exceeded the limit on the number of books you can borrow or reserve in the last seven days.';
-        ELSEIF NEW.status = 'queue' THEN
-            SET queue_count = (
-                SELECT COUNT(*) AS count
-                FROM book_status
-                WHERE book_id = NEW.book_id                  AND status ='queue'
-                  AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-            );
-            IF queue_count >= 1 THEN
-                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This book has already been queued in the last seven days.';
-            END IF;
-        END IF;
-    -- Fix the syntax error in the following line
-    ELSEIF NEW.user_id IN (SELECT user_id FROM lib_user WHERE lib_user.role='teacher' OR lib_user.role='admin') THEN
-        SET borrow_count = (
-            SELECT COUNT(*) AS count
-            FROM book_status
-            WHERE user_id = NEW.user_id
-              AND status IN ('borrowed', 'reserved')
-              AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-        );
-        IF borrow_count >= 1 THEN
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'You have exceeded the limit on the number of books you can borrow or reserve in the last seven days.';
-        ELSEIF NEW.status = 'queue' THEN
-            SET queue_count = (
-                SELECT COUNT(*) AS count
-                FROM book_status
-                WHERE book_id = NEW.book_id
-                  AND status = 'queue'
-                  AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-            );
-            IF queue_count >= 1 THEN
-                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This book has already been queued in the last seven days.';
-        END IF;
-    END IF;
-END$$
-DELIMITER ;
-*/
 /* ---Ensure that our db has only one superadmin
 CREATE TRIGGER trg_lib_user_super_admin
 BEFORE INSERT OR UPDATE ON lib_user
@@ -457,7 +426,7 @@ CREATE PROCEDURE decrease_available_books(IN _book_id INT)
 BEGIN
     UPDATE book
     SET number_of_available_books = number_of_available_books - 1
-    WHERE book_id = book_id;
+    WHERE book_id = _book_id;
 END //
 
 DELIMITER ;
@@ -468,7 +437,7 @@ CREATE PROCEDURE increase_available_books(IN _book_id INT)
 BEGIN
     UPDATE book
     SET number_of_available_books = number_of_available_books + 1
-    WHERE book_id = book_id;
+    WHERE book_id = _book_id;
 END //
 
 DELIMITER ;
