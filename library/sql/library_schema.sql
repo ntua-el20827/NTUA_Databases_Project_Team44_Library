@@ -248,16 +248,25 @@ FOR EACH ROW
 BEGIN
     DECLARE borrow_count INT;
     DECLARE queue_count INT;
+    DECLARE reserved_count INT;
 
     IF NEW.user_id IN (SELECT user_id FROM lib_user WHERE role_name='student') THEN
         SET borrow_count = (
             SELECT COUNT(*) AS count
             FROM book_status
             WHERE user_id = NEW.user_id
-              AND status IN ('borrowed', 'reserved')
+              AND status IN ('borrowed')
               AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
         );
-        IF borrow_count >= 2 THEN
+        SET reserved_count = (
+            SELECT COUNT(*) AS count
+            FROM book_status
+            WHERE user_id = NEW.user_id
+              AND status IN ('reserved')
+              AND request_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+        );
+
+        IF (borrow_count+reserved_count) >= 2 THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'You have exceeded the limit on the number of books you can borrow or reserve in the last seven days.';
         ELSEIF NEW.status = 'queue' THEN
             SET queue_count = (
@@ -276,10 +285,17 @@ BEGIN
             SELECT COUNT(*) AS count
             FROM book_status
             WHERE user_id = NEW.user_id
-              AND status IN ('borrowed', 'reserved')
+              AND status IN ('borrowed')
               AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
         );
-        IF borrow_count >= 1 THEN
+        SET reserved_count = (
+            SELECT COUNT(*) AS count
+            FROM book_status
+            WHERE user_id = NEW.user_id
+              AND status IN ('reserved')
+              AND request_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+        );
+        IF (borrow_count+reserved_count) >= 1 THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'You have exceeded the limit on the number of books you can borrow or reserve in the last seven days.';
         ELSEIF NEW.status = 'queue' THEN
             SET queue_count = (
