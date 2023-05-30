@@ -266,7 +266,7 @@ INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, numbe
 VALUES ('Ethan Frome', 'Stellar Books', 200, 129567834, 'A novel by Edith Wharton, set in rural New England and exploring themes of love, duty, and the consequences of repressed emotions.', 3, 3, 'https://covers.openlibrary.org/b/OLID/OL7215847M-M.jpg', 'English', 3);
 
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES ('Uncle Tom\'s Cabin', 'Stellar Books', 450, 459283716, 'An anti-slavery novel by Harriet Beecher Stowe, portraying the harsh realities of slavery in the United States and its impact on individuals.', 4, 4, 'https://covers.openlibrary.org/b/OLID/OL26244385M-M.jpg', 'English', 3);
+VALUES ('Uncle Toms Cabin', 'Stellar Books', 450, 459283716, 'An anti-slavery novel by Harriet Beecher Stowe, portraying the harsh realities of slavery in the United States and its impact on individuals.', 4, 4, 'https://covers.openlibrary.org/b/OLID/OL26244385M-M.jpg', 'English', 3);
 
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
 VALUES ('Women in Love', 'Stellar Books', 400, 935827416, 'A novel by D.H. Lawrence, delving into the complex relationships and desires of the Brangwen sisters and their respective partners.', 3, 3, 'https://covers.openlibrary.org/b/OLID/OL14048584M-M.jpg', 'English', 3);
@@ -319,7 +319,7 @@ INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, numbe
 VALUES ('The Adventures of Sherlock Holmes ', 'Stellar Books', 320, 8162945730, 'A collection of twelve detective stories featuring the famous detective Sherlock Holmes and his loyal friend Dr. John Watson, written by Sir Arthur Conan Doyle.', 4, 4, 'https://covers.openlibrary.org/b/OLID/OL24349267M-M.jpg', 'English', 1);
 
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES ('The Wonderful Wizard of Oz', 'Stellar Books', 220, 4257891630, 'A beloved children\'s novel by L. Frank Baum, following the adventures of Dorothy Gale and her friends as they journey through the magical Land of Oz.', 3, 3, 'https://covers.openlibrary.org/b/OLID/OL7170815M-M.jpg', 'English', 1);
+VALUES ('The Wonderful Wizard of Oz', 'Stellar Books', 220, 4257891630, 'A beloved childrens novel by L. Frank Baum, following the adventures of Dorothy Gale and her friends as they journey through the magical Land of Oz.', 3, 3, 'https://covers.openlibrary.org/b/OLID/OL7170815M-M.jpg', 'English', 1);
 
 --- SCHOOL 2
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
@@ -338,10 +338,10 @@ INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, numbe
 VALUES ('The Call of the Wild', 'Stellar Books', 240, 987654321, 'A novel by Jack London, telling the story of Buck, a domesticated dog who is thrust into the harsh world of the Yukon during the Klondike Gold Rush and discovers his primal instincts.', 4, 4, 'https://covers.openlibrary.org/b/OLID/OL23283734M-M.jpg', 'English', 2);
 
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES ('Harry Potter and the Philosopher\'s Stone', 'Stellar Books', 320, 759318246, 'The first book in the Harry Potter series by J.K. Rowling, following the magical journey of Harry Potter as he discovers his true identity and begins his education at Hogwarts School of Witchcraft and Wizardry.', 5, 5, 'https://covers.openlibrary.org/b/OLID/OL22856696M-M.jpg', 'English', 2);
+VALUES ('Harry Potter and the Philosophers Stone', 'Stellar Books', 320, 759318246, 'The first book in the Harry Potter series by J.K. Rowling, following the magical journey of Harry Potter as he discovers his true identity and begins his education at Hogwarts School of Witchcraft and Wizardry.', 5, 5, 'https://covers.openlibrary.org/b/OLID/OL22856696M-M.jpg', 'English', 2);
 
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES ('Harry Potter and the Chamber of Secrets', 'Stellar Books', 400, 432157896, 'The second book in the Harry Potter series by J.K. Rowling, featuring Harry Potter\'s second year at Hogwarts and his encounter with the mysterious Chamber of Secrets.', 3, 3, 'https://covers.openlibrary.org/b/OLID/OL26594474M-M.jpg', 'English', 2);
+VALUES ('Harry Potter and the Chamber of Secrets', 'Stellar Books', 400, 432157896, 'The second book in the Harry Potter series by J.K. Rowling, featuring Harry Potters second year at Hogwarts and his encounter with the mysterious Chamber of Secrets.', 3, 3, 'https://covers.openlibrary.org/b/OLID/OL26594474M-M.jpg', 'English', 2);
 
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
 VALUES ('Harry Potter and the Goblet of Fire', 'Stellar Books', 600, 567893214, 'The fourth book in the Harry Potter series by J.K. Rowling, where Harry Potter competes in the Triwizard Tournament and faces the rise of Lord Voldemort.', 4, 4, 'https://covers.openlibrary.org/b/OLID/OL25683482M-M.jpg', 'English', 2);
@@ -355,7 +355,7 @@ VALUES ('Northern Lights', 'Stellar Books', 320, 963258741, 'The first book in t
 
 --- SCHOOL 3
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES ('Hamlet', 'Stellar Books', 200, 956241378, 'A tragedy by William Shakespeare, depicting the internal struggle and revenge of Prince Hamlet after his father\'s murder, exploring themes of mortality, madness, and moral ambiguity.', 4, 4, 'https://covers.openlibrary.org/b/OLID/OL26587990M-M.jpg', 'English', 3);
+VALUES ('Hamlet', 'Stellar Books', 200, 956241378, 'A tragedy by William Shakespeare, depicting the internal struggle and revenge of Prince Hamlet after his fathers murder, exploring themes of mortality, madness, and moral ambiguity.', 4, 4, 'https://covers.openlibrary.org/b/OLID/OL26587990M-M.jpg', 'English', 3);
 
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
 VALUES ('Great Expectations', 'Stellar Books', 450, 832159467, 'A novel by Charles Dickens, following the life of Pip, an orphan who dreams of becoming a gentleman, and his encounters with a mysterious benefactor and the enigmatic Miss Havisham.', 5, 5, 'https://covers.openlibrary.org/b/OLID/OL45791004M-M.jpg', 'English', 3);
@@ -385,16 +385,16 @@ INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, numbe
 VALUES ('Dracula', 'Stellar Books', 400, 375618429, 'A gothic horror novel by Bram Stoker, introducing the iconic vampire Count Dracula and the battle between him and a group of individuals led by Professor Abraham Van Helsing.', 5, 5, 'https://covers.openlibrary.org/b/OLID/OL7075358M-M.jpg', 'English', 3);
 
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES ('The Princess and the Goblin', 'Stellar Books', 240, 528716934, 'A children\'s fantasy novel by George MacDonald, following the adventures of a young princess and a young miner as they confront goblins and overcome challenges.', 3, 3, 'https://covers.openlibrary.org/b/OLID/OL7544575M-M.jpg', 'English', 3);
+VALUES ('The Princess and the Goblin', 'Stellar Books', 240, 528716934, 'A childrens fantasy novel by George MacDonald, following the adventures of a young princess and a young miner as they confront goblins and overcome challenges.', 3, 3, 'https://covers.openlibrary.org/b/OLID/OL7544575M-M.jpg', 'English', 3);
 
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES ('Le avventure di Pinocchio', 'Stellar Books', 200, 912378645, 'A classic Italian children\'s novel by Carlo Collodi, narrating the adventures of Pinocchio, a wooden puppet who aspires to become a real boy.', 4, 4, 'https://covers.openlibrary.org/b/OLID/OL27004449M-M.jpg', 'Italian', 3);
+VALUES ('Le avventure di Pinocchio', 'Stellar Books', 200, 912378645, 'A classic Italian childrens novel by Carlo Collodi, narrating the adventures of Pinocchio, a wooden puppet who aspires to become a real boy.', 4, 4, 'https://covers.openlibrary.org/b/OLID/OL27004449M-M.jpg', 'Italian', 3);
 
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
 VALUES ('The Story of the Amulet', 'Stellar Books', 320, 498253617, 'A fantasy novel by E. Nesbit, featuring a group of children who go on magical adventures through time with the help of a mysterious amulet.', 3, 3, 'https://covers.openlibrary.org/b/OLID/OL17139068M-M.jpg', 'English', 3);
 
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES ('The Marvelous Land of Oz', 'Stellar Books', 260, 357962481, 'A children\'s novel by L. Frank Baum, continuing the adventures in the Land of Oz as a boy named Tip encounters new characters and faces unexpected challenges.', 4, 4, 'https://covers.openlibrary.org/b/OLID/OL7244470M-M.jpg', 'English', 3);
+VALUES ('The Marvelous Land of Oz', 'Stellar Books', 260, 357962481, 'A childrens novel by L. Frank Baum, continuing the adventures in the Land of Oz as a boy named Tip encounters new characters and faces unexpected challenges.', 4, 4, 'https://covers.openlibrary.org/b/OLID/OL7244470M-M.jpg', 'English', 3);
 
 ---
 ---
@@ -1074,7 +1074,7 @@ VALUES (39, 87, 'The Lion, the Witch and the Wardrobe is a captivating fantasy t
 
 --- School 3
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (4, 44, 'Harry Potter and the Sorcerer\'s Stone is a magical start to an incredible journey.', '2022-12-05', '5');
+VALUES (4, 44, 'Harry Potter and the Sorceres Stone is a magical start to an incredible journey.', '2022-12-05', '5');
 
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
 VALUES (11, 45, 'The Hunger Games is a thrilling dystopian novel filled with action and suspense.', '2023-03-20', '4');
@@ -1110,7 +1110,7 @@ INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
 VALUES (41, 61, 'Ethan Frome is a tragic tale of love and regret set in a small New England town.', '2023-04-10', '4');
 
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (42, 62, 'Uncle Tom\'s Cabin is a powerful and influential novel that exposes the horrors of slavery.', '2022-11-20', '5');
+VALUES (42, 62, 'Uncle Toms Cabin is a powerful and influential novel that exposes the horrors of slavery.', '2022-11-20', '5');
 
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
 VALUES (43, 63, 'Women in Love is a complex and introspective novel that delves into relationships and societal constraints.', '2023-01-15', '4');
