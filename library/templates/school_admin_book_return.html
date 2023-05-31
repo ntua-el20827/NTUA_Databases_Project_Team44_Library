@@ -1,17 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset ="UTF-8"> 
+  <meta name = "description" content="This is an awesome website"> 
+  <title>Return Book</title>
+  <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
+  <script>
+    function confirmLogout() {
+      var result = confirm("Are you sure you want to logout?");
+      if (result) {
+        window.location.href = "{{ url_for('logout') }}";
+      }
+    }
+  </script>
     <title>Book Return</title>
 </head>
 <body>
-    <h1>Book Return</h1>
+    <div class="topnav">
+        <a href="{{ url_for('school_admin') }}" > Επιστροφη στη σχολική Βιβλιοθήκη</a> 
+        <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
+</div>
 
-    <h2>Booked Items</h2>
+    <h2>Παρακάτω φαίνονται οι ενεργοί δανεισμοί. Πατώντας στο κουμπί επιστροφη, καταχωρειται στο συστημα η επιστροφη του βιβλιου</h2>
+    <div class = "school_list">
     <table>
         <thead>
             <tr>
                 <th>Item ID</th>
                 <th>Title</th>
+                <th> User's First Name</th>
+                <th> User's Last Name</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -20,6 +38,8 @@
                 <tr>
                     <td>{{ item[0] }}</td>
                     <td>{{ item[1] }}</td>
+                    <td>{{ item[3] }}</td>
+                    <td>{{ item[4] }}</td>
                     <td>
                         <form method="POST" action="{{ url_for('school_admin_book_return') }}">
                             <input type="hidden" name="item_id" value="{{ item[0] }}">
@@ -30,5 +50,6 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
 </body>
 </html>
