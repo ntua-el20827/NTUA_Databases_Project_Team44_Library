@@ -5,7 +5,7 @@ Entity-Relational Diagram:
 Rerational Schema:
 (image)
 
-Intallation:
+Installation:
 
 Dcumentaion:
 
