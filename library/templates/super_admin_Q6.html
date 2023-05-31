@@ -3,6 +3,20 @@
 <head>
   <title>Query 6: Top 3 Couples of Book Themes with Most Common Borrowings</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <style>
+    table {
+      
+      width: 100%;
+    }
+  
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+  
+   
+  </style>
   <script>
     function confirmLogout() {
       var result = confirm("Are you sure you want to logout?");
@@ -14,8 +28,8 @@
 </head>
 <body>
   <div class="topnav">
-    <a href="{{ url_for('super_admin') }}" class="btn">Home</a>
-    <a href="{{ url_for('super_admin_queries') }}" class="btn"> Queries</a>
+    <a href="{{ url_for('super_admin') }}" >Επιστροφη στην αρχικη </a>
+    <a href="{{ url_for('super_admin_queries') }}" > Queries</a>
     <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
   </div>
   <div class="super_admin">
@@ -40,6 +54,6 @@
     <p>No couples of book themes found with the specified criteria.</p>
   {% endif %}
 </div>
-  </div>
+</div>
 </body>
 </html>

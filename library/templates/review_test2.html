@@ -8,14 +8,26 @@
 		
 
 		<link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
-
+        <script>
+            function confirmLogout() {
+              var result = confirm("Are you sure you want to logout?");
+              if (result) {
+                window.location.href = "{{ url_for('logout') }}";
+              }
+            }
+          </script>
 		
 	</head>
 <body>   
 <div class="topnav">		  
-    <a href="{{ url_for('contact') }}">Επικοινωνια με Υπεύθυνο Χειριστή </a> |
-    <a href="{{ url_for('school') }}">Επιστροφή στην Σχολική Βιβλιοθήκη</a>
     
+    {% if is_admin %}
+          <a href="{{ url_for('school_admin') }}">Επιστροφή στην Σχολική Βιβλιοθήκη</a>
+      {% else %}
+          <a href="{{ url_for('school') }}">Επιστροφή στην Σχολική Βιβλιοθήκη</a>
+      {% endif %}
+    <a href="{{ url_for('book_display') }}">Πίσω στο βιβλίο </a> |
+    <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
 
     
 </div>
@@ -24,31 +36,11 @@
 <h3 id="fh2">Η αξιολόγησή σας βοηθάει τους υπόλοιπους χρήστες που ενδιαφέρονται για αυτό το βιβλίο.</h3>
 
 
-<form id="feedback" action="">
-<!--     <div class="pinfo">Τα στοιχεία σας:
-    </div> -->
-
+<form id="feedback" action="{{ url_for('review') }}" method="POST">
     <div class="form-group">
-
-
-
-<!--     <div class="input-group">
-        <span class="input-group-addon"> Όνομα </span>
-        <input  name="name" placeholder="" class="form-control"  type="text">
+        <div class="pinfo"> Μπορείτε να γράψετε ενα σύντομο σχόλιο για το βιβλίο:
+        </div>
     </div>
-    </div>
-
-<div class="input-group">
-    <span class="input-group-addon"> Επίθετο </span>
-    <input  name="name" placeholder="" class="form-control"  type="text">
-    </div> -->
-    
-
-
-    <div class="pinfo"> Μπορείτε να γράψετε ενα σύντομο σχόλιο για το βιβλίο:
-        
-    </div>
-
 
     <div class="form-group">
 

@@ -31,12 +31,21 @@
       margin-top: 5px;
     }
   </style>
+    <script>
+      function confirmLogout() {
+        var result = confirm("Are you sure you want to logout?");
+        if (result) {
+          window.location.href = "{{ url_for('logout') }}";
+        }
+      }
+    </script>
 </head>
 
 <body>
     <div class="topnav">
-        <a href="{{ url_for('school') }}">Home</a>  |
-      <a href="{{ url_for('book_display') }}"> Πίσω </a>  |
+        <a href="{{ url_for('school') }}">Επιστροφή στη σχολική βιβλιοθήκη</a>  |
+      <a href="{{ url_for('book_display') }}"> Πίσω στο βιβλίο </a>  |
+      <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
     </div>
 <br> 
   <div class="welcome">

@@ -3,19 +3,28 @@
 <head>
   <title>Super Admin Actions</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script>
+    function confirmLogout() {
+      var result = confirm("Are you sure you want to logout?");
+      if (result) {
+        window.location.href = "{{ url_for('logout') }}";
+      }
+    }
+</script>
 </head>
 <body>
   <!--<div class="super-admin-page">-->
     
     <div class="topnav">
-      <a href="{{ url_for('super_admin') }}" class="btn">Home</a>
-      <a href="{{ url_for('super_admin_Q1') }}" class="btn"> Query 1</a>
-      <a href="{{ url_for('super_admin_Q2') }}" class="btn">Query 2</a>
-      <a href="{{ url_for('super_admin_Q3') }}" class="btn">Query 3</a>
-      <a href="{{ url_for('super_admin_Q4') }}" class="btn">Query 4</a>
-      <a href="{{ url_for('super_admin_Q5') }}" class="btn">Query 5</a>
-      <a href="{{ url_for('super_admin_Q6') }}" class="btn">Query 6</a>
-      <a href="{{ url_for('super_admin_Q7') }}" class="btn">Query 7</a>
+      <a href="{{ url_for('super_admin') }}" >Επιστροφη στην αρχικη </a>
+      <a href="{{ url_for('super_admin_Q1') }}" >Query 1</a>
+      <a href="{{ url_for('super_admin_Q2') }}" >Query 2</a>
+      <a href="{{ url_for('super_admin_Q3') }}" >Query 3</a>
+      <a href="{{ url_for('super_admin_Q4') }}" >Query 4</a>
+      <a href="{{ url_for('super_admin_Q5') }}" >Query 5</a>
+      <a href="{{ url_for('super_admin_Q6') }}" >Query 6</a>
+      <a href="{{ url_for('super_admin_Q7') }}" >Query 7</a>
+      <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
     </div>
 
     <br><br>

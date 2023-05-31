@@ -37,28 +37,64 @@
     </div>
       
     <div class="topnav">
+                  
                   <a href="{{ url_for('user_profile') }}" > Το προφιλ μου </a> |
-                  
-                  <a href="{{ url_for('school') }}">Home</a>  |
-                  
-                 
                   <a href="{{ url_for('contact') }}" > Επικοινωνια με τον Υπεύθυνο Βιβλιοθήκης </a>
-                  
-                  <a href="{{ url_for('contact') }}">Επικοινωνια με τον Υπευθυνο Βιβλιοθηκης</a>
                   <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
     </div>
     <br>
     <div class ="welcome">
-    <p > <h3>Μπορειτε να αναζητήσετε παρακάτω το σχολείο στο οποίο ανήκετε. Αφού το βρείτε, πατήστε στο σχολείο, όπου και θα μπορέσετε να κάνετε αίτηση για έγγραφη.</h3> 
+    <p > <h3>Παρακάτω φαίνονταιι όλα τα βιβλία της σχολικής μας βιβλιοθήκης. Πατώντας πάνω στο εξώφυλλο, στο τίτλο ή στο ονομα του συγγραφέα,
+          θα σας εμφανιστουν στοιχεία για το αντίστοιχο βιβλιο. Κατοπιν Μπορείτε να δανειστείτε βιβλια, να τα αξιολογησετε 
+          καθως επισης να δειτε αξιολογησεις αλλων χρηστων.</h3> 
     </p>
     
-    
-      <div class="row">
+    <div class ="super_admin">
+    <form method="POST">
+      <div class="form-group">
+      <input type="text" name="search_text" placeholder="Πληκτρολογηστε" required>
+      </div>
+        <div class="form-group">
+      <select name="search_type">
+        <option value="title">Title</option>
+        <option value="category">Category</option>
+        <option value="author">Author</option>
+        <option value="copies">Copies</option>
+      </select>
+      </div>
+        <div class="form-group">
+      <input type="submit" value="Search" class="edit-btn">
+      </div>
+     </form>
+     {% if no_results %}
+    <p>No results for your input value.</p>
+    <div class="row">
       {% for book in books %}
           <div class="book">
             <form action="{{ url_for('school') }}" method="POST">
               <input type="hidden" name="ISBN" value="{{ book[1] }}">
               <input type="hidden" name="book_id" value="{{ book[3] }}">
+              <button type="submit" style="border: none; background: none; padding: 0;">
+                <img src="{{ book[2] }}" alt="{{ book[0] }}">
+                <h2>{{ book[0]}}</h2>
+                <h2 style="font-style: italic;
+                color: #8B0000; font-size: 15px; margin-bottom: 100px;">{{ book[1] }}</h2>
+              </button>
+            </form>
+            
+          </div>  
+      {% endfor %}
+    </div>
+   {% endif %}
+  {% if books %}
+    <h3>Search Results</h3>
+    <div class="row">
+      {% for book in books %}
+          <div class="book">
+            <form action="{{ url_for('school') }}" method="POST">
+              <input type="hidden" name="ISBN" value="{{ book[1] }}">
+              <input type="hidden" name="book_id" value="{{ book[3] }}">
+              
               <button type="submit" style="border: none; background: none; padding: 0;">
                 <img src="{{ book[2] }}" alt="{{ book[0] }}">
                 <h2>{{ book[0] }}</h2>
@@ -69,7 +105,12 @@
             
           </div>  
       {% endfor %}
+    
+  {% endif %}
     </div>
+    </div>
+    
+      
     </body>
     </html>
   

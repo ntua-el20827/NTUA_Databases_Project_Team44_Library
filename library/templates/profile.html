@@ -14,9 +14,9 @@
 </head>
 <body>
     <div class="topnav">
-        <a href="{{ url_for('school') }}">Home</a> |
+        <a href="{{ url_for('school') }}">Επιστροφή στη Σχολική βιβλιοθήκη</a> |
         <a href="page2.html">Τα βιβλία μου</a> |
-        <a href="{{ url_for('contact') }}">Επικοινωνία με τον Υπεύθυνο Βιβλιοθήκης</a> |
+        
         <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
     </div>
     
@@ -32,9 +32,9 @@
         <p><strong>Ημερομηνία γέννησης:</strong> {{ user_info[4] }}</p>
         <p><strong>Σχολείο:</strong> {{ school_info[2] }}</p>
         <p><strong>Διευθυντής Σχολείου: </strong>{{ school_info[1]}} </p>
-        <form action="{{ url_for('edit_profile') }}" method="GET">
-            <button type="submit" class="edit-btn">Edit Profile</button>
-        </form>
+       <!-- <form action="{{ url_for('edit_profile') }}" method="GET">-->
+            <!--<button type="submit" class="edit-btn">Edit Profile</button>-->
+        <!--</form>-->
         <form action="{{ url_for('edit_password') }}" method="GET">
             <button type="submit" class="edit-btn">Edit Password</button>
         </form>
