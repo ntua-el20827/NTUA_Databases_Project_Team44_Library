@@ -33,15 +33,13 @@ WHERE book_theme.theme = <your_book_theme>
   AND lib_user.role_name = 'teacher';
 
 ---3.1.3 Find the teachers who are younger than 40 years old and have borrowed the most books as well as the number of the books.
-SELECT lib_user.user_name, COUNT(*) AS num_borrowings
-FROM book_status
-INNER JOIN lib_user ON book_status.user_id = lib_user.user_id
-WHERE lib_user.role_name = 'teacher'
-  AND lib_user.user_date_of_birth > UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 40 YEAR))
-  AND book_status.status = 'borrowed'
-GROUP BY lib_user.user_id
-ORDER BY num_borrowings DESC
-LIMIT 1;
+SELECT u.user_id, u.user_firstname, u.user_lastname,u.user_date_of_birth, s.school_name, COUNT(*) as num_books_borrowed
+FROM lib_user u
+JOIN school s ON u.school_id = s.school_id
+JOIN book_status bs ON u.user_id = bs.user_id
+WHERE u.role_name = 'teacher' AND u.user_date_of_birth > DATE_SUB(CURDATE(), INTERVAL 40 YEAR) AND bs.status = 'borrowed'
+GROUP BY u.user_id
+ORDER BY num_books_borrowed DESC;
 
 ---3.1.4 List of book authors whose books have not been borrowed
 SELECT DISTINCT book_author.author
@@ -115,13 +113,17 @@ WHERE bs.status = 'borrowed' AND bs.return_date IS NULL AND u.school_id = <schoo
 */
 
 ---3.2.3 Average of reviews by borrower and book theme(search criteria: user/book theme)
-SELECT CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bt.theme, AVG(r.rating) AS avg_rating
-FROM lib_user u
-INNER JOIN review r ON u.user_id = r.user_id
-INNER JOIN book b ON r.book_id = b.book_id
-INNER JOIN book_theme bt ON b.book_id = bt.book_id
-WHERE u.school_id = <school_id>
-GROUP BY u.user_id, bt.theme;
+---Average by user
+SELECT lib_user.user_id, CONCAT(lib_user.user_firstname, ' ', lib_user.user_lastname) as full_name, AVG(review.rating) as avg_rating
+FROM lib_user
+JOIN review ON lib_user.user_id = review.user_id
+GROUP BY lib_user.user_id;
+---Average by theme
+SELECT bt.theme, AVG(r.rating) as avg_rating
+FROM book_theme bt
+JOIN book b ON bt.book_id = b.book_id
+JOIN review r ON b.book_id = r.book_id
+GROUP BY bt.theme;
 
 
 ---3.3 User Queries
