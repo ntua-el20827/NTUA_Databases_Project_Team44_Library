@@ -4,6 +4,8 @@ from library import app,mydb
 from library.forms import *
 from datetime import datetime
 
+class SQLTriggerError(Exception):
+    pass
 
 # Route for the first page
 @app.route('/', methods=['GET', 'POST'])
@@ -424,46 +426,56 @@ def rent():
     user_id = session['user_id']
     role_name = session['role_name'] 
     book_id = session['book_id']
-
-    #5 
+    print(book_id)
+    print(user_id)
+    #5 Ελεγχος για εκπροθεσμο
     cur = mydb.connection.cursor()
     query = """ SELECT bs.book_id
-FROM book_status bs
-WHERE bs.status = 'borrowed'
-  AND bs.return_date IS NULL
-  AND bs.approval_date <= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
-  AND bs.user_id = %s"""
-    cur.execute(query,(user_id,))
-    oxi_ekprothesmo = cur.fetchall()
-    if oxi_ekprothesmo:
-        query = """ SELECT book_id FROM book_status WHERE user_id = %s AND book_id %s AND status='borrowed' AND returned_date = NULL """
+        FROM book_status bs
+        WHERE bs.status = 'borrowed'
+        AND bs.return_date IS NULL
+        AND bs.approval_date <= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        AND bs.user_id = %s"""
+
+    cur.execute(query,(user_id,)) # Επιστρεφει ολα τα εκπροσθεσμα βιβλία για εναν χρήστη
+    ekprothesma = cur.fetchall()
+    print("ekprothesma = ", ekprothesma)
+    if (ekprothesma==()):
+        print("mesa")
+        # Ελεγχος αν αυτο που διαλεξες το εχεις δανεισμένο ή κρατημένο
+        query = """ SELECT book_id FROM book_status WHERE user_id = %s AND book_id = %s AND return_date IS NULL """
         cur.execute(query,(user_id, book_id,))
         exei_daneistei = cur.fetchone()
         if exei_daneistei:
-            error_message = "Εχετε δανειστεί ηδη αυτό το βιβλίο"
-            return render_template('non_valid_borrowing.html',error_message)
+            flash("Εχετε ήδη δανειστει/κρατήσει αυτο το βιβλίο")
+            return redirect(url_for("book_display"))
         else:    
-            query = "INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date) VALUES (%s, %s, 'reserved', %s)"
-            cur.execute(query,(book_id,user_id,datetime.time.now()))  # Execute your INSERT statement here
-
-            # Fetch the MESSAGE_TEXT from the last executed statement
-            cur.execute("SELECT MESSAGE_TEXT FROM mysql_error_info")
-            error_info = cur.fetchone()
-
-            if error_info:
-                error_message = "Εχετε περάσει τον αριθμό δανεισμών/κρατήσεων"
-                return render_template('non_valid_borrowing.html',error_message)
-            else:
+            query = """ SELECT number_of_available_books FROM book WHERE book_id = %s"""
+            cur.execute(query,(book_id,))
+            diathesima_antitipa = cur.fetchone()
+            print(diathesima_antitipa)
+            if (int(diathesima_antitipa[0])>0):
+                try:
+                    query = "INSERT INTO book_status (book_id, user_id, status, request_date) VALUES (%s, %s, 'reserved', CURDATE())"
+                    cur.execute(query,(book_id,user_id,))  # Execute your INSERT statement here
+                except SQLTriggerError as e:
+                    error_message = str(e)
+                    flash("Εχετε περάσει τον αριθμό δανεισμών/κρατήσεων")
+                    return redirect(url_for("book_display"))
                 mydb.connection.commit()
-                query = "CALL increase_available_books(%s)"
+                query = "CALL decrease_available_books(%s)"
                 cur.execute(query,(book_id,))
                 mydb.connection.commit()
                 cur.close()
-                return render_template('reserved_test.html')
+                flash("H Κρατηση για το βιβλίο επιβεβαιωθηκε.Μπορειτε να την δείτε στην καρτελα Mybooks. Μπορειτε να πατε να παρετε το βιβλίο σας")
+                return redirect(url_for("book_display"))
+            else:
+                flash("Δεν υπαρχουν διαθέσιμα αντιτυπα μπορείτε ομως να κανετε κράτηση")
+                return redirect(url_for("book_display"))
 
     else:
-        error_message = "Δεν εχετε επιστρεψει καποιο βιβλίο"
-        return render_template('non_valid_borrowing.html',error_message)
+        flash("Δεν εχετε επιστρεψει καποιο βιβλίο")
+        return redirect(url_for("book_display"))
 
     # ΓΕΝΙΚΑ ΕΔΩ ΠΡΕΠΕΙ ΝΑ ΚΑΝΟΥΜΕ ΠΟΛΛΑ QUERIES ΚΑΙ ΝΑ ΕΚΤΕΛΕΣΟΥΜΕ ΟΛΟΥΣ ΤΟΥΣ ΕΛΕΓΧΟΥΣ
     #1. 2 ΔΑΝΕΙΣΜΟΙ ΤΗΝ ΒΔΟΜΑΔΑ ΑΝΑ ΒΔΟΜΑΔΑ ΓΙΑ ΤΟΝ ΜΑΘΗΤΗ -> 1 εως 4 σε trigger

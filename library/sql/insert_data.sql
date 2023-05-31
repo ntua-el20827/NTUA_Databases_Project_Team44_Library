@@ -72,7 +72,7 @@ VALUES
 
 ---- books for school 1 
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES ('Pride and Prejudice','Stellar Books', 400, 1234567890, 'A classic romance novel exploring themes of societal norms, love, and prejudice in 19th-century England.', 4, 4, 'https://covers.openlibrary.org/b/id/12645114-M.jpg', 'English', 1);
+VALUES ('Pride and Prejudice','Stellar Books', 400, 1234567890, 'A classic romance novel exploring themes of societal norms, love, and prejudice in 19th-century England.', 1, 1, 'https://covers.openlibrary.org/b/id/12645114-M.jpg', 'English', 1);
 
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
 VALUES ('The Catcher in the Rye', 'BlueSky Publications', 320, 2345678901, 'A coming-of-age novel narrated by an angsty teenager who questions societal conventions and struggles with his own identity.', 3, 3, 'https://covers.openlibrary.org/b/id/6297651-M.jpg', 'English', 1);
@@ -1098,8 +1098,8 @@ INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
 VALUES (43, 63, 'Women in Love is a complex and introspective novel that delves into relationships and societal constraints.', '2023-01-15', '4');
 
 --- Κρατήσεις
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (1, 15, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+/* INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
+VALUES (1, 15, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL); */
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (2, 2, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
