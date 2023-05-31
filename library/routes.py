@@ -331,10 +331,12 @@ def mybooks():
     school_id = session['school_id']
     user_id = session['user_id']
     if request.method == 'POST':
+        book_status_id = request.form['book_status_id']
         book_id = request.form['book_id']
+        print(book_status_id)
         cur = mydb.connection.cursor()
-        query = "DELETE FROM book_status WHERE book_id = %s AND user_id = %s"
-        cur.execute(query,(book_id,user_id,))
+        query = "DELETE FROM book_status WHERE book_status_id = %s"
+        cur.execute(query,(book_status_id,))
         mydb.connection.commit()
         query = "CALL increase_available_books(%s)"
         cur.execute(query,(book_id,))
@@ -342,20 +344,20 @@ def mybooks():
         cur.close()
 
     cur = mydb.connection.cursor()
-    query = """ SELECT bs.book_id, b.title, b.book_language, b.ISBN, bs.approval_date
+    query = """ SELECT bs.book_id, b.title, b.book_language, b.ISBN, bs.approval_date, bs.book_status_id
 FROM book_status bs
 JOIN book b ON bs.book_id = b.book_id
 WHERE bs.user_id = %s AND bs.status = 'borrowed' """
 
     cur.execute(query,(user_id,))
     borrowed_books = cur.fetchall()
-    query = """ SELECT bs.book_id, b.title, b.book_language, b.ISBN, bs.request_date
+    query = """ SELECT bs.book_id, b.title, b.book_language, b.ISBN, bs.request_date, bs.book_status_id
 FROM book_status bs
 JOIN book b ON bs.book_id = b.book_id
-WHERE bs.user_id = %s AND bs.status = 'reerved' """
+WHERE bs.user_id = %s AND bs.status = 'reserved' """
     cur.execute(query,(user_id,))
     reserved_books = cur.fetchall()
-    query = """ SELECT bs.book_id, b.title,b.book_language, b.ISBN, bs.request_date
+    query = """ SELECT bs.book_id, b.title,b.book_language, b.ISBN, bs.request_date, bs.book_status_id
 FROM book_status bs
 JOIN book b ON bs.book_id = b.book_id
 WHERE bs.user_id = %s AND bs.status = 'queue' """
@@ -496,10 +498,11 @@ def rent():
             if (int(diathesima_antitipa[0])>0):
                 try:
                     query = "INSERT INTO book_status (book_id, user_id, status, request_date) VALUES (%s, %s, 'reserved', CURDATE())"
+                    ## ΑΛΛΑΓΗ ΝΑ ΒΑΛΛΩ ΤΟ book_status_id
                     cur.execute(query,(book_id,user_id,))  # Execute your INSERT statement here
                 except SQLTriggerError as e:
                     error_message = str(e)
-                    flash("Εχετε περάσει τον αριθμό δανεισμών/κρατήσεων")
+                    flash("Εχετε περάσει τον αριθμό δανεισμών")
                     return redirect(url_for("book_display"))
                 mydb.connection.commit()
                 query = "CALL decrease_available_books(%s)"
@@ -509,7 +512,7 @@ def rent():
                 flash("H Κρατηση για το βιβλίο επιβεβαιωθηκε.Μπορειτε να την δείτε στην καρτελα Mybooks. Μπορειτε να πατε να παρετε το βιβλίο σας")
                 return redirect(url_for("book_display"))
             else:
-                flash("Δεν υπαρχουν διαθέσιμα αντιτυπα μπορείτε ομως να κανετε κράτηση")
+                flash('Δεν υπαρχουν διαθέσιμα αντιτυπα μπορείτε ομως να κανετε <a href ="'+url_for('queue')+'">κράτηση</a>','info')
                 return redirect(url_for("book_display"))
 
     else:
@@ -523,6 +526,30 @@ def rent():
     #4. 1 ΚΡΑΤΗΣΗ ΤΗΝ ΕΒΔΟΜΑΔΑ ΑΝΑ ΕΒΔΟΑΜΔΑ ΓΙΑ ΤΟΝ ΚΑΘΗΓΗΤΗ
     #5. ΔΕΝ ΕΠΙΤΡΕΠΕΤΑΙ ΚΡΑΤΗΣΗ ΑΝ ΧΡΩΣΤΑΕΙ ΝΑ ΕΠΙΣΤΡΕΨΕΙ ΕΚΠΡΟΘΕΣΜΟ ΒΙΒΛΙΟ -> ΠΡΟΘΕΣΜΙΑ = 1 ΒΔΟΜΑΔΑ
     #6. ΔΕΝ ΕΠΙΤΡΕΠΕΤΑΙ ΚΡΑΤΗΣΗ ΑΝ ΕΧΕΙ ΉΔΗ ΔΑΝΕΙΣΤΕΙ ΑΥΤΟ ΤΟ ΒΙΒΛΙΟ / Η ΕΧΕΙ ΚΑΝΕΙ ΚΡΑΤΗΣΗ ΑΥΤΟ ΤΟ ΒΙΒΛΊΟ
+
+#Route για ουρα αναμονης
+@app.route('/queue',methods=['GET', 'POST'])
+def queue():
+    ISBN = session['ISBN']
+    school_id = session['school_id']
+    user_id = session['user_id']
+    role_name = session['role_name'] 
+    book_id = session['book_id']
+    cur = mydb.connection.cursor()
+    try:
+        query = "INSERT INTO book_status (book_id, user_id, status, request_date) VALUES (%s, %s, 'queue', CURDATE())"
+        ## ΑΛΛΑΓΗ ΝΑ ΒΑΛΛΩ ΤΟ book_status_id
+        cur.execute(query,(book_id,user_id,))  # Execute your INSERT statement here
+    except SQLTriggerError as e:
+        error_message = str(e)
+        flash("Εχετε περάσει τον αριθμό κρατήσεων")
+        return redirect(url_for("book_display"))
+    mydb.connection.commit()
+    cur.close()
+    flash("H Κρατηση για το βιβλίο επιβεβαιωθηκε.Μπορειτε να την δείτε στην καρτελα Mybooks. Εκει θα μπορείτε να δείτε ποτε θα μπορείτε να πάτε να πάρετε το βιβλίο σας ")
+    return redirect(url_for("book_display"))
+
+
 
 #route για επαναφορά στην σχολική βιβλιοθήκη
 @app.route('/back_to_school')
@@ -1118,6 +1145,7 @@ def school_admin_reservations():
         if action == 'accept':
             # Change the status to 'borrowed' in the 'book_status' table
             query = "UPDATE book_status SET status = 'borrowed', approval_date = %s WHERE book_id = %s AND user_id = %s "
+            ## ΑΛΛΑΓΗ ΝΑ ΒΑΛΛΩ ΤΟ book_status_id
             cur.execute(query, (datetime.now(),item_id, user_id,))
             mydb.connection.commit()
 

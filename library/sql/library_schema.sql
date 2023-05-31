@@ -31,8 +31,8 @@ CREATE TABLE school_phone(
   school_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (phone,school_id),
-  KEY fk_school_id (school_id), -- πιθανόν να μην χρειαζεται
-  CONSTRAINT fk_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
+  KEY fk_school_id (school_id), 
+  CONSTRAINT fk_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Table 'lib_user'
@@ -50,7 +50,7 @@ CREATE TABLE lib_user(
     last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id),
     KEY fk_user_school_id (school_id),
-    CONSTRAINT fk_user_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT fk_user_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8; 
 -- ισως: ON DELETE CASCADE 
 
@@ -71,7 +71,7 @@ CREATE TABLE book (
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (book_id),
   KEY fk_book_school_id (school_id),
-  CONSTRAINT fk_book_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT fk_book_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Table book_status
@@ -86,8 +86,8 @@ CREATE TABLE book_status (
   PRIMARY KEY (book_status_id),
   KEY fk_book_status_book_id (book_id),
   KEY fk_book_status_user_id (user_id),
-  CONSTRAINT fk_book_status_book_id FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT fk_book_status_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT fk_book_status_book_id FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_book_status_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -99,7 +99,7 @@ CREATE TABLE book_keywords (
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (keywords,book_id),
   KEY fk_book_keywords_book_id (book_id),
-  CONSTRAINT fk_book_keywords_book_id FOREIGN KEY(book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT fk_book_keywords_book_id FOREIGN KEY(book_id) REFERENCES book (book_id) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Table 'book_theme'
@@ -109,7 +109,7 @@ CREATE TABLE book_theme (
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (theme, book_id),
   KEY fk_book_theme_book_id (book_id),
-  CONSTRAINT fk_book_theme_book_id FOREIGN KEY(book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT fk_book_theme_book_id FOREIGN KEY(book_id) REFERENCES book (book_id) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Table 'book_author'
@@ -119,7 +119,7 @@ CREATE TABLE book_author (
 	last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (author,book_id),
   KEY fk_book_author_book_id (book_id),
-	CONSTRAINT fk_book_author_book_id FOREIGN KEY(book_id) REFERENCES book (book_id) ON DELETE RESTRICT ON UPDATE CASCADE
+	CONSTRAINT fk_book_author_book_id FOREIGN KEY(book_id) REFERENCES book (book_id) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Table 'review'
@@ -133,9 +133,9 @@ CREATE TABLE review (
   review_pending_flag ENUM('pending'),
   PRIMARY KEY (rev_id,user_id,book_id),
   KEY fk_review_user_id (user_id),
-  CONSTRAINT fk_review_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE RESTRICT,
+  CONSTRAINT fk_review_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE CASCADE,
   KEY fk_review_book_id (book_id),
-  CONSTRAINT fk_review_book_id FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE RESTRICT
+  CONSTRAINT fk_review_book_id FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --- Ειναι σωστο το primary key?
 
@@ -218,7 +218,27 @@ WHERE user_pending_flag = 'waiting';
  */
 
 
+DELIMITER //
 
+CREATE PROCEDURE decrease_available_books(IN _book_id INT)
+BEGIN
+    UPDATE book
+    SET number_of_available_books = number_of_available_books - 1
+    WHERE book_id = _book_id;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE increase_available_books(IN _book_id INT)
+BEGIN
+    UPDATE book
+    SET number_of_available_books = number_of_available_books + 1
+    WHERE book_id = _book_id;
+END //
+
+DELIMITER ;
 ---
 --- Triggers
 ---
@@ -265,6 +285,7 @@ DECLARE done INT DEFAULT FALSE;
       );
       IF _user_id IN (SELECT user_id FROM lib_user WHERE role_name='student') THEN
           IF borrow_count+reserved_count <2 THEN
+
             UPDATE book_status 
             SET status = 'reserved', request_date = CURRENT_DATE 
             WHERE book_id = NEW.book_id AND status = 'queue' AND user_id = _user_id
@@ -273,6 +294,7 @@ DECLARE done INT DEFAULT FALSE;
           END IF;
       ELSEIF _user_id IN (SELECT user_id FROM lib_user WHERE role_name='teacher' OR role_name = 'admin') THEN
         IF borrow_count+reserved_count <1 THEN
+            CALL decrease_available_books(NEW.book_id);
             UPDATE book_status 
             SET status = 'reserved', request_date = CURRENT_DATE 
             WHERE book_id = NEW.book_id AND status = 'queue' AND user_id = _user_id
@@ -420,24 +442,3 @@ CREATE INDEX idx_book_title ON book (title);
 ---
 --- Functions
 ---
-DELIMITER //
-
-CREATE PROCEDURE decrease_available_books(IN _book_id INT)
-BEGIN
-    UPDATE book
-    SET number_of_available_books = number_of_available_books - 1
-    WHERE book_id = _book_id;
-END //
-
-DELIMITER ;
-
-DELIMITER //
-
-CREATE PROCEDURE increase_available_books(IN _book_id INT)
-BEGIN
-    UPDATE book
-    SET number_of_available_books = number_of_available_books + 1
-    WHERE book_id = _book_id;
-END //
-
-DELIMITER ;

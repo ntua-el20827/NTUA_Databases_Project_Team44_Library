@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>School Admin - Query 1</title>
+  <title>My Books</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
@@ -71,8 +71,8 @@
                     <td>{{ item[4] }}</td>
                     <td>
                         <form method="POST" action="{{ url_for('mybooks') }}">
+                            <input type="hidden" name="book_status_id" value="{{ item[5] }}">
                             <input type="hidden" name="book_id" value="{{ item[0] }}">
-                            
                             <button type="submit" name="action" value="deny">Delete</button>
                         </form>
                     </td>
@@ -107,7 +107,7 @@
                     <td> {{ item[4] }} </td>
                     <td>
                         <form method="POST" action="{{ url_for('mybooks') }}">
-                            <input type="hidden" name="book_id" value="{{ item[0] }}">
+                            <input type="hidden" name="book_status_id" value="{{ item[5] }}">
                             
                             <button type="submit" name="action" value="deny">Deny </button>
                         </form>
