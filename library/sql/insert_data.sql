@@ -17,7 +17,7 @@ INSERT INTO school_phone (phone, school_id) VALUES
 
 --- superadmin
 INSERT INTO lib_user (user_pwd, user_name, school_id, role_name, user_email, user_firstname, user_lastname, user_date_of_birth)
-VALUES (1111, 'manosneo', 1, 'super_admin', 'manosaekara@gmail.com', 'manos', 'aek', '1924-01-01');
+VALUES (1111, 'manosneo', 1, 'super_admin', 'manosneof@gmail.com', 'manos', 'neof', '1924-01-01');
 --- 1 admin for every shcool 
 INSERT INTO lib_user (user_pwd, user_name, school_id, role_name, user_email, user_firstname, user_lastname, user_date_of_birth)
 VALUES (1234, 'george123', 1, 'admin', 'georgesmith@gmail.com', 'George', 'Smith', '1985-07-10'),
