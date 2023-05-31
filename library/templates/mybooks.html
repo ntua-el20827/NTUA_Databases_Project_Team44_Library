@@ -14,27 +14,104 @@
   
   <h2> Παρακατω φαινονται τα βιβλια που εχετε δανειστει στο παρελθον</h2>
   
+  {% if books %}
+    
+  <h2>Borrowed</h2>
+  <div class = "school_list">
+    <table>
+        <thead>
+            <tr>
+                <th>Book ID</th>
+                <th>Title</th>
+                <th>ISBN</th>
+                <th>Language</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in borrowed_books %}
+                <tr>
+                    <td>{{ item[0] }}</td>
+                    <td>{{ item[1] }}</td>
+                    <td>{{ item[2] }}</td>
+                    <td>{{ item[3] }}</td>
+                   
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+     {%endif%}
+
 
   {% if books %}
     
-    <div class ="school_list">
+  <h2>Reserved Items</h2>
+  <div class = "school_list">
     <table>
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Author</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for book in books %}
-        <tr>
-          <td>{{ book[0] }}</td>
-          <td>{{ book[1] }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
+        <thead>
+            <tr>
+                <th>Book ID</th>
+                <th>Title</th>
+                <th>ISBN</th>
+                <th>Language</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in reserved_books %}
+                <tr>
+                    <td>{{ item[0] }}</td>
+                    <td>{{ item[1] }}</td>
+                    <td>{{ item[2] }}</td>
+                    <td>{{ item[3] }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('mybooks') }}">
+                            <input type="hidden" name="book_id" value="{{ item[0] }}">
+                            
+                            <button type="submit" name="action" value="deny">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
-  {% endif %}
-  </div>
+    </div>
+     {%endif%}
+
+     {% if books %}
+    
+  <h2>Κρατησεις βιβλιων που δεν ειναι διαθεσιμα</h2>
+  <div class = "school_list">
+    <table>
+        <thead>
+            <tr>
+                <th>Book ID</th>
+                <th>Title</th>
+                <th>ISBN</th>
+                <th>Language</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in queued_books %}
+                <tr>
+                    <td>{{ item[0] }}</td>
+                    <td>{{ item[1] }}</td>
+                    <td>{{ item[2] }}</td>
+                    <td>{{ item[3] }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('mybooks') }}">
+                            <input type="hidden" name="book_id" value="{{ item[0] }}">
+                            
+                            <button type="submit" name="action" value="deny">Deny </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+     {%endif%}
   </div>
 </body>
