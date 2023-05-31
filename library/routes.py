@@ -168,25 +168,61 @@ def signup():
 #route για την αρχική σελίδα του σχολείου -> ολα τα βιβλία
 @app.route('/school', methods=['GET', 'POST'])
 def school():
+    no_results = False
+    school_id = session['school_id']
     if request.method == "POST":
-        ISBN = request.form['ISBN'] 
-        book_id = request.form['book_id'] 
-        session['ISBN'] = ISBN  
-        session['book_id'] = book_id  
-        return redirect(url_for('book_display'))
-    else:
+        search_text = request.form['search_text']
+        search_type = request.form['search_type']
         cur = mydb.connection.cursor()
-        school_id = session['school_id']
-        query = """ SELECT b.title, b.ISBN, b.book_image, b.book_id,
+
+        if search_type == 'title':
+            query = """ SELECT b.title, b.ISBN, b.book_image, b.book_id,
         GROUP_CONCAT(ba.author SEPARATOR ',') AS authors
         FROM book b
         JOIN book_author ba ON b.book_id = ba.book_id
-        WHERE b.school_id = %s 
+        WHERE b.school_id = %s AND b.title = %s
+        GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id"""
+            cur.execute(query, (school_id,str(search_text),))
+        elif search_type == 'category':
+            print("category")
+            query = """ SELECT b.title, b.ISBN, b.book_image, b.book_id,
+        GROUP_CONCAT(ba.author SEPARATOR ',') AS authors,
+        GROUP_CONCAT(bt.theme SEPARATOR ',') AS themes
+        FROM book b
+        JOIN book_author ba ON b.book_id = ba.book_id
+        LEFT JOIN book_theme bt ON b.book_id = bt.book_id
+        WHERE b.school_id = %s AND bt.theme = %s
+        GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id;
+        """
+            cur.execute(query, (school_id,str(search_text),))
+        elif search_type == 'author':
+            query = """SELECT b.title, b.ISBN, b.book_image, b.book_id,
+        GROUP_CONCAT(ba.author SEPARATOR ',') AS authors
+        FROM book b
+        JOIN book_author ba ON b.book_id = ba.book_id
+        WHERE b.school_id = %s AND ba.author = %s
         GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id """
-        cur.execute(query,(school_id,))
+            cur.execute(query, (school_id,str(search_text),))
         books = cur.fetchall()
         cur.close()
-        return render_template('schooltry2.html',books = books ) 
+        print(len(books))
+        if len(books) != 0:
+            return render_template('schooltry2.html',books = books ,no_results=False)
+        else:
+            no_results = True
+    
+    cur = mydb.connection.cursor()
+    query = """ SELECT b.title, b.ISBN, b.book_image, b.book_id,
+    GROUP_CONCAT(ba.author SEPARATOR ',') AS authors
+    FROM book b
+    JOIN book_author ba ON b.book_id = ba.book_id
+    WHERE b.school_id = %s 
+    GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id """
+    cur.execute(query,(school_id,))
+    books = cur.fetchall()
+    cur.close()
+    return render_template('schooltry2.html',books = books ,no_results=no_results) 
+
 
 @app.route('/request_library_form', methods=['GET', 'POST'])
 def request_library_form():
@@ -345,8 +381,16 @@ def edit_password():
     cur.close()
     return render_template('edit_password.html',user_info = user_info)
 #route για το βιβλίο που ο χρηστης επέλεξε
-@app.route('/book_display')
+@app.route('/book_display',methods=['GET', 'POST'])
 def book_display():
+    if request.method == "POST":
+        # Ο χρηστης πατησε το βιβλίο που θέλει
+        ISBN = request.form['ISBN'] 
+        book_id = request.form['book_id'] 
+        session['ISBN'] = ISBN  
+        session['book_id'] = book_id  
+        return redirect(url_for('book_display'))
+    # Εμφανιζει το βιβλίο που επέλεξε ο χρήστης
     ISBN = session['ISBN']
     book_id = session['book_id']
     school_id = session['school_id']
@@ -448,28 +492,48 @@ def review():
     
     if request.method == 'POST':
         review_text = request.form['review-text']
-        rating = request.form['rating']
-        print(f"Review Text: {review_text}")
-        print(f"Rating: {rating}")
-
-        cur = mydb.connection.cursor()
-        # Check if the user has already reviewed the book
-        query = "SELECT review_id FROM book_status WHERE user_id = %s AND book_id = %s"
-        cur.execute(query, (user_id, book_id))
-        existing_review = cur.fetchone()
-        cur.close()
-
-        if existing_review:
-            flash("You have already reviewed this book", "error")
-            return redirect(url_for("back_to_school"))
+        rating = request.form['likert']
 
         # Store the review and rating in the database
         cur = mydb.connection.cursor()
-        # Perform the necessary database insert/update operations to store the review
+        insert_query = """ INSERT INTO review (user_id, book_id, review_text, rev_date, rating,review_pending_flag) VALUES (%s, %s, %s, CURDATE(), %s,'pending') """
+        cur.execute(insert_query, (user_id,book_id,review_text,rating,))
+        mydb.connection.commit()
         cur.close()
 
-        flash("Your review is going to be checked", "success")
-        return redirect(url_for("review"))
+        flash("Η αξιολόγηση σας ειναι υπο έγκριση")
+        return redirect(url_for("book_display"))
+    
+    # Ελεγχος αν εχει δανειστει το βιβλίο για να μπροεί να κάνει αξιολογηση
+    cur = mydb.connection.cursor()
+    print(user_id)
+    print(book_id)
+    query = "SELECT book_status_id FROM book_status WHERE user_id = %s AND book_id = %s AND status = 'borrowed'"
+    cur.execute(query, (user_id, book_id))
+    existing_borrowing = cur.fetchone()
+    cur.close()
+    if existing_borrowing == None:
+        flash("Δεν εχετε δανειστει αυτο το βιβλίο για να μπορείτε να το αξιολογήσετε")
+        return redirect(url_for("book_display"))
+    # Ελεγχος αν εχει ήδη αξιολογήσει το βιβλίο
+    cur = mydb.connection.cursor()
+    #Αν ειναι pending
+    query = "SELECT rev_id FROM review WHERE user_id = %s AND book_id = %s AND review_pending_flag='pending'"
+    cur.execute(query, (user_id, book_id))
+    existing_review = cur.fetchone()
+    cur.close()
+    if existing_review:
+        flash("Η αξιολογηση σας ειναι υπο εγκριση")
+        return redirect(url_for("book_display"))
+    # Check if the user has already reviewed the book
+    cur = mydb.connection.cursor()
+    query = "SELECT rev_id FROM review WHERE user_id = %s AND book_id = %s"
+    cur.execute(query, (user_id, book_id))
+    existing_review = cur.fetchone()
+    cur.close()
+    if existing_review:
+        flash("Εχετε ηδη αξιολογήσει αυτό το βιβλίο")
+        return redirect(url_for("book_display"))
     role_name = session['role_name']
     is_admin = role_name == 'admin' 
     return render_template("review_test2.html", is_admin=is_admin)
@@ -922,6 +986,7 @@ WHERE u.school_id = %s"""
 # Extra Route για να ελεγξει αιτήσεις αξιολόγησης 
 @app.route('/school_admin_reviews', methods=['GET', 'POST'])
 def school_admin_reviews():
+    school_id = session['school_id']
     if request.method == 'POST':
         application_id = request.form['application_id']
         action = request.form['action']
@@ -933,22 +998,24 @@ def school_admin_reviews():
             # Insert the review application into the 'review' table
             query = "INSERT INTO review (application_id) VALUES (%s)"
             cur.execute(query, (application_id,))
-            mydb.commit()
+            mydb.connection.commit()
         elif action == 'deny':
             # Delete the review application from the 'review_applications' view
             query = "DELETE FROM review_applications WHERE application_id = %s"
             cur.execute(query, (application_id,))
-            mydb.commit()
+            mydb.connection.commit()
 
         cur.close()
-        mydb.close()
 
     # Connect to the database to fetch the review applications
     cur = mydb.connection.cursor()
 
     # Fetch the review applications from the 'review_applications' view
-    query = "SELECT * FROM review_applications"
-    cur.execute(query)
+    query = """ SELECT r.*
+FROM review r
+JOIN lib_user u ON r.user_id = u.user_id
+WHERE r.review_pending_flag = 'pending' AND u.school_id = %s """
+    cur.execute(query,(school_id,))
     review_applications = cur.fetchall()
     cur.close()
 

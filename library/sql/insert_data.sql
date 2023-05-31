@@ -920,7 +920,7 @@ INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, 
 VALUES (1, 2, 'borrowed', '2023-05-01', '2023-05-04', '2023-05-06');
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (2, 5, 'borrowed', '2023-05-02', '2023-05-05', '2023-05-07');
+VALUES (1, 15, 'borrowed', '2023-05-02', '2023-05-05', '2023-05-07');
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (3, 6, 'borrowed', '2023-05-03', '2023-05-06', '2023-05-08');
@@ -961,7 +961,7 @@ VALUES (14, 33, 'borrowed', '2023-05-14', '2023-05-17', '2023-05-19');
 --- Reviews
 --- School 1
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (2, 1, 'Pride and Prejudice is a classic love story with memorable characters.', '2022-09-10', '4');
+VALUES (5, 1, 'Pride and Prejudice is a classic love story with memorable characters.', '2022-09-10', '4');
 
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
 VALUES (5, 7, 'To the Lighthouse is a beautifully written book with poetic prose.', '2022-11-20', '5');
