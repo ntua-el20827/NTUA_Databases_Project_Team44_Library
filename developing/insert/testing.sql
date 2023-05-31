@@ -39,6 +39,14 @@ CALL increase_available_books(6);
 
 select * from book_status where user_id=6 OR user_id=5;
 
+---3
+INSERT INTO book_status (book_id, user_id, status, request_date)
+VALUES (1, 15, 'reserved', '2023-05-29');
+CALL decrease_available_books(1);
+INSERT INTO book_status (book_id, user_id, status, request_date)
+VALUES (1, 16, 'queue', '2023-05-30');
+CALL increase_available_books(1);
+
 
 -- queries
 INSERT INTO book_author (author, book_id)

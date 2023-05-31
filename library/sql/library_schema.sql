@@ -86,7 +86,7 @@ CREATE TABLE book_status (
   PRIMARY KEY (book_status_id),
   KEY fk_book_status_book_id (book_id),
   KEY fk_book_status_user_id (user_id),
-  CONSTRAINT fk_book_status_book_id FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_book_status_book_id FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE CASCADE,
   CONSTRAINT fk_book_status_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -285,7 +285,6 @@ DECLARE done INT DEFAULT FALSE;
       );
       IF _user_id IN (SELECT user_id FROM lib_user WHERE role_name='student') THEN
           IF borrow_count+reserved_count <2 THEN
-
             UPDATE book_status 
             SET status = 'reserved', request_date = CURRENT_DATE 
             WHERE book_id = NEW.book_id AND status = 'queue' AND user_id = _user_id
@@ -294,7 +293,6 @@ DECLARE done INT DEFAULT FALSE;
           END IF;
       ELSEIF _user_id IN (SELECT user_id FROM lib_user WHERE role_name='teacher' OR role_name = 'admin') THEN
         IF borrow_count+reserved_count <1 THEN
-            CALL decrease_available_books(NEW.book_id);
             UPDATE book_status 
             SET status = 'reserved', request_date = CURRENT_DATE 
             WHERE book_id = NEW.book_id AND status = 'queue' AND user_id = _user_id
@@ -309,6 +307,23 @@ END$$
 
 DELIMITER ;
 
+
+DELIMITER $$
+CREATE TRIGGER yolo
+AFTER UPDATE ON book_status
+FOR EACH ROW
+BEGIN
+  IF NEW.status = 'reserved' AND OLD.status = 'queue' THEN
+    DISABLE TRIGGER tr_book_status_queue_to_reserved ON book;
+    UPDATE book SET number_of_available_books = number_of_available_books - 1 WHERE book_id = NEW.book_id;
+    ENABLE TRIGGER tr_book_status_queue_to_reserved ON book;
+  END IF;
+END$$
+DELIMITER ;
+
+
+
+--------
 
 DELIMITER $$
 CREATE TRIGGER check_borrow_limit
