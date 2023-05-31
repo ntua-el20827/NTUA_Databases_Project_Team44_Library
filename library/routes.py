@@ -177,7 +177,12 @@ def school():
     else:
         cur = mydb.connection.cursor()
         school_id = session['school_id']
-        query = "SELECT title, ISBN, book_image, book_id FROM book WHERE school_id = %s" 
+        query = """ SELECT b.title, b.ISBN, b.book_image, b.book_id,
+        GROUP_CONCAT(ba.author SEPARATOR ',') AS authors
+        FROM book b
+        JOIN book_author ba ON b.book_id = ba.book_id
+        WHERE b.school_id = %s 
+        GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id """
         cur.execute(query,(school_id,))
         books = cur.fetchall()
         cur.close()
