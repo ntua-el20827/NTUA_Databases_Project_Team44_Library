@@ -2,33 +2,82 @@
 <html>
 <head>
     <title>Review Applications</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="This is an awesome website">
+    <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}"> 
+    <style>
+        .review-container {
+          width: 500px;
+          margin: 0 auto;
+        }
+    
+        .review {
+          background-color: #687bd1;
+          padding: 10px;
+          margin-bottom: 10px;
+        }
+    
+        .review .username {
+          font-weight: bold;
+        }
+    
+        .review .date {
+          color: #888;
+          font-size: 0.8em;
+        }
+    
+        .review .content {
+          margin-top: 5px;
+        }
+      </style>
+      </style>
+      <script>
+        function confirmLogout() {
+          var result = confirm("Are you sure you want to logout?");
+          if (result) {
+            window.location.href = "{{ url_for('logout') }}";
+          }
+        }
+      </script>
 </head>
-<body>
-    <h1>Review Applications</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Application ID</th>
-                <th>Application Details</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for application in review_applications %}
-                <tr>
-                    <td>{{ application[0] }}</td>
-                    <td>{{ application[1] }}</td>
-                    <td>
-                        <form method="POST" action="{{ url_for('school_admin_reviews') }}">
-                            <input type="hidden" name="application_id" value="{{ application[0] }}">
-                            <button type="submit" name="action" value="accept">Accept</button>
-                            <button type="submit" name="action" value="deny">Deny</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+
+<body>
+    <div class="topnav">
+        <a href="{{ url_for('school_admin') }}">Επιστροφή στη σχολική βιβλιοθήκη</a>  |
+       
+        <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
+    </div>
+    <br> 
+    <div class="welcome">
+    <h2>Αξιολογήσεις Χρηστών</h2>
+    </div>
+    
+
+{% for application in review_applications %}
+  <div class="review-container">
+    <div class="review">
+        <div class="username">Usernname: {{application[0]}} </div>
+    
+        <div class="content"> Review: {{application[1]}} </div>
+        <div class="rating">
+            <span class="label">Rating: </span>
+            <span class="value">{{application[2]}}</span>
+        <br>
+            <span>
+                <form method ="POST" action ="{{url_for('school_admin_reviews')}}">
+                <input type="hidden" name="user_id" value="{{application[3]}}">
+                <input type="hidden" name="book_id" value="{{application[4]}}">
+                <button type="submit" name="action" value="accept">Accept</button>
+                <button type="submit" name="action" value="deny">Deny</button>
+            </form>
+            </span>
+        </div>
+    </div>
+  </div>
+{% endfor %}
+
+
 </body>
+
 </html>

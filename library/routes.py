@@ -988,21 +988,23 @@ WHERE u.school_id = %s"""
 def school_admin_reviews():
     school_id = session['school_id']
     if request.method == 'POST':
-        application_id = request.form['application_id']
+        book_id = request.form['book_id']
+        user_id = request.form['user_id']
         action = request.form['action']
 
         # Connect to the database
         cur = mydb.connection.cursor()
 
         if action == 'accept':
+            print("inside sccept")
             # Insert the review application into the 'review' table
-            query = "INSERT INTO review (application_id) VALUES (%s)"
-            cur.execute(query, (application_id,))
+            query = "UPDATE review SET review_pending_flag=NULL WHERE user_id = %s AND book_id=%s"
+            cur.execute(query, (user_id,book_id))
             mydb.connection.commit()
         elif action == 'deny':
             # Delete the review application from the 'review_applications' view
-            query = "DELETE FROM review_applications WHERE application_id = %s"
-            cur.execute(query, (application_id,))
+            query = "DELETE FROM review WHERE user_id = %s AND book_id=%s"
+            cur.execute(query, (user_id,book_id))
             mydb.connection.commit()
 
         cur.close()
@@ -1011,10 +1013,10 @@ def school_admin_reviews():
     cur = mydb.connection.cursor()
 
     # Fetch the review applications from the 'review_applications' view
-    query = """ SELECT r.*
+    query = """ SELECT u.user_name, r.review_text, r.rating, u.user_id, r.book_id
 FROM review r
 JOIN lib_user u ON r.user_id = u.user_id
-WHERE r.review_pending_flag = 'pending' AND u.school_id = %s """
+WHERE r.review_pending_flag = 'pending' AND u.school_id = %s"""
     cur.execute(query,(school_id,))
     review_applications = cur.fetchall()
     cur.close()
