@@ -342,20 +342,20 @@ def mybooks():
         cur.close()
 
     cur = mydb.connection.cursor()
-    query = """ SELECT bs.book_id, b.title, b.book_language, b.ISBN
+    query = """ SELECT bs.book_id, b.title, b.book_language, b.ISBN, bs.approval_date
 FROM book_status bs
 JOIN book b ON bs.book_id = b.book_id
 WHERE bs.user_id = %s AND bs.status = 'borrowed' """
 
     cur.execute(query,(user_id,))
     borrowed_books = cur.fetchall()
-    query = """ SELECT bs.book_id, b.title, b.book_language, b.ISBN
+    query = """ SELECT bs.book_id, b.title, b.book_language, b.ISBN, bs.request_date
 FROM book_status bs
 JOIN book b ON bs.book_id = b.book_id
 WHERE bs.user_id = %s AND bs.status = 'reerved' """
     cur.execute(query,(user_id,))
     reserved_books = cur.fetchall()
-    query = """ SELECT bs.book_id, b.title,b.book_language, b.ISBN
+    query = """ SELECT bs.book_id, b.title,b.book_language, b.ISBN, bs.request_date
 FROM book_status bs
 JOIN book b ON bs.book_id = b.book_id
 WHERE bs.user_id = %s AND bs.status = 'queue' """
