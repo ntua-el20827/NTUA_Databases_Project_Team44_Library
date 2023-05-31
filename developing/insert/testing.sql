@@ -38,3 +38,9 @@ VALUES (6, 5, 'queue', '2023-05-30');
 CALL increase_available_books(6);
 
 select * from book_status where user_id=6 OR user_id=5;
+
+
+-- queries
+INSERT INTO book_author (author, book_id)
+VALUES
+  ('Edith Wharton', 62),('Edith Wharton', 63),('Edith Wharton', 64),('Edith Wharton', 65),('Edith Wharton', 66);
