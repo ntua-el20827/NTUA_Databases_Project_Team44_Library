@@ -1075,6 +1075,35 @@ WHERE r.review_pending_flag = 'pending' AND u.school_id = %s"""
     # Render the template with the review applications
     return render_template('school_admin_reviews.html', review_applications=review_applications)
 
+@app.route('/delete_users' , methods = ['GET', 'POST'])
+def delete_users():
+    if request.method == 'POST':
+        item_id = request.form['item_id']
+        user_id = request.form['user_id']
+        action = request.form['action']
+
+
+        # Delete the item from the 'book_status' table
+        query = "DELETE FROM lib_user WHERE user_id = %s"
+        cur.execute(query, (user_id),)
+        mydb.connection.commit()
+        
+        cur.execute(query,(int(item_id),))
+        mydb.connection.commit()
+
+        cur.close()
+
+    # Connect to the database to fetch the data
+    cur = mydb.connection.cursor()
+
+    # Fetch data from the 'book_status' table with status='reserved'
+    query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'reserved'"
+    cur.execute(query)
+    reserved_items = cur.fetchall()
+    cur.close()
+
+    # Render the template with the data
+    return render_template('school_admin_reservations.html', reserved_items=reserved_items)
 # Extra Route για να ελεγξει κρατήσεις -> να τις κανει δανεισμους [ΟΚ]
 @app.route('/school_admin_reservations', methods=['GET', 'POST'])
 def school_admin_reservations():
