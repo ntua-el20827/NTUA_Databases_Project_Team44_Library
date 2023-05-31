@@ -113,13 +113,17 @@ WHERE bs.status = 'borrowed' AND bs.return_date IS NULL AND u.school_id = <schoo
 */
 
 ---3.2.3 Average of reviews by borrower and book theme(search criteria: user/book theme)
-SELECT CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bt.theme, AVG(r.rating) AS avg_rating
-FROM lib_user u
-INNER JOIN review r ON u.user_id = r.user_id
-INNER JOIN book b ON r.book_id = b.book_id
-INNER JOIN book_theme bt ON b.book_id = bt.book_id
-WHERE u.school_id = <school_id>
-GROUP BY u.user_id, bt.theme;
+---Average by user
+SELECT lib_user.user_id, CONCAT(lib_user.user_firstname, ' ', lib_user.user_lastname) as full_name, AVG(review.rating) as avg_rating
+FROM lib_user
+JOIN review ON lib_user.user_id = review.user_id
+GROUP BY lib_user.user_id;
+---Average by theme
+SELECT bt.theme, AVG(r.rating) as avg_rating
+FROM book_theme bt
+JOIN book b ON bt.book_id = b.book_id
+JOIN review r ON b.book_id = r.book_id
+GROUP BY bt.theme;
 
 
 ---3.3 User Queries
