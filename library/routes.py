@@ -326,6 +326,21 @@ def user_profile():
         return render_template('super_admin_user_profile.html',user_info = user_info,school_info=school_info,can_edit=can_edit)
     return render_template('profile.html',user_info = user_info,school_info=school_info,can_edit=can_edit)
 
+@app.route('/mybooks', methods=['GET', 'POST'])
+def mybooks():
+    school_id = session['school_id']
+    user_id = session['user_id']
+    cur = mydb.connection.cursor()
+    query = "SELECT * FROM book_status WHERE user_id = %s AND status = 'borrowed'" 
+    cur.execute(query,(user_id,))
+    borrowed_books = cur.fetchall()
+    query = "SELECT * FROM book_status WHERE user_id = %s AND status = 'reserved'" 
+    cur.execute(query,(user_id,))
+    reserved_books = cur.fetchall()
+    cur.close()
+    return render_template("mybooks.html",borrowed_books=borrowed_books,reserved_books=reserved_books)
+
+
 @app.route('/edit_profile',methods=['GET', 'POST'])
 def edit_profile():
     if request.method == 'POST':
