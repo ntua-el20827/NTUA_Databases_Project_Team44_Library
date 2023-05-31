@@ -330,15 +330,39 @@ def user_profile():
 def mybooks():
     school_id = session['school_id']
     user_id = session['user_id']
+    if request.method == 'POST':
+        book_id = request.form['book_id']
+        cur = mydb.connection.cursor()
+        query = "DELETE FROM book_status WHERE book_id = %s AND user_id = %s"
+        cur.execute(query,(book_id,user_id,))
+        mydb.connection.commit()
+        query = "CALL increase_available_books(%s)"
+        cur.execute(query,(book_id,))
+        mydb.connection.commit()
+        cur.close()
+
     cur = mydb.connection.cursor()
-    query = "SELECT * FROM book_status WHERE user_id = %s AND status = 'borrowed'" 
+    query = """ SELECT bs.book_id, b.title, b.language, b.ISBN
+FROM book_status bs
+JOIN book b ON bs.book_id = b.book_id
+WHERE bs.user_id = %s AND bs.status = 'borrowed' """
+
     cur.execute(query,(user_id,))
     borrowed_books = cur.fetchall()
-    query = "SELECT * FROM book_status WHERE user_id = %s AND status = 'reserved'" 
+    query = """ SELECT bs.book_id, b.title, b.language, b.ISBN
+FROM book_status bs
+JOIN book b ON bs.book_id = b.book_id
+WHERE bs.user_id = %s AND bs.status = 'reerved' """
     cur.execute(query,(user_id,))
     reserved_books = cur.fetchall()
+    query = """ SELECT bs.book_id, b.title,b.language, b.ISBN
+FROM book_status bs
+JOIN book b ON bs.book_id = b.book_id
+WHERE bs.user_id = %s AND bs.status = 'queue' """
+    cur.execute(query,(user_id,))
+    queued_books = cur.fetchall()
     cur.close()
-    return render_template("mybooks.html",borrowed_books=borrowed_books,reserved_books=reserved_books)
+    return render_template("mybooks.html",borrowed_books=borrowed_books,reserved_books=reserved_books,queued_books=queued_books)
 
 
 @app.route('/edit_profile',methods=['GET', 'POST'])
