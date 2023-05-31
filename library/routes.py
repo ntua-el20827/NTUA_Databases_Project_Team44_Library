@@ -1104,33 +1104,28 @@ WHERE r.review_pending_flag = 'pending' AND u.school_id = %s"""
 
 @app.route('/delete_users' , methods = ['GET', 'POST'])
 def delete_users():
+    school_id = session['school_id']
     if request.method == 'POST':
-        item_id = request.form['item_id']
+        cur = mydb.connection.cursor()
         user_id = request.form['user_id']
-        action = request.form['action']
-
-
         # Delete the item from the 'book_status' table
         query = "DELETE FROM lib_user WHERE user_id = %s"
-        cur.execute(query, (user_id),)
+        cur.execute(query, (user_id,))
         mydb.connection.commit()
-        
-        cur.execute(query,(int(item_id),))
-        mydb.connection.commit()
-
         cur.close()
 
     # Connect to the database to fetch the data
     cur = mydb.connection.cursor()
 
     # Fetch data from the 'book_status' table with status='reserved'
-    query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'reserved'"
-    cur.execute(query)
-    reserved_items = cur.fetchall()
+    query = """SELECT user_id, user_name, user_firstname, user_lastname, role_name FROM lib_user WHERE school_id = %s AND role_name IN ('student','teacher') 
+    ORDER BY user_lastname"""
+    cur.execute(query, (school_id,))
+    users = cur.fetchall()
     cur.close()
 
     # Render the template with the data
-    return render_template('school_admin_reservations.html', reserved_items=reserved_items)
+    return render_template('delete_users.html', users=users)
 # Extra Route για να ελεγξει κρατήσεις -> να τις κανει δανεισμους [ΟΚ]
 @app.route('/school_admin_reservations', methods=['GET', 'POST'])
 def school_admin_reservations():
@@ -1278,7 +1273,12 @@ def school_admin_book_return():
     cur = mydb.connection.cursor()
 
     # Fetch data from the 'book_status' table with status='booked' and return_date=NULL
-    query = "SELECT * FROM book_status WHERE status = 'borrowed' AND return_date IS NULL"
+    query = """SELECT bs.book_id, b.title, bs.user_id, u.user_firstname, u.user_lastname
+    FROM book_status bs
+    JOIN book b ON bs.book_id = b.book_id
+    JOIN lib_user u ON bs.user_id = u.user_id
+    WHERE bs.status = 'borrowed' AND bs.return_date IS NULL
+    ORDER BY u.user_lastname"""
     cur.execute(query)
     booked_items = cur.fetchall()
     cur.close()
