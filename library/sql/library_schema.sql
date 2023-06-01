@@ -139,12 +139,13 @@ CREATE TABLE review (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --- Ειναι σωστο το primary key?
 
-/*
+
 ---
 --- Events
 ---
 
 ---Every day the db needs to check whether a queue deadline has expired
+DELIMITER $$
 CREATE EVENT delete_from_queue
 ON SCHEDULE EVERY 1 DAY
 DO
@@ -153,19 +154,61 @@ BEGIN
     DELETE FROM book_status
     WHERE status = 'queue'
     AND request_date < DATE_SUB(NOW(), INTERVAL 1 WEEK);
-END;
+END $$
+DELIMITER ;
 
 ---Every day the db needs to check whether a reservation deadline has expired
+DELIMITER $$
+
 CREATE EVENT delete_old_reservations
 ON SCHEDULE EVERY 1 DAY
-DO`
+DO
 BEGIN
+    -- Declare variables
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE book_id INT;
+    DECLARE function_result BOOLEAN;
+
+    -- Cursor to fetch book_id values
+    DECLARE cur CURSOR FOR
+        SELECT book_id
+        FROM book_status
+        WHERE status = 'reserved'
+        AND request_date < DATE_SUB(NOW(), INTERVAL 1 WEEK);
+
+    -- Declare handlers
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
     -- Delete old reservations
     DELETE FROM book_status
     WHERE status = 'reserved'
     AND request_date < DATE_SUB(NOW(), INTERVAL 1 WEEK);
-END;
-*/
+
+    -- Open cursor
+    OPEN cur;
+
+    -- Fetch book_id values and call function/procedure
+    read_loop: LOOP
+        FETCH cur INTO book_id;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        -- Call your function with book_id as a parameter
+        SET function_result = check_book_update(book_id);
+
+        IF function_result = 0 THEN
+            -- Call your procedure with book_id as a parameter
+            CALL increase_available_books(book_id);
+        END IF;
+    END LOOP;
+
+    -- Close cursor
+    CLOSE cur;
+END$$
+
+DELIMITER ;
+
 
 ---
 --- Views
@@ -182,6 +225,16 @@ FROM school s
 JOIN school_phone sp ON s.school_id = sp.school_id
 JOIN lib_user lu ON s.school_id = lu.school_id
 WHERE s.pending_flag = 'pending' AND lu.user_pending_flag = 'waiting' AND lu.role_name = 'admin';
+
+-- School_application
+CREATE VIEW school_applications AS
+SELECT s.school_id, s.school_name, s.city, s.street, s.postal_code, s.email,
+       s.principal_lastname, s.principal_firstname, s.school_admin_lastname, s.school_admin_firstname,
+       u.user_id, u.user_name, u.user_email, u.user_firstname, u.user_lastname, u.user_date_of_birth
+FROM school s
+JOIN lib_user u ON s.school_id = u.school_id
+WHERE s.pending_flag = 'pending' AND u.user_pending_flag = 'waiting';
+
 
 ---only include reviews submitted by users with the student role,
 ---and with a NULL rev_date indicating that they require approval
