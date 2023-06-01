@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Verify School Application</title>
+    <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
     <style>
         .accept-button {
             background-color: green;
@@ -15,15 +16,21 @@
     </style>
 </head>
 <body>
+    <div class="topnav">
+        <a href="{{ url_for('super_admin') }}" >Επιστροφη στην αρχικη </a>
+        <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
+    </div>
     <h1>Verify School Application</h1>
 
     <h2>Application Details</h2>
-    <p><strong>Application ID:</strong> {{ application[0] }}</p>
+    <p><strong>School ID:</strong> {{ application[0] }}</p>
     <p><strong>School Name:</strong> {{ application[1] }}</p>
-    <p><strong>User First Name:</strong> {{ application[2] }}</p>
-    <p><strong>User Last Name:</strong> {{ application[3] }}</p>
+    <p><strong>Admin First Name:</strong> {{ application[2] }}</p>
+    <p><strong>Admin Last Name:</strong> {{ application[3] }}</p>
 
-    <form method="POST" action="{{ url_for('verify_school_application', application_id=application[0]) }}">
+    <form method="POST" action="{{ url_for('verify_school_application')}}">
+        <input type="hidden" name="school_id" value="{{ application[0] }}">
+        <input type="hidden" name="user_id" value="{{ application[4] }}">
         <button type="submit" name="action" value="accept" class="accept-button">Accept</button>
         <button type="submit" name="action" value="delete" class="delete-button">Delete</button>
     </form>
