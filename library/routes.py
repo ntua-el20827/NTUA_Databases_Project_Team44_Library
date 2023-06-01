@@ -338,8 +338,13 @@ def mybooks():
         query = "DELETE FROM book_status WHERE book_status_id = %s"
         cur.execute(query,(book_status_id,))
         mydb.connection.commit()
-        query = "CALL increase_available_books(%s)"
+        query = "Select check_book_update(%s) as update_occured;"
         cur.execute(query,(book_id,))
+        update_occured = cur.fetchone()
+        if update_occured==0:
+            query = "CALL increase_available_books(%s)"
+            cur.execute(query,(book_id,))
+            mydb.connection.commit()
         mydb.connection.commit()
         cur.close()
 
@@ -548,7 +553,6 @@ def queue():
     cur.close()
     flash("H Κρατηση για το βιβλίο επιβεβαιωθηκε.Μπορειτε να την δείτε στην καρτελα Mybooks. Εκει θα μπορείτε να δείτε ποτε θα μπορείτε να πάτε να πάρετε το βιβλίο σας ")
     return redirect(url_for("book_display"))
-
 
 
 #route για επαναφορά στην σχολική βιβλιοθήκη
@@ -1102,6 +1106,7 @@ WHERE r.review_pending_flag = 'pending' AND u.school_id = %s"""
     # Render the template with the review applications
     return render_template('school_admin_reviews.html', review_applications=review_applications)
 
+# Extra route για αν διαγράφει χρήστες
 @app.route('/delete_users' , methods = ['GET', 'POST'])
 def delete_users():
     school_id = session['school_id']
@@ -1126,6 +1131,7 @@ def delete_users():
 
     # Render the template with the data
     return render_template('delete_users.html', users=users)
+
 # Extra Route για να ελεγξει κρατήσεις -> να τις κανει δανεισμους [ΟΚ]
 @app.route('/school_admin_reservations', methods=['GET', 'POST'])
 def school_admin_reservations():
@@ -1150,8 +1156,13 @@ def school_admin_reservations():
             query = "DELETE FROM book_status WHERE book_id = %s"
             cur.execute(query, (int(item_id),))
             mydb.connection.commit()
-            query = "CALL increase_available_books(%s)"
+            query = "Select check_book_update(%s) as update_occured;"
             cur.execute(query,(int(item_id),))
+            update_occured = cur.fetchone()
+            if update_occured==0:
+                query = "CALL increase_available_books(%s)"
+                cur.execute(query,(int(item_id),))
+                mydb.connection.commit()
             mydb.connection.commit()
 
         cur.close()
@@ -1264,9 +1275,13 @@ def school_admin_book_return():
         query = "UPDATE book_status SET return_date = %s WHERE item_id = %s AND  user_id = %s"
         cur.execute(query, (current_date, item_id))
         mydb.connection.commit()
-        query = "CALL increase_available_books(%s)"
+        query = "Select check_book_update(%s) as update_occured;"
         cur.execute(query,(int(item_id),))
-        mydb.connection.commit()
+        update_occured = cur.fetchone()
+        if update_occured==0:
+            query = "CALL increase_available_books(%s)"
+            cur.execute(query,(int(item_id),))
+            mydb.connection.commit()
         cur.close()
 
     # Connect to the database to fetch the data

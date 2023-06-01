@@ -45,7 +45,11 @@ VALUES (1, 15, 'reserved', '2023-05-29');
 CALL decrease_available_books(1);
 INSERT INTO book_status (book_id, user_id, status, request_date)
 VALUES (1, 16, 'queue', '2023-05-30');
+delete from book_status where book_id=1 AND status = 'reserved';
+
+select number_of_available_books from book where book_id=1;
 CALL increase_available_books(1);
+Select check_book_update(1) as update_occured;
 
 
 -- queries

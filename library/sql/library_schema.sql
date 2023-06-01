@@ -158,7 +158,7 @@ END;
 ---Every day the db needs to check whether a reservation deadline has expired
 CREATE EVENT delete_old_reservations
 ON SCHEDULE EVERY 1 DAY
-DO
+DO`
 BEGIN
     -- Delete old reservations
     DELETE FROM book_status
@@ -247,7 +247,7 @@ DELIMITER ;
 --- εφόσον ο χρήστης που εχει αιτηθεί κράτηση δεν υπερβαίνει τα όρια του δανεισμού. Σε αυτή την περίπτωση επιλέγεται ο επόμενος στην σειρά 
 --- προτεραιότητας χρηστης.
 --- Ο χρήστης ενημερώνεται για αυτή την αλλαγή απο την καρτέλα MyBooks στο προφιλ του.
-DELIMITER $$
+/* DELIMITER $$
 CREATE TRIGGER tr_book_status_queue_to_reserved 
 AFTER UPDATE ON book
 FOR EACH ROW
@@ -305,21 +305,7 @@ DECLARE done INT DEFAULT FALSE;
   END IF;
 END$$
 
-DELIMITER ;
-
-
-DELIMITER $$
-CREATE TRIGGER yolo
-AFTER UPDATE ON book_status
-FOR EACH ROW
-BEGIN
-  IF NEW.status = 'reserved' AND OLD.status = 'queue' THEN
-    DISABLE TRIGGER tr_book_status_queue_to_reserved ON book;
-    UPDATE book SET number_of_available_books = number_of_available_books - 1 WHERE book_id = NEW.book_id;
-    ENABLE TRIGGER tr_book_status_queue_to_reserved ON book;
-  END IF;
-END$$
-DELIMITER ;
+DELIMITER ; */
 
 
 
@@ -457,3 +443,75 @@ CREATE INDEX idx_book_title ON book (title);
 ---
 --- Functions
 ---
+
+DELIMITER $$
+CREATE FUNCTION check_book_update(_book_id INT) RETURNS BOOLEAN
+BEGIN
+    DECLARE borrow_count INT;
+    DECLARE reserved_count INT;
+    DECLARE _user_id INT UNSIGNED;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE update_occurred BOOLEAN DEFAULT FALSE;
+    
+    DECLARE cur CURSOR FOR
+      SELECT user_id AS _user_id FROM book_status 
+      WHERE book_id = _book_id AND status = 'queue' 
+      ORDER BY request_date;
+      
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+      
+    IF (SELECT number_of_available_books FROM book WHERE book_id = _book_id) = 0 THEN 
+
+        OPEN cur;
+        
+        read_loop: LOOP
+          FETCH cur INTO _user_id;
+          IF done THEN
+            LEAVE read_loop;
+          END IF;
+          
+          SET borrow_count = (
+            SELECT COUNT(*) AS count
+            FROM book_status
+            WHERE user_id = _user_id
+              AND status IN ('borrowed')
+              AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+          );
+          
+          SET reserved_count = (
+            SELECT COUNT(*) AS count
+            FROM book_status
+            WHERE user_id = _user_id
+              AND status IN ('reserved')
+              AND request_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+              LIMIT 1
+          );
+          
+          IF _user_id IN (SELECT user_id FROM lib_user WHERE role_name='student') THEN
+              IF borrow_count + reserved_count < 2 THEN
+                UPDATE book_status 
+                SET status = 'reserved', request_date = CURRENT_DATE 
+                WHERE book_id = _book_id AND status = 'queue' AND user_id = _user_id
+                ORDER BY request_date;
+                SET done = TRUE;
+                SET update_occurred = TRUE;
+              END IF;
+          ELSEIF _user_id IN (SELECT user_id FROM lib_user WHERE role_name='teacher' OR role_name = 'admin') THEN
+            IF borrow_count + reserved_count < 1 THEN
+                UPDATE book_status 
+                SET status = 'reserved', request_date = CURRENT_DATE 
+                WHERE book_id = _book_id AND status = 'queue' AND user_id = _user_id
+                ORDER BY request_date;
+                SET done = TRUE;
+                SET update_occurred = TRUE;
+              END IF;
+          END IF;
+        END LOOP;
+        
+        CLOSE cur;
+    END IF;
+    
+    RETURN update_occurred;
+END$$
+
+DELIMITER ;
