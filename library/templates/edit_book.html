@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Book</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .form-row {
+            margin-bottom: 20px;
+          }
+          
+          label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+          }
+          
+          input[type="text"],
+          input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+          }
+          
+          textarea {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+          }
+          
+          button[type="submit"] {
+            background-color: rgb(238, 174, 202);
+            color: rgb(6, 6, 6);
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+          }
+          
+          button[type="submit"]:hover {
+            background-color: #64a8e1;
+          }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Edit Book</h1>
+    </div>
+    <div class="profile">
+    <form method="POST" action="{{ url_for('edit_book') }}">
+        
+        <div class="form-row">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" value="{{ book_info[1] }}" required>
+        </div>
+        
+        <div class="form-row">
+            <label for="publisher">Publisher:</label>
+            <input type="text" id="publisher" name="publisher" value="{{ book_info[2] }}" required>
+        </div>
+        
+        <div class="form-row">
+            <label for="pages">Pages:</label>
+            <input type="number" id="pages" name="pages" value="{{ book_info[3] }}" required>
+        </div>
+        
+        <div class="form-row">
+            <label for="isbn">ISBN:</label>
+            <input type="number" id="isbn" name="isbn" value="{{ book_info[4] }}" required>
+        </div>
+        
+        <div class="form-row">
+            <label for="summary">Summary:</label>
+            <textarea id="summary" name="summary" required>{{ book_info[5] }}</textarea>
+        </div>
+        
+        <div class="form-row">
+            <label for="number_of_books">Number of Books:</label>
+            <input type="number" id="number_of_books" name="number_of_books" value="{{ book_info[6] }}" required>
+        </div>
+        
+        <div class="form-row">
+            <label for="number_of_available_books">Number of Available Books:</label>
+            <input type="number" id="number_of_available_books" name="number_of_available_books" value="{{ book_info[7] }}" required>
+        </div>
+        
+        <div class="form-row">
+            <label for="book_image">Book Image:</label>
+            <input type="text" id="book_image" name="book_image" value="{{ book_info[8] }}" required>
+        </div>
+        
+        <div class="form-row">
+            <label for="book_language">Book Language:</label>
+            <input type="text" id="book_language" name="book_language" value="{{ book_info[9] }}" required>
+        </div>
+
+        <div class="form-row">
+            <label for="authors">Authors:</label>
+                {% for author in authors %}
+                    <option value="{{ author}}" {% if author in book_authors %}selected{% endif %}>{{ author[0] }}</option>
+                {% endfor %}
+        </div>
+        <div class="form-row">
+            <label for="themes">Themes:</label>
+                {% for theme in themes %}
+                    <option value="{{ theme}}" {% if theme in book_themes %}selected{% endif %}>{{ theme[0] }}</option>
+                {% endfor %}
+        </div>
+
+        
+        <div class="form-row">
+            <button type="submit">Submit</button>
+        </div>
+       
+    </form>
+    </div>
+</body>
+</html>

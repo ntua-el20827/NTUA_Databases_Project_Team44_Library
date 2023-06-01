@@ -29,6 +29,7 @@ CREATE TABLE school (
 CREATE TABLE school_phone(
   phone BIGINT NOT NULL,
   school_id INT UNSIGNED NOT NULL,
+  phone_flag ENUM('pending'),
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (phone,school_id),
   KEY fk_school_id (school_id), 
