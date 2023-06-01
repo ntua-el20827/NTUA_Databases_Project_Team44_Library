@@ -935,7 +935,36 @@ def school_admin():
         books = cur.fetchall()
         cur.close()
         return render_template('school_admin.html',books = books )
-
+@app.route('/school_admin_add_books', methods=['GET', 'POST'])
+def school_admin_add_books(): 
+    if request.method == "POST":
+        title = request.form['title']
+        publisher = request.form['publisher']
+        pages = request.form['pages']
+        isbn = request.form['isbn']
+        summary = request.form['summary']
+        number_of_books = request.form['number_of_books']
+        book_image = request.form['book_image']
+        language = request.form['language']
+        author = request.form['author']
+        author2 =  request.form['author2']
+        cur = mydb.connection.cursor()
+        school_query = """ INSERT INTO book (title, publisher, pages, isbn, summary, number_of_books, book_image, language)
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"""
+        book_values = (title, publisher, pages, isbn, summary, number_of_books, book_image, language, language)
+        try:
+            cur.execute(school_query,book_values)  # Execute your INSERT statement here
+            mydb.connection.commit()
+        except Exception as e:
+            flash("Υπαρχει λάθος στα στοιχεία του βιβλιου")
+            return redirect(url_for("school_admin_add_books"))
+        school_id = cur.lastrowid
+        
+      
+        flash("Το βιβλιο Προστεθηκε")
+        return redirect(url_for("school"))
+    else:
+        return render_template("school_admin_add_books.html")
 
 #Route για την αρχική των queries του school_admin
 @app.route('/school_admin_queries')

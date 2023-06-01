@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>User Sign-up</title>
+	<link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}">
+</head>
+<body>
+	<div class="header">
+	<h1> Προσθήκη Βιβλίου </h1>
+	<hr color="black">
+</div>
+	
+	<br><br>
+	<div class="registration">
+      <h5>
+      Με την αίτηση Εγγραφής Σχολικής Μονάδας γίνεται αυτόματα
+        η αίτηση εγγραφής του υπεύθυνου της βιβλιοθήκης.
+      </h5>
+	  {% with messages = get_flashed_messages() %}
+	  {% if messages %}
+		  <div class="flash-messages">
+			  {% for message in messages %}
+				  <div class="flash-message">{{ message | safe}}</div>
+			  {% endfor %}
+		  </div>
+	  {% endif %}
+	  {% endwith %}
+	<form method="POST" action=" {{ url_for('school_admin_add_books') }} " onsubmit="return validateForm()">
+		<div class="labels">
+		<label for="title">Title:</label> <br>
+		<input type="text" id="title" name="title" required>
+		</div>
+		<br>
+		<label for="publisher">Εκδοτης:</label> <br>
+		<input type="text" id="publisher" name="publisher" required>
+		<br> <br>
+		<label for="pages">Αριθμος Σελιδων:</label><br>
+  		<input type="text" id="pages" name="pages" required><br>
+ 		<br>
+		<label for="ISBN">ISBN:</label><br>
+  		<input type="text" id="isbn" name="isbn" required> <br>
+		<br>
+		<label for="summary" rows = "3">Περιληψη:</label><br>
+		<input type="text" id="summary" name="summary" required><br>
+		<br>
+		<label for="number_of_books">Αριθμος Βιβλιων :</label><br>
+		<input type="text" id="number_of_books" name="number_of_books" required><br>
+		<br>
+		<label for="book_image">url εξωφύλλου: </label><br>
+		<input type="text" id="book_image" name="book_image" required>
+		<br><br>
+		<label for="language">Γλώσσα: </label><br>
+		<input type="text" id="language" name="language" required>
+        <br><br>
+        
+        <label for="author"> 1ος Συγγραφέας:</label><br>
+		<input type="text" id="author" name="author" required><br><br>
+
+   
+		<label for="2author">2oς Συγγραφέας:</label><br>
+		<input type="text" id="author2" name="author2" ><br><br>
+		<br><br>
+
+        <form action="{{ url_for('school_admin_add_books') }}" method="POST">
+        <input type="submit" value="Προσθήκη">	
+        </form>	
+        <p>Επιστροφη στην αρχικη <a href="{{ url_for('index') }}"> σελίδα </a></p>
+	</form>
+
+    </div>
+
+	<script>
+		function validateForm() {
+			var username = document.getElementById("newusername").value;
+			var password = document.getElementById("newpassword").value;
+			var fname = document.getElementById("fname").value;
+			var lname = document.getElementById("lname").value;
+			var email = document.getElementById("email").value;
+			var phone = document.getElementById("phone").value;
+
+			
+
+			return true;
+		}
+	</script>
+</body>
+</html>
