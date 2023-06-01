@@ -64,9 +64,22 @@ body {
 .search{
    margin:20px;
    padding: 10px;
-          
+      
         	
 }
+.search input[type="text"] {
+  background-color: rgb(91, 186, 221);
+  
+  /* Add other CSS rules for the search input */
+}
+.search button{
+  
+  height:25px;
+  border-radius:30px;
+    background-color: rgb(91, 186, 221);
+    /* Add other CSS rules for the search input */
+  }
+
 .school_list{
 	margin: 20px;
     background-color: black;

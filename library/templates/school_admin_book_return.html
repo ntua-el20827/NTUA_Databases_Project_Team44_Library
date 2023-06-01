@@ -43,6 +43,7 @@
                     <td>
                         <form method="POST" action="{{ url_for('school_admin_book_return') }}">
                             <input type="hidden" name="item_id" value="{{ item[0] }}">
+                            <input type="hidden" name="user_id" value="{{ item[2] }}">
                             <button type="submit">Returned</button>
                         </form>
                     </td>
