@@ -6,7 +6,11 @@
 </head>
 <body>
     <div class="topnav">
-        <a href="{{ url_for('school') }}">Home</a>  |
+    {% if is_admin %}
+        <a href="{{ url_for('school_admin') }}">Επιστροφή στην Σχολική Βιβλιοθήκη</a>
+    {% else %}
+        <a href="{{ url_for('school') }}">Επιστροφή στην Σχολική Βιβλιοθήκη</a>
+    {% endif %}
         
     </div>
   <div class ="super_admin">

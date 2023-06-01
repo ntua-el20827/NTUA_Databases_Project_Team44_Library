@@ -14,14 +14,15 @@ def index():
         print("HI")
         school_name = request.form['school_name']
         session['school_name'] = school_name
-        #print(school_name)
+        print(school_name)
         #query για να πάρω το school_id
-        #query = "SELECT school_id from school where shcool_name = %s"
-        #cur = mydb.connection.cursor()
-        #cur.execute(query,school_name)
-        #school_id = cur.fetchone() # με την fetchall() πιάνω όλα όσα ηρθαν απο το execute που έγινε!!
-        #cur.close()
-        #session['shcool_id'] = school_id
+        query = "SELECT school_id from school where school_name = %s"
+        cur = mydb.connection.cursor()
+        cur.execute(query,(school_name,))
+        school_id = cur.fetchone() # με την fetchall() πιάνω όλα όσα ηρθαν απο το execute που έγινε!!
+        cur.close()
+        session['school_id'] = school_id
+        print(school_id)
         return redirect(url_for('login'))
     else:
         # Read the query from queries.sql
@@ -55,12 +56,12 @@ def login():
         password = request.form['password']
         session['username'] = username
         session['password'] = password
-        #school_id = session['school_id']
+        school_id = session['school_id']
         
         # Query the database to validate the user's credentials
         cur = mydb.connection.cursor()
-        query = "SELECT * FROM lib_user WHERE user_name = %s AND user_pwd = %s AND user_pending_flag IS NULL"
-        cur.execute(query, (username, password))
+        query = "SELECT * FROM lib_user WHERE user_name = %s AND user_pwd = %s AND user_pending_flag IS NULL AND school_id=%s"
+        cur.execute(query, (username, password,school_id))
         user = cur.fetchone()
         cur.close()
         
@@ -83,7 +84,7 @@ def login():
             return redirect(url_for('dashboard'))  # Redirect to the dashboard page after successful login
         else:
             # Invalid credentials, show an error message
-            error_message = "Invalid username or password"
+            error_message = "Invalid username or password or selected school"
             return render_template('login.html', error_message=error_message)
     
     # Render the template for the login page with the form
@@ -122,12 +123,12 @@ def dashboard():
     if 'user_id' in session:
         user_id = session['user_id']
         cur = mydb.connection.cursor()
-        query = "SELECT school_id FROM lib_user WHERE user_id = %s"
+        """ query = "SELECT school_id FROM lib_user WHERE user_id = %s"
         cur.execute(query, (user_id,))
         school_id_tuple = cur.fetchone()
         school_id = school_id_tuple[0] if school_id_tuple else None
         session['school_id'] = school_id
-        print(school_id)
+        print(school_id) """
         query = "SELECT * FROM lib_user WHERE user_id = %s"
         cur.execute(query, (user_id,))
         user = cur.fetchone()
@@ -364,7 +365,8 @@ def mybooks():
         query = "Select check_book_update(%s) as update_occured;"
         cur.execute(query,(book_id,))
         update_occured = cur.fetchone()
-        if update_occured==0:
+        print(update_occured)
+        if update_occured[0]==0:
             query = "CALL increase_available_books(%s)"
             cur.execute(query,(book_id,))
             mydb.connection.commit()
@@ -373,26 +375,29 @@ def mybooks():
 
     cur = mydb.connection.cursor()
     query = """ SELECT bs.book_id, b.title, b.book_language, b.ISBN, bs.approval_date, bs.book_status_id
-FROM book_status bs
-JOIN book b ON bs.book_id = b.book_id
-WHERE bs.user_id = %s AND bs.status = 'borrowed' """
+        FROM book_status bs
+        JOIN book b ON bs.book_id = b.book_id
+        WHERE bs.user_id = %s AND bs.status = 'borrowed' """
 
     cur.execute(query,(user_id,))
     borrowed_books = cur.fetchall()
     query = """ SELECT bs.book_id, b.title, b.book_language, b.ISBN, bs.request_date, bs.book_status_id
-FROM book_status bs
-JOIN book b ON bs.book_id = b.book_id
-WHERE bs.user_id = %s AND bs.status = 'reserved' """
+        FROM book_status bs
+        JOIN book b ON bs.book_id = b.book_id
+        WHERE bs.user_id = %s AND bs.status = 'reserved' """
     cur.execute(query,(user_id,))
     reserved_books = cur.fetchall()
     query = """ SELECT bs.book_id, b.title,b.book_language, b.ISBN, bs.request_date, bs.book_status_id
-FROM book_status bs
-JOIN book b ON bs.book_id = b.book_id
-WHERE bs.user_id = %s AND bs.status = 'queue' """
+        FROM book_status bs
+        JOIN book b ON bs.book_id = b.book_id
+        WHERE bs.user_id = %s AND bs.status = 'queue' """
     cur.execute(query,(user_id,))
     queued_books = cur.fetchall()
     cur.close()
-    return render_template("mybooks.html",borrowed_books=borrowed_books,reserved_books=reserved_books,queued_books=queued_books)
+    role_name = session['role_name']
+    is_admin = role_name == 'admin'
+
+    return render_template("mybooks.html",borrowed_books=borrowed_books,reserved_books=reserved_books,queued_books=queued_books,is_admin=is_admin)
 
 @app.route('/edit_profile',methods=['GET', 'POST'])
 def edit_profile():
@@ -527,7 +532,7 @@ def rent():
                     query = "INSERT INTO book_status (book_id, user_id, status, request_date) VALUES (%s, %s, 'reserved', CURDATE())"
                     ## ΑΛΛΑΓΗ ΝΑ ΒΑΛΛΩ ΤΟ book_status_id
                     cur.execute(query,(book_id,user_id,))  # Execute your INSERT statement here
-                except SQLTriggerError as e:
+                except Exception as e:
                     error_message = str(e)
                     flash("Εχετε περάσει τον αριθμό δανεισμών")
                     return redirect(url_for("book_display"))
@@ -1169,9 +1174,9 @@ def school_admin_reservations():
         print(type(item_id))
         if action == 'accept':
             # Change the status to 'borrowed' in the 'book_status' table
-            query = "UPDATE book_status SET status = 'borrowed', approval_date = %s WHERE book_id = %s AND user_id = %s "
+            query = "UPDATE book_status SET status = 'borrowed', approval_date = CURDATE() WHERE book_id = %s AND user_id = %s "
             ## ΑΛΛΑΓΗ ΝΑ ΒΑΛΛΩ ΤΟ book_status_id
-            cur.execute(query, (datetime.now(),item_id, user_id,))
+            cur.execute(query, (item_id, user_id,))
             mydb.connection.commit()
 
             # Να βάλλουμε και current date το rent_date
