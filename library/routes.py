@@ -1110,9 +1110,9 @@ def school_admin_Q2():
     school_id = session['school_id']
     cur = mydb.connection.cursor()
     query = """ SELECT u.user_id, u.user_firstname, u.user_lastname,DATEDIFF(NOW(), bs.approval_date)
-FROM lib_user u
-JOIN book_status bs ON u.user_id = bs.user_id
-WHERE bs.status = 'borrowed' AND bs.return_date IS NULL AND u.school_id = %s AND (DATEDIFF(NOW(), bs.approval_date) > 7)
+    FROM lib_user u
+    JOIN book_status bs ON u.user_id = bs.user_id
+    WHERE bs.status = 'borrowed' AND bs.return_date IS NULL AND u.school_id = %s AND (DATEDIFF(NOW(), bs.approval_date) > 7)
             """
     cur.execute(query, (school_id,))
     if request.method == 'POST':
