@@ -645,10 +645,7 @@ def review():
 def review_users_test():
     
     school_id = session['school_id']
-    
-
-       
-
+    book_id = session['book_id']
     # Connect to the database to fetch the review applications
     cur = mydb.connection.cursor()
 
@@ -656,8 +653,8 @@ def review_users_test():
     query = """ SELECT u.user_name, r.review_text, r.rating, u.user_id, r.book_id
         FROM review r
         JOIN lib_user u ON r.user_id = u.user_id
-        WHERE r.review_pending_flag IS NULL AND u.school_id = %s"""
-    cur.execute(query,(school_id,))
+        WHERE r.review_pending_flag IS NULL AND u.school_id = %s and r.book_id = %s"""
+    cur.execute(query,(school_id,book_id,))
     review_applications = cur.fetchall()
     cur.close()
 
