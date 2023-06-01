@@ -1028,12 +1028,12 @@ def school_admin_Q3():
     school_id = session['school_id']
     cur = mydb.connection.cursor()
     query = """ SELECT CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bt.theme, AVG(r.rating) AS avg_rating
-FROM lib_user u
-INNER JOIN review r ON u.user_id = r.user_id
-INNER JOIN book b ON r.book_id = b.book_id
-INNER JOIN book_theme bt ON b.book_id = bt.book_id
-WHERE u.school_id = %s
-GROUP BY u.user_id, bt.theme
+            FROM lib_user u
+            INNER JOIN review r ON u.user_id = r.user_id
+            INNER JOIN book b ON r.book_id = b.book_id
+            INNER JOIN book_theme bt ON b.book_id = bt.book_id
+            WHERE u.school_id = %s
+            GROUP BY u.user_id, bt.theme
             """
     cur.execute(query, (school_id,))
     if request.method == 'POST':
@@ -1044,11 +1044,11 @@ GROUP BY u.user_id, bt.theme
         # Connect to the database and execute the query based on the search type
         
         q1 = """  SELECT CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bt.theme, AVG(r.rating) AS avg_rating
-FROM lib_user u
-INNER JOIN review r ON u.user_id = r.user_id
-INNER JOIN book b ON r.book_id = b.book_id
-INNER JOIN book_theme bt ON b.book_id = bt.book_id
-WHERE u.school_id = %s"""
+            FROM lib_user u
+            INNER JOIN review r ON u.user_id = r.user_id
+            INNER JOIN book b ON r.book_id = b.book_id
+            INNER JOIN book_theme bt ON b.book_id = bt.book_id
+            WHERE u.school_id = %s"""
         if search_type == 'Full name':
             query = q1+" AND borrower_name = %s GROUP BY u.user_id, bt.theme"
             cur.execute(query,(school_id, search_text, ))
@@ -1096,9 +1096,9 @@ def school_admin_reviews():
 
     # Fetch the review applications from the 'review_applications' view
     query = """ SELECT u.user_name, r.review_text, r.rating, u.user_id, r.book_id
-FROM review r
-JOIN lib_user u ON r.user_id = u.user_id
-WHERE r.review_pending_flag = 'pending' AND u.school_id = %s"""
+        FROM review r
+        JOIN lib_user u ON r.user_id = u.user_id
+        WHERE r.review_pending_flag = 'pending' AND u.school_id = %s"""
     cur.execute(query,(school_id,))
     review_applications = cur.fetchall()
     cur.close()
