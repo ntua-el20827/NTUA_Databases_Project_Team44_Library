@@ -1030,8 +1030,10 @@ def school_admin():
         books = cur.fetchall()
         cur.close()
         return render_template('school_admin.html',books = books )
+
 @app.route('/school_admin_add_books', methods=['GET', 'POST'])
 def school_admin_add_books(): 
+    school_id = session['school_id']
     if request.method == "POST":
         title = request.form['title']
         publisher = request.form['publisher']
@@ -1044,20 +1046,19 @@ def school_admin_add_books():
         author = request.form['author']
         author2 =  request.form['author2']
         cur = mydb.connection.cursor()
-        school_query = """ INSERT INTO book (title, publisher, pages, isbn, summary, number_of_books, book_image, language)
-        VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"""
-        book_values = (title, publisher, pages, isbn, summary, number_of_books, book_image, language, language)
+        school_query = """ INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books,number_of_available_books, book_image, book_language, school_id)
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+        book_values = (title, publisher, pages, isbn, summary, number_of_books,number_of_books, book_image, language,school_id)
         try:
             cur.execute(school_query,book_values)  # Execute your INSERT statement here
             mydb.connection.commit()
         except Exception as e:
             flash("Υπαρχει λάθος στα στοιχεία του βιβλιου")
             return redirect(url_for("school_admin_add_books"))
-        school_id = cur.lastrowid
-        
+
       
         flash("Το βιβλιο Προστεθηκε")
-        return redirect(url_for("school"))
+        return redirect(url_for("school_admin_add_books"))
     else:
         return render_template("school_admin_add_books.html")
 
