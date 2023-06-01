@@ -432,6 +432,68 @@ def edit_profile():
     cur.close()
     return render_template('edit_profile.html',user_info = user_info,school_info=school_info)
 
+@app.route('/edit_book',methods=['GET', 'POST'])
+def edit_book():
+    book_id = session['book_id']
+    if request.method == 'POST':
+        # Retrieve the updated book attributes from the form
+        title = request.form['title']
+        publisher = request.form['publisher']
+        pages = request.form['pages']
+        isbn = request.form['isbn']
+        summary = request.form['summary']
+        number_of_books = request.form['number_of_books']
+        number_of_available_books = request.form['number_of_available_books']
+        book_image = request.form['book_image']
+        book_language = request.form['book_language']
+        #authors = request.form.getlist('authors')
+        # Add more attributes here as needed
+
+        # Perform the necessary database update query using the new information
+        cur = mydb.connection.cursor()
+        query = "UPDATE book SET title = %s, publisher = %s, pages = %s, ISBN = %s, summary = %s, " \
+                "number_of_books = %s, number_of_available_books = %s, book_image = %s, book_language = %s " \
+                "WHERE book_id = %s"
+        cur.execute(query, (title, publisher, pages, isbn, summary, number_of_books, number_of_available_books,
+                            book_image, book_language, book_id))
+        mydb.connection.commit()
+        cur.close()
+
+        # Redirect the user to the updated profile page or any other desired page
+        return redirect(url_for('book_display'))
+    ISBN = session['ISBN']
+    school_id = session['school_id']
+    cur = mydb.connection.cursor()
+    #print("ISBN is ", type(ISBN))
+    #print(int(ISBN))
+    query = """SELECT b.book_id, b.title, b.publisher, b.pages,b.ISBN, b.summary,b.number_of_books,b.number_of_available_books,b.book_image,
+        b.book_language,GROUP_CONCAT(ba.author SEPARATOR ',') AS authors
+        FROM book b
+        JOIN book_author ba ON b.book_id = ba.book_id
+        WHERE b.school_id = %s AND b.ISBN = %s AND b.book_id = %s
+        GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id
+        """
+    cur.execute(query,(school_id, int(ISBN),book_id))
+    book_info = cur.fetchone()
+    query = """SELECT GROUP_CONCAT(ba.author SEPARATOR ',') AS authors
+        FROM book b
+        JOIN book_author ba ON b.book_id = ba.book_id
+        WHERE b.school_id = %s AND b.ISBN = %s AND b.book_id = %s
+        GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id
+        """
+    cur.execute(query,(school_id, int(ISBN),book_id))
+    authors = cur.fetchall()
+    query = """SELECT GROUP_CONCAT(bt.theme SEPARATOR ',') AS themes
+        FROM book b
+        JOIN book_theme bt ON b.book_id = bt.book_id
+        WHERE b.school_id = %s AND b.ISBN = %s AND b.book_id = %s
+        GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id
+        """
+    cur.execute(query,(school_id, int(ISBN),book_id))
+    themes = cur.fetchall()
+    cur.close()
+    return render_template('edit_book.html',book_info = book_info,authors=authors,themes=themes)
+
 @app.route('/edit_password',methods=['GET', 'POST'])
 def edit_password():
     if request.method == 'POST':
