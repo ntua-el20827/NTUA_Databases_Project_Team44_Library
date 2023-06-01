@@ -248,7 +248,7 @@ def request_library_form():
         cur = mydb.connection.cursor()
         school_query = """ INSERT INTO school (school_name, city, street, postal_code, email, principal_lastname, principal_firstname, school_admin_lastname, school_admin_firstname,pending_flag)
         VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,'pending')"""
-        school_values = (school_name, city, street, postal_code, email, plname, pfname, lname, fname)
+        school_values = (school_name, city, street, postal_code, school_email, plname, pfname, lname, fname)
         try:
             cur.execute(school_query,school_values)  # Execute your INSERT statement here
             mydb.connection.commit()
@@ -265,7 +265,37 @@ def request_library_form():
             mydb.connection.commit()
         except Exception as e:
             flash("Υπαρχει λάθος στα στοιχεία του Υπευθυνου χειριστή")
+            delete_query = "DELETE FROM school WHERE school_id = %s"
+            cur.execute(delete_query, (school_id,))
+            mydb.commit()
             return redirect(url_for("request_library_form"))
+        phone1_query = """INSERT INTO school_phone (school_id,phone,phone_flag) 
+        VALUES (%s,%s,'pending')"""
+        phone1_values = (school_id,phone)
+        print(phone)
+        try:
+            cur.execute(phone1_query,phone1_values)  # Execute your INSERT statement here
+            mydb.connection.commit()
+        except Exception as e:
+            flash("Υπαρχει λάθος στα τηλεφωνικά στοιχεία 1")
+            delete_query = "DELETE FROM school WHERE school_id = %s"
+            cur.execute(delete_query, (school_id,))
+            mydb.connection.commit()
+            return redirect(url_for("request_library_form"))
+        if len(phone2)> 0:
+            phone2_query = """INSERT INTO school_phone (school_id,phone,phone_flag) 
+            VALUES (%s,%s,'pending')"""
+            phone2_values = (school_id,phone2)
+            print(phone2)
+            try:
+                cur.execute(phone2_query,phone2_values)  # Execute your INSERT statement here
+                mydb.connection.commit()
+            except Exception as e:
+                flash("Υπαρχει λάθος στα τηλεφωνικά στοιχεία 2")
+                delete_query = "DELETE FROM school WHERE school_id = %s"
+                cur.execute(delete_query, (school_id,))
+                mydb.connection.commit()
+                return redirect(url_for("request_library_form"))
         flash("Η αίτηση για εγγραφή νεας βιβλιοθήκης εχει καταχωρηθεί")
         return redirect(url_for("request_library_form"))
     else:
@@ -947,6 +977,9 @@ def verify_school_application():
             query = "UPDATE lib_user SET user_pending_flag = NULL WHERE user_id = %s "
             cur.execute(query, (user_id,))
             mydb.connection.commit()
+            query = "UPDATE school_phone SET phone_flag = NULL WHERE school_id = %s "
+            cur.execute(query, (school_id_to_review,))
+            mydb.connection.commit()
             cur.close()
             session.pop('school_id_to_review', None)
             return redirect(url_for('super_admin_school_applications'))
@@ -957,7 +990,7 @@ def verify_school_application():
             # Delete the application from the 'library_applications' table
             delete_query = "DELETE FROM school WHERE school_id = %s"
             cur.execute(delete_query, (school_id_to_review,))
-            mydb.commit()
+            mydb.connection.commit()
             cur.close()
             session.pop('school_id_to_review', None)
             return redirect(url_for('super_admin_school_applications'))
@@ -966,7 +999,7 @@ def verify_school_application():
     # Connect to the database to fetch the application details
     cur = mydb.connection.cursor()
     # Get application details from the database
-    query = "SELECT * FROM school_applications WHERE school_id = %s"
+    query = "SELECT school_id,school_name,school_admin_firstname,school_admin_lastname FROM school_applications WHERE school_id = %s"
     cur.execute(query, (school_id_to_review,))
     application = cur.fetchone()
     cur.close()
