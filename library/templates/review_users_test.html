@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="description" content="This is an awesome website">
-  <title>School Library</title>
-  <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}"> 
-  <style>
-    .review-container {
-      width: 500px;
-      margin: 0 auto;
-    }
-
-    .review {
-      background-color: #687bd1;
-      padding: 10px;
-      margin-bottom: 10px;
-    }
-
-    .review .username {
-      font-weight: bold;
-    }
-
-    .review .date {
-      color: #888;
-      font-size: 0.8em;
-    }
-
-    .review .content {
-      margin-top: 5px;
-    }
-  </style>
-    <script>
-      function confirmLogout() {
-        var result = confirm("Are you sure you want to logout?");
-        if (result) {
-          window.location.href = "{{ url_for('logout') }}";
+    <title>Review Applications</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="This is an awesome website">
+    <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}"> 
+    <style>
+        .review-container {
+          width: 500px;
+          margin: 0 auto;
         }
-      }
-    </script>
+    
+        .review {
+          background-color: #687bd1;
+          padding: 10px;
+          margin-bottom: 10px;
+        }
+    
+        .review .username {
+          font-weight: bold;
+        }
+    
+        .review .date {
+          color: #888;
+          font-size: 0.8em;
+        }
+    
+        .review .content {
+          margin-top: 5px;
+        }
+      </style>
+      </style>
+      <script>
+        function confirmLogout() {
+          var result = confirm("Are you sure you want to logout?");
+          if (result) {
+            window.location.href = "{{ url_for('logout') }}";
+          }
+        }
+      </script>
 </head>
 
 <body>
@@ -47,99 +47,30 @@
       <a href="{{ url_for('book_display') }}"> Πίσω στο βιβλίο </a>  |
       <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
     </div>
-<br> 
-  <div class="welcome">
-  <h2>Αξιολογήσεις Χρηστών</h2>
-</div>
+
+    <br> 
+    <div class="welcome">
+    <h2>Αξιολογήσεις Χρηστών</h2>
+    </div>
+    
+
+{% for application in review_applications %}
   <div class="review-container">
     <div class="review">
-      <div class="username">John Doe</div>
-      
-      <div class="content">This book was absolutely amazing! I couldn't put it down.</div>
-      <div class="rating">
-        <span class="label">Rating:</span>
-        <span class="value">4.5</span>
-      </div>
+        <div class="username">Usernname: {{application[0]}} </div>
     
-    </div>
-
-    <div class="review">
-      <div class="username">John Doe</div>
-      
-      <div class="content">This book was absolutely amazing! I couldn't put it down.</div>
-      <div class="rating">
-        <span class="label">Rating:</span>
-        <span class="value">4.5</span>
-      </div>
-    
-    </div>
-
-    <div class="review">
-      <div class="username">John Doe</div>
-      
-      <div class="content">This book was absolutely amazing! I couldn't put it down.</div>
-      <div class="rating">
-        <span class="label">Rating:</span>
-        <span class="value">4.5</span>
+        <div class="content"> Review: {{application[1]}} </div>
+        <div class="rating">
+            <span class="label">Rating: </span>
+            <span class="value">{{application[2]}}</span>
+        
+           
+        </div>
         <br>
-        <span><button type="submit" name="action" value="accept">Accept</button>
-          <button type="submit" name="action" value="deny">Deny</button>
-        </span>
-        </div>
-    
-    </div>
-    <div class="review">
-        <div class="username">John Doe</div>
-        
-        <div class="content">This book was absolutely amazing! I couldn't put it down.</div>
-        <div class="rating">
-          <span class="label">Rating:</span>
-          <span class="value">4.5</span>
-        </div>
-      
-      </div>
-      <div class="review">
-        <div class="username">John Doe</div>
-        
-        <div class="content">This book was absolutely amazing! I couldn't put it down.</div>
-        <div class="rating">
-          <span class="label">Rating:</span>
-          <span class="value">4.5</span>
-        </div>
-      
-      </div>
-      <div class="review">
-        <div class="username">John Doe</div>
-        
-        <div class="content">This book was absolutely amazing! I couldn't put it down.</div>
-        <div class="rating">
-          <span class="label">Rating:</span>
-          <span class="value">4.5</span>
-        </div>
-        
-      </div>
-      <div class="review">
-        <div class="username">John Doe</div>
-        
-        <div class="content">This book was absolutely amazing! I couldn't put it down.</div>
-        <div class="rating">
-          <span class="label">Rating:</span>
-          <span class="value">4.5</span>
-        </div>
-      
-      </div>
-
-       <div class="review">
-      <div class="username">John Doe</div>
-      
-      <div class="content">This book was absolutely amazing! I couldn't put it down.</div>
-      <div class="rating">
-        <span class="label">Rating:</span>
-        <span class="value">4.5</span>
-      </div>
-    
     </div>
   </div>
+{% endfor %}
+
 
 </body>
 

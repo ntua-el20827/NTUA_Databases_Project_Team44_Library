@@ -643,7 +643,26 @@ def review():
 
 @app.route('/review_users_test')
 def review_users_test():
-    return render_template("review_users_test.html")
+    
+    school_id = session['school_id']
+    
+
+       
+
+    # Connect to the database to fetch the review applications
+    cur = mydb.connection.cursor()
+
+    # Fetch the review applications from the 'review_applications' view
+    query = """ SELECT u.user_name, r.review_text, r.rating, u.user_id, r.book_id
+        FROM review r
+        JOIN lib_user u ON r.user_id = u.user_id
+        WHERE r.review_pending_flag IS NULL AND u.school_id = %s"""
+    cur.execute(query,(school_id,))
+    review_applications = cur.fetchall()
+    cur.close()
+
+    # Render the template with the review applications
+    return render_template("review_users_test.html", review_applications = review_applications)
 
 #Route για την αρχική του super_admin
 @app.route('/super_admin')
@@ -1279,9 +1298,9 @@ def school_admin_book_return():
         cur = mydb.connection.cursor()
 
         # Update the 'return_date' to the current date in the 'book_status' table
-        current_date = datetime.date.today()
-        query = "UPDATE book_status SET return_date = %s WHERE item_id = %s AND  user_id = %s"
-        cur.execute(query, (current_date, item_id))
+    
+        query = "UPDATE book_status SET return_date = CURDATE() WHERE book_id = %s AND  user_id = %s"
+        cur.execute(query, (item_id, user_id,))
         mydb.connection.commit()
         query = "Select check_book_update(%s) as update_occured;"
         cur.execute(query,(int(item_id),))
