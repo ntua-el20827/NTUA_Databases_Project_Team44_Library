@@ -227,24 +227,46 @@ def school():
 
 
 @app.route('/request_library_form', methods=['GET', 'POST'])
-def request_library_form():
+def request_library_form(): 
     if request.method == "POST":
-   #     newusername = request.form['newusername']
-   #     newpassword = request.form['newpassword']
-    #    fname = request.form['fname']
-    #    lname = request.form['lname']
-    #    email = request.form['email']
-   #     phone = request.form['phone']
-    #    school_name = request.form['schoolname']
-    #    cur = mydb.connection.cursor()
-     #   query1 = "INSERT INTO users_applications (username, password, first_name, last_name, email, phone) VALUES (%s, %s, %s, %s, %s, %s)"
-     #   query2 = "INSERT INTO school_applications (username, first_name, last_name, email, phone, school_name) VALUES (%s, %s, %s, %s, %s, %s)"
-      #  values = (newusername, newpassword, fname, lname, email, phone, school_name)
-       # cur.execute(query1, values)
-        #cur.execute(query2, values)
-       # mydb.connection.commit()
-        #cur.close()
-        return redirect(url_for('waiting'))
+        newusername = request.form['newusername']
+        newpassword = request.form['newpassword']
+        fname = request.form['fname']
+        lname = request.form['lname']
+        email = request.form['email']
+        dob = request.form['dob']
+        school_name = request.form['school_name']
+        city = request.form['city']
+        street = request.form['street']
+        postal_code = request.form['postal_code']
+        school_email = request.form['school_email']
+        pfname = request.form['pfname']
+        plname = request.form['plname']
+        phone = request.form['phone']
+        phone2 =  request.form['phone2']
+        cur = mydb.connection.cursor()
+        school_query = """ INSERT INTO school (school_name, city, street, postal_code, email, principal_lastname, principal_firstname, school_admin_lastname, school_admin_firstname,pending_flag)
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,'pending')"""
+        school_values = (school_name, city, street, postal_code, email, plname, pfname, lname, fname)
+        try:
+            cur.execute(school_query,school_values)  # Execute your INSERT statement here
+            mydb.connection.commit()
+        except Exception as e:
+            flash("Υπαρχει λάθος στα στοιχεία του σχολείου")
+            return redirect(url_for("request_library_form"))
+        school_id = cur.lastrowid
+        print(school_id)
+        admin_query = """INSERT INTO lib_user (user_pwd, user_name, school_id, role_name, user_email,user_firstname,user_lastname,user_date_of_birth,user_pending_flag) 
+        VALUES (%s, %s, %s, 'admin', %s, %s,%s,%s,'waiting')"""
+        admin_values = (newpassword, newusername, school_id,email,fname,lname,dob)
+        try:
+            cur.execute(admin_query,admin_values)  # Execute your INSERT statement here
+            mydb.connection.commit()
+        except Exception as e:
+            flash("Υπαρχει λάθος στα στοιχεία του Υπευθυνου χειριστή")
+            return redirect(url_for("request_library_form"))
+        flash("Η αίτηση για εγγραφή νεας βιβλιοθήκης εχει καταχωρηθεί")
+        return redirect(url_for("request_library_form"))
     else:
         return render_template("request_library_form.html")
 
@@ -326,6 +348,7 @@ def user_profile():
         return render_template('super_admin_user_profile.html',user_info = user_info,school_info=school_info,can_edit=can_edit)
     return render_template('profile.html',user_info = user_info,school_info=school_info,can_edit=can_edit)
 
+#Route για τα βιβλία του χρήστη
 @app.route('/mybooks', methods=['GET', 'POST'])
 def mybooks():
     school_id = session['school_id']
@@ -370,7 +393,6 @@ WHERE bs.user_id = %s AND bs.status = 'queue' """
     queued_books = cur.fetchall()
     cur.close()
     return render_template("mybooks.html",borrowed_books=borrowed_books,reserved_books=reserved_books,queued_books=queued_books)
-
 
 @app.route('/edit_profile',methods=['GET', 'POST'])
 def edit_profile():
@@ -553,7 +575,6 @@ def queue():
     cur.close()
     flash("H Κρατηση για το βιβλίο επιβεβαιωθηκε.Μπορειτε να την δείτε στην καρτελα Mybooks. Εκει θα μπορείτε να δείτε ποτε θα μπορείτε να πάτε να πάρετε το βιβλίο σας ")
     return redirect(url_for("book_display"))
-
 
 #route για επαναφορά στην σχολική βιβλιοθήκη
 @app.route('/back_to_school')
@@ -813,18 +834,15 @@ def super_admin_Q7():
 @app.route('/super_admin_school_applications', methods=['GET', 'POST'])
 def super_admin_school_applications():
     if request.method == 'POST':
-        school_name = request.form.get('school_name')
-        application_id = request.form.get('application_id')
-        session['application_id'] = application_id
-
-        if school_name and application_id:
-            return redirect(url_for('verify_school_application', school_name=school_name, application_id=application_id))
+        school_id_to_review = request.form['school_id']
+        session['school_id_to_review'] = school_id_to_review
+        return redirect(url_for('verify_school_application'))
 
     # Connect to the database to fetch the data
     cur = mydb.connection.cursor()
 
     # Fetch data from the 'library_applications' view
-    query = "SELECT application_id, school_name FROM library_applications"
+    query = "SELECT school_id, school_name, user_id, user_firstname, user_lastname FROM school_applications"
     cur.execute(query)
     applications = cur.fetchall()
     cur.close()
@@ -832,56 +850,46 @@ def super_admin_school_applications():
     # Render the template with the data
     return render_template('library_applications.html', applications=applications)
 
-@app.route('/verify_school_application/<int:application_id>', methods=['GET', 'POST'])
-def verify_school_application(application_id):
+@app.route('/verify_school_application', methods=['GET', 'POST'])
+def verify_school_application():
     if request.method == 'POST':
-        action = request.form.get('action')
-
+        school_id_to_review = request.form['school_id']
+        action = request.form['action']
+        user_id = request.form['user_id']
         if action == 'accept':
-            # Connect to the database to perform database operations
             cur = mydb.connection.cursor()
-            # Get application details from the database
-            query = "SELECT * FROM library_applications "
-            cur.execute(query)
-            application = cur.fetchone()
-
-            if application:
-                # Insert the school into the 'school' table
-                insert_query = "INSERT INTO school (school_name) VALUES (%s)"
-                cur.execute(insert_query, (application[1],))
-                mydb.commit()
-
-                # Get the school_id of the inserted school
-                school_id = cur.lastrowid
-
-                # Insert a user into the 'lib_user' table for the new school
-                insert_user_query = "INSERT INTO lib_user (user_firstname, user_lastname, school_id) VALUES (%s, %s, %s)"
-                cur.execute(insert_user_query, (application[2], application[3], school_id))
-                mydb.commit()
-
+            query = "UPDATE school SET pending_flag = NULL WHERE school_id = %s"
+            cur.execute(query, (school_id_to_review,))
+            mydb.connection.commit()
+            query = "UPDATE lib_user SET user_pending_flag = NULL WHERE user_id = %s "
+            cur.execute(query, (user_id,))
+            mydb.connection.commit()
             cur.close()
+            session.pop('school_id_to_review', None)
+            return redirect(url_for('super_admin_school_applications'))
 
         elif action == 'delete':
             # Connect to the database to perform database operations
             cur = mydb.connection.cursor()
             # Delete the application from the 'library_applications' table
-            delete_query = "DELETE FROM library_applications WHERE application_id = %s"
-            cur.execute(delete_query, (application_id,))
+            delete_query = "DELETE FROM school WHERE school_id = %s"
+            cur.execute(delete_query, (school_id_to_review,))
             mydb.commit()
             cur.close()
-        # Redirect back to the library applications page
-        return redirect(url_for('library_applications'))
-
+            session.pop('school_id_to_review', None)
+            return redirect(url_for('super_admin_school_applications'))
+    school_id_to_review = session['school_id_to_review'] 
+    print(school_id_to_review)
     # Connect to the database to fetch the application details
     cur = mydb.connection.cursor()
     # Get application details from the database
-    query = "SELECT * FROM library_applications WHERE application_id = %s"
-    cur.execute(query, (application_id,))
+    query = "SELECT * FROM school_applications WHERE school_id = %s"
+    cur.execute(query, (school_id_to_review,))
     application = cur.fetchone()
     cur.close()
 
     # Render the template with the application details
-    return render_template('verify_school_application.html', application=application)
+    return render_template('verify_school_applications.html', application=application)
 
 #Route for school admin
 @app.route('/school_admin')

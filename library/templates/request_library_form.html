@@ -16,6 +16,15 @@
       Με την αίτηση Εγγραφής Σχολικής Μονάδας γίνεται αυτόματα
         η αίτηση εγγραφής του υπεύθυνου της βιβλιοθήκης.
       </h5>
+	  {% with messages = get_flashed_messages() %}
+	  {% if messages %}
+		  <div class="flash-messages">
+			  {% for message in messages %}
+				  <div class="flash-message">{{ message | safe}}</div>
+			  {% endfor %}
+		  </div>
+	  {% endif %}
+	  {% endwith %}
 	<form method="POST" action=" {{ url_for('request_library_form') }} " onsubmit="return validateForm()">
 		<div class="labels">
 		<label for="newusername">Username:</label> <br>
@@ -38,7 +47,7 @@
 		<input type="date" id="dob" name="dob" required><br>
 		<br>
 		<label for="school">Όνομα Σχολείου: </label><br>
-		<input type="text" id="phone" name="phone" required>
+		<input type="text" id="school_name" name="school_name" required>
 		<br><br>
 		<label for="city">Πολη: </label><br>
 		<input type="text" id="city" name="city" required>
@@ -64,7 +73,7 @@
 
    
 		<label for="2phone">2o Τηλεφωνο Σχολειου:</label><br>
-		<input type="text" id="2phone" name="2phone" ><br><br>
+		<input type="text" id="phone2" name="phone2" ><br><br>
 
       
         <form action="{{ url_for('request_library_form') }}" method="POST">

@@ -219,13 +219,6 @@ CREATE VIEW all_schools AS
 SELECT school_id, school_name
 FROM school;
 
-CREATE VIEW library_applications AS
-SELECT s.school_name, s.city, s.street, s.postal_code, s.email, s.principal_lastname, s.principal_firstname, s.school_admin_lastname, s.school_admin_firstname, sp.phone, lu.user_pwd, lu.user_name, lu.user_email, lu.user_firstname, lu.user_lastname, lu.user_date_of_birth, lu.user_pending_flag
-FROM school s
-JOIN school_phone sp ON s.school_id = sp.school_id
-JOIN lib_user lu ON s.school_id = lu.school_id
-WHERE s.pending_flag = 'pending' AND lu.user_pending_flag = 'waiting' AND lu.role_name = 'admin';
-
 -- School_application
 CREATE VIEW school_applications AS
 SELECT s.school_id, s.school_name, s.city, s.street, s.postal_code, s.email,
@@ -233,7 +226,7 @@ SELECT s.school_id, s.school_name, s.city, s.street, s.postal_code, s.email,
        u.user_id, u.user_name, u.user_email, u.user_firstname, u.user_lastname, u.user_date_of_birth
 FROM school s
 JOIN lib_user u ON s.school_id = u.school_id
-WHERE s.pending_flag = 'pending' AND u.user_pending_flag = 'waiting';
+WHERE s.pending_flag = 'pending' AND u.user_pending_flag = 'waiting' AND u.role_name = 'admin';
 
 
 ---only include reviews submitted by users with the student role,
@@ -483,7 +476,7 @@ END;
 ---
 ---Indexes
 ---
-/*
+
 CREATE INDEX idx_book_status_status ON book_status (status);
 CREATE INDEX idx_book_theme_theme ON book_theme (theme);
 CREATE INDEX idx_book_author_author ON book_author (author);
@@ -491,7 +484,7 @@ CREATE INDEX idx_book_status_user_id ON book_status (user_id);
 CREATE INDEX idx_book_status_approval_date ON book_status (approval_date);
 CREATE INDEX idx_lib_user_name ON lib_user (user_firstname, user_lastname);
 CREATE INDEX idx_book_title ON book (title);
-*/
+
 
 ---
 --- Functions
