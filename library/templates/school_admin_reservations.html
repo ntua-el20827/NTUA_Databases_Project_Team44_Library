@@ -65,17 +65,20 @@
             </tr>
         </thead>
         <tbody>
-            {% for data in book_query_data %}
-                <tr>
-                    <td>{{ data[0] }}</td>
-                    <td>{{ data[1] }}</td>
-                    <td>
-                        <form method="POST" action="{{ url_for('school_admin_reservations') }}">
-                            <input type="hidden" name="item_id" value="{{ data[0] }}">
-                            <button type="submit" name="action" value="delete">Delete</button>
-                        </form>
-                    </td>
-                </tr>
+            {% for data in queued_items %}
+            <tr>
+                <td>{{ item[0] }}</td>
+                <td>{{ item[1] }}</td>
+                <td>{{ item[2] }}</td>
+                <td>{{ item[3] }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('school_admin_reservations') }}">
+                        <input type="hidden" name="item_id" value="{{ item[0] }}">
+                        <input type="hidden" name="user_id" value="{{ item[2] }}">
+                        <button type="submit" name="action" value="deny_queue">Deny</button>
+                    </form>
+                </td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>

@@ -547,6 +547,7 @@ def edit_password():
     user_info = cur.fetchone()
     cur.close()
     return render_template('edit_password.html',user_info = user_info)
+
 #route για το βιβλίο που ο χρηστης επέλεξε
 @app.route('/book_display',methods=['GET', 'POST'])
 def book_display():
@@ -1345,6 +1346,12 @@ def school_admin_reservations():
                 cur.execute(query,(int(item_id),))
                 mydb.connection.commit()
             mydb.connection.commit()
+        elif action == 'deny_queue':
+            # Delete the item from the 'book_status' table
+            query = "DELETE FROM book_status WHERE book_id = %s"
+            cur.execute(query, (int(item_id),))
+            mydb.connection.commit()
+            
 
         cur.close()
 
@@ -1355,10 +1362,13 @@ def school_admin_reservations():
     query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'reserved'"
     cur.execute(query)
     reserved_items = cur.fetchall()
+    query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'queue'"
+    cur.execute(query)
+    queued_items = cur.fetchall()
     cur.close()
 
     # Render the template with the data
-    return render_template('school_admin_reservations.html', reserved_items=reserved_items)
+    return render_template('school_admin_reservations.html', reserved_items=reserved_items,queued_items=queued_items)
 
 # Extra Route για να εισάγει κατευθειαν δανεισμό
 @app.route('/school_admin_new_booking', methods=['GET', 'POST'])

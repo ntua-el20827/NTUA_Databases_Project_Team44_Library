@@ -1098,95 +1098,107 @@ INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
 VALUES (43, 63, 'Women in Love is a complex and introspective novel that delves into relationships and societal constraints.', '2023-01-15', '4');
 
 --- Κρατήσεις
-/* INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (1, 15, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL); */
 
+-- School 1
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (2, 2, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-
-/* INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (3, 5, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL); */
+CALL decrease_available_books(2);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (4, 6, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(4);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (5, 7, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(5);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (6, 14, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(6);
+
+INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
+VALUES (7, 15, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(7);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (8, 16, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-  
+CALL decrease_available_books(8);
+
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (9, 17, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(9);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (10, 18, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(10);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (11, 19, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(11);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (12, 30, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(12);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (13, 31, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(13);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (14, 32, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(14);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (15, 33, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(15);
 
---- School 2
+-- School 2
+
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (27, 20, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(27);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (28, 21, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(28);
+
+INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
+VALUES (29, 22, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(29);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (33, 35, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(33);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (34, 36, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(34);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (35, 37, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(35);
 
+
+-- School 3
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (36, 38, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-
-
---- School 3
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (44, 4, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (45, 11, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (46, 12, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (47, 13, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+VALUES (47, 11, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(47);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (48, 25, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(48);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (49, 26, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(49);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (50, 27, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(50);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (51, 28, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
-
-INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (52, 29, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+VALUES (51, 43, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+CALL decrease_available_books(51);
 
 
 ----
@@ -1196,3 +1208,5 @@ INSERT INTO book_author (author, book_id) VALUES ('Edith Wharton', 62),('Edith W
 INSERT INTO book_status (book_id, user_id, status, request_date,approval_date)
 VALUES (16, 19, 'borrowed', '2023-04-29','2023-04-30');
 CALL decrease_available_books(19);
+
+---queue
