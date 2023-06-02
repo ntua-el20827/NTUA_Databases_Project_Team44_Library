@@ -81,15 +81,36 @@ body {
   }
 
   
-.school_list{
+.school_list1{
 	margin: 20px;
     background-color: black;
   color:  rgb(91, 186, 221);
-    width: 800px;
+    width: 400px;
     border-radius:30px;
-    
-}
+  }
 
+  .school_list1 table {
+    padding: 10px; 
+  }
+  
+  .school_list1 th,
+  .school_list1 td {
+    padding: 10px; 
+    text-align: center;
+    vertical-align: middle;
+  }
+  .school_list1 a{
+    color: rgb(150, 150, 18);
+  }
+
+  
+  .school_list{
+    margin: 20px;
+      background-color: black;
+    color:  rgb(91, 186, 221);
+      width: 800px;
+      border-radius:30px;
+    }
 .school_list table {
   padding: 10px; 
 }
@@ -134,7 +155,7 @@ body {
     border-style: solid; 
     border-radius: 30px;
     border-width: 6px;
-    padding: 50px;
+    padding: 30px;
     margin: auto;
     margin-bottom: 20px;
   

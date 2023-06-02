@@ -12,10 +12,10 @@
 	
 	<br><br>
 	<div class="registration">
-      <h5>
-      Με την αίτηση Εγγραφής Σχολικής Μονάδας γίνεται αυτόματα
-        η αίτηση εγγραφής του υπεύθυνου της βιβλιοθήκης.
-      </h5>
+      <h4>
+      Παρακάτω προσθέστε τα στοιχεία του βιβλίου. Είναι απαραίτητη η συμπλήρωση όλων των πεδίων, πλην των πεδίων 2ου Συγγραφέα
+	  και Λέξεων κλειδιών σε περίπτωση που αυτά τα στοιχεία δεν υπάρχουν
+      </h4>
 	  {% with messages = get_flashed_messages() %}
 	  {% if messages %}
 		  <div class="flash-messages">
@@ -59,12 +59,18 @@
    
 		<label for="2author">2oς Συγγραφέας:</label><br>
 		<input type="text" id="author2" name="author2" ><br><br>
-		<br><br>
+		
+
+		<label for="keywords">Λέξεις Κλειδιά:</label><br>
+		<input type="text" id="keywords" name="keywords" ><br><br>
+		<br>
+		
+
 
         <form action="{{ url_for('school_admin_add_books') }}" method="POST">
         <input type="submit" value="Προσθήκη">	
         </form>	
-        <p>Επιστροφη στην αρχικη <a href="{{ url_for('index') }}"> σελίδα </a></p>
+        <p>Επιστροφη στην <a href="{{ url_for('school_admin') }}"> Σχολική Βιβλιοθήκη </a></p>
 	</form>
 
     </div>
