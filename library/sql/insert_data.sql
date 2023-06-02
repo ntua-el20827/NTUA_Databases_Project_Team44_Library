@@ -959,143 +959,151 @@ INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, 
 VALUES (14, 33, 'borrowed', '2023-05-14', '2023-05-17', '2023-05-19');
 
 --- Reviews
---- School 1
+-- school 1
+-- Reviews for user_id 2
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (5, 1, 'Pride and Prejudice is a classic love story with memorable characters.', '2022-09-10', '4');
+VALUES (2, 1, 'Pride and Prejudice is a timeless classic with memorable characters and a beautiful love story.', '2023-01-10', '5');
+
+-- Reviews for user_id 6
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (6, 3, 'The Hobbit is a charming adventure filled with magical creatures and a captivating quest.', '2023-02-15', '4');
+
+-- Reviews for user_id 7
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (7, 4, '1984 is a dystopian masterpiece that offers a chilling portrayal of a totalitarian society.', '2023-03-20', '5');
+
+-- Reviews for user_id 14
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (14, 5, 'The Alchemist is a thought-provoking novel that inspires readers to follow their dreams.', '2023-04-25', '4');
+
+-- Reviews for user_id 15
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (15, 1, 'Pride and Prejudice is a beloved classic that showcases the complexities of love and societal expectations.', '2022-12-05', '5');
+
+-- Reviews for user_id 16
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (16, 7, 'To the Lighthouse is a beautifully written novel that explores themes of introspection and the passage of time.', '2023-01-25', '4');
+
+-- Reviews for user_id 17
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (17, 8, 'Moby-Dick is an epic tale of adventure and obsession set in the world of whaling.', '2023-02-08', '5');
+
+-- Reviews for user_id 18
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (18, 9, 'The Picture of Dorian Gray is a haunting novel that explores the corrupting nature of beauty and youth.', '2023-03-15', '4');
+
+-- Reviews for user_id 19
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (19, 16, 'The Kite Runner is a powerful and emotional story of friendship, redemption, and the consequences of our choices.', '2023-04-12', '3');
+
+-- Reviews for user_id 19
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (19, 10, 'Frankenstein is a Gothic masterpiece that raises questions about the boundaries of science and the nature of humanity.', '2023-01-28', '2');
+
+-- Reviews for user_id 30
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (30, 11, 'A Game of Thrones is an immersive and epic fantasy series filled with complex characters and political intrigue.', '2023-02-20', '1');
+
+-- Reviews for user_id 31
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (31, 12, 'The Fault in Our Stars is a heart-wrenching and beautifully written novel about love, loss, and the power of human connection.', '2023-03-18', '4');
+
+-- Reviews for user_id 32
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (32, 13, 'Gone Girl is a gripping psychological thriller with twists and turns that keep you guessing until the very end.', '2023-04-10', '3');
+
+-- Reviews for user_id 33
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (33, 14, 'The Chronicles of Narnia is a beloved fantasy series that takes readers on a magical journey through a world of imagination.', '2023-05-05', '4');
+
+-- school 2
+-- Reviews for user_id 3
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (3, 23, 'The Da Vinci Code is a gripping and intricate thriller that keeps you hooked from start to finish.', '2023-01-12', '3');
 
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (5, 7, 'To the Lighthouse is a beautifully written book with poetic prose.', '2022-11-20', '5');
+VALUES (3, 37, 'The War of the Worlds is a classic science fiction novel that explores themes of invasion and humanity.', '2023-02-18', '5');
+
+-- Reviews for user_id 8
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (8, 38, 'The Time Machine is a thought-provoking science fiction novella that delves into the concept of time travel.', '2023-03-20', '3');
 
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (6, 10, 'Frankenstein is a haunting tale of creation and the consequences that follow.', '2022-12-05', '4');
+VALUES (8, 24, 'The Kite Runner is a deeply moving and poignant novel that explores themes of friendship, betrayal, and redemption.', '2023-04-15', '5');
+
+-- Reviews for user_id 9
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (9, 25, 'The Book Thief is a haunting and beautifully written story set during World War II.', '2023-05-08', '4');
 
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (7, 16, 'The Kite Runner is a powerful and emotional story of redemption.', '2023-01-15', '5');
+VALUES (9, 39, 'The Poison Belt is a thrilling science fiction novella that continues the adventures of Professor Challenger.', '2023-02-27', '5');
+
+-- Reviews for user_id 10
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (10, 26, 'The Secret Life of Bees is a heartwarming and powerful novel that explores themes of family, race, and forgiveness.', '2023-03-10', '4');
 
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (14, 20, 'The Bell Jar is a captivating and thought-provoking novel.', '2023-03-08', '4');
+VALUES (10, 40, 'The Invisible Man is a classic science fiction novel that examines the consequences of scientific experimentation.', '2023-04-22', '2');
+
+-- Reviews for user_id 20
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (20, 27, 'The Road is a post-apocalyptic novel that offers a bleak yet gripping depiction of survival and hope.', '2023-01-28', '4');
 
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (15, 21, 'The Help is a compelling and heartwarming story about racial inequality.', '2023-04-02', '5');
+VALUES (20, 41, 'Vingt mille lieues sous les mers (Twenty Thousand Leagues Under the Sea) is a classic adventure novel by Jules Verne.', '2023-02-12', '5');
+
+-- Reviews for user_id 21
+INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
+VALUES (21, 28, 'The Bell Jar is a poignant and semi-autobiographical novel that explores themes of mental health and identity.', '2023-03-05', '4');
 
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (16, 22, 'The Hunger Games is a thrilling dystopian adventure that keeps you on the edge of your seat.', '2023-05-10', '4');
+VALUES (21, 42, 'Flatland is a unique and thought-provoking novella that presents a mathematical world of dimensions.', '2023-04-18', '2');
 
+-- Reviews for user_id 22
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (17, 2, 'The Catcher in the Rye is a coming-of-age novel with a unique and memorable protagonist.', '2022-10-15', '5');
+VALUES (22, 29, 'The Help is a compelling and emotionally charged novel that tackles issues of race and discrimination.', '2023-05-02', '4');
 
+-- Reviews for user_id 23
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (18, 4, '1984 is a chilling portrayal of a dystopian society and the dangers of totalitarianism.', '2023-02-18', '5');
+VALUES (23, 30, 'Alice''s Adventures in Wonderland is a whimsical and imaginative tale that takes readers on a surreal journey.', '2023-01-15', '5');
 
+-- school 3
+-- Reviews for user_id 4
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (19, 9, 'The Picture of Dorian Gray is a beautifully written novel with themes of beauty, decadence, and morality.', '2023-03-25', '4');
+VALUES (4, 44, 'Harry Potter and the Sorcerer''s Stone is a magical and enchanting start to the beloved Harry Potter series.', '2023-03-18', '5');
 
+-- Reviews for user_id 11
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (30, 67, 'The Bible is a sacred text that offers spiritual guidance and wisdom.', '2023-01-01', '5');
+VALUES (11, 45, 'The Hunger Games is a gripping and thrilling dystopian novel that keeps you on the edge of your seat.', '2023-02-10', '2');
 
+-- Reviews for user_id 12
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (31, 68, 'Adventures of Huckleberry Finn is a classic adventure novel with deep social commentary.', '2023-02-28', '4');
+VALUES (12, 46, 'The Girl with the Dragon Tattoo is a gripping and suspenseful crime thriller with complex and intriguing characters.', '2023-01-25', '5');
 
+-- Reviews for user_id 13
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (32, 69, 'Treasure Island is a thrilling pirate tale that sparks the imagination.', '2023-04-10', '5');
+VALUES (13, 47, 'The Chronicles of Narnia is a timeless and enchanting series that transports readers to a magical world.', '2023-04-02', '4');
 
+-- Reviews for user_id 25
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (33, 70, 'Sense and Sensibility is a delightful Jane Austen novel that explores love and societal expectations.', '2023-05-15', '4');
+VALUES (25, 48, 'Pride and Prejudice is a classic and beautifully written novel that explores themes of love, societal norms, and personal growth.', '2023-03-15', '5');
 
+-- Reviews for user_id 26
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (30, 71, 'A Tale of Two Cities is a captivating historical novel with memorable characters and themes of love and sacrifice.', '2022-12-25', '5');
+VALUES (26, 49, 'The Catcher in the Rye is a coming-of-age novel that captures the disillusionment and alienation of the protagonist.', '2023-04-28', '4');
 
+-- Reviews for user_id 27
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (31, 72, 'A Christmas Carol is a heartwarming holiday tale that teaches the importance of compassion and redemption.', '2023-01-05', '4');
+VALUES (27, 50, 'The Hobbit is a delightful and adventurous tale set in the world of Middle-earth.', '2023-02-22', '2');
 
---- School 2
+-- Reviews for user_id 28
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (3, 23, 'The Da Vinci Code is a thrilling mystery with intricate puzzles and a captivating plot.', '2022-11-15', '4');
+VALUES (28, 51, 'Brave New World is a thought-provoking dystopian novel that explores themes of technology, society, and individuality.', '2023-05-05', '4');
 
+-- Reviews for user_id 29
 INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (8, 26, 'The Secret Life of Bees is a heartwarming coming-of-age story set in the backdrop of civil rights movement.', '2023-02-20', '5');
+VALUES (29, 52, 'The Lord of the Rings is an epic fantasy trilogy that takes readers on a journey through a richly detailed and immersive world.', '2023-01-08', '5');
 
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (9, 27, 'The Road is a post-apocalyptic novel that explores the depths of human resilience and love.', '2023-03-05', '4');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (10, 32, 'The Wonderful Wizard of Oz is a timeless classic filled with imagination and adventure.', '2023-04-18', '5');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (20, 37, 'The War of the Worlds is a groundbreaking science fiction novel that sparked the alien invasion genre.', '2023-05-02', '4');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (21, 40, 'The Invisible Man is a gripping tale of scientific discovery and its dangerous consequences.', '2022-10-25', '5');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (22, 41, 'Vingt mille lieues sous les mers is a classic adventure novel that takes readers on a journey beneath the sea.', '2022-12-12', '4');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (23, 42, 'Flatland is a thought-provoking novella that explores dimensions and societal hierarchies.', '2023-01-28', '5');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (24, 79, 'Adventures of Huckleberry Finn is an American classic that challenges societal norms.', '2023-02-10', '4');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (34, 85, 'Harry Potter and the Chamber of Secrets is a magical and enchanting continuation of the beloved series.', '2023-04-15', '5');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (35, 36, 'Nineteen Eighty-Four is a dystopian masterpiece that serves as a cautionary tale about totalitarianism.', '2023-05-05', '4');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (36, 38, 'The Time Machine is a visionary science fiction novel that explores the concept of time travel.', '2022-11-20', '5');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (37, 85, 'Harry Potter and the Chamber of Secrets is another thrilling adventure in the magical world of Harry Potter.', '2023-01-10', '4');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (38, 86, 'Harry Potter and the Goblet of Fire is a spellbinding installment with thrilling challenges and unexpected twists.', '2023-02-28', '5');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (39, 87, 'The Lion, the Witch and the Wardrobe is a captivating fantasy that transports readers to the magical land of Narnia.', '2023-03-15', '4');
-
---- School 3
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (4, 44, 'Harry Potter and the Sorceres Stone is a magical start to an incredible journey.', '2022-12-05', '5');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (11, 45, 'The Hunger Games is a thrilling dystopian novel filled with action and suspense.', '2023-03-20', '4');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (12, 46, 'The Girl with the Dragon Tattoo is a gripping mystery with complex characters.', '2023-04-08', '5');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (13, 47, 'The Chronicles of Narnia is a beloved fantasy series with enchanting adventures.', '2022-11-25', '4');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (25, 48, 'Pride and Prejudice is a timeless romance that explores societal norms.', '2023-01-12', '5');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (26, 49, 'The Catcher in the Rye is a thought-provoking coming-of-age novel with a distinctive voice.', '2023-02-22', '4');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (27, 50, 'The Hobbit is a delightful adventure that transports readers to Middle-earth.', '2023-04-25', '5');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (28, 53, 'The Odyssey is an epic poem filled with heroic deeds and mythical encounters.', '2022-10-18', '4');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (29, 54, 'A Game of Thrones is a gripping tale of power, politics, and fantastical elements.', '2022-12-05', '5');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (39, 59, 'Sense and Sensibility is a classic Jane Austen novel that explores love and societal expectations.', '2023-02-12', '4');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (40, 60, 'Northanger Abbey is a witty and satirical novel that parodies gothic fiction.', '2023-03-28', '5');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (41, 61, 'Ethan Frome is a tragic tale of love and regret set in a small New England town.', '2023-04-10', '4');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (42, 62, 'Uncle Toms Cabin is a powerful and influential novel that exposes the horrors of slavery.', '2022-11-20', '5');
-
-INSERT INTO review (user_id, book_id, review_text, rev_date, rating)
-VALUES (43, 63, 'Women in Love is a complex and introspective novel that delves into relationships and societal constraints.', '2023-01-15', '4');
 
 --- Κρατήσεις
 
