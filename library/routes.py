@@ -496,13 +496,10 @@ def edit_book():
     cur = mydb.connection.cursor()
     #print("ISBN is ", type(ISBN))
     #print(int(ISBN))
-    query = """SELECT b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, 
-        GROUP_CONCAT(ba.author SEPARATOR ',') AS authors,
-        b.summary, b.book_image, b.book_id,
-        GROUP_CONCAT(bk.keywords SEPARATOR ',') AS keywords
+    query = """SELECT b.book_id, b.title, b.publisher, b.pages,b.ISBN, b.summary,b.number_of_books,b.number_of_available_books,b.book_image,
+        b.book_language,GROUP_CONCAT(ba.author SEPARATOR ',') AS authors
         FROM book b
         JOIN book_author ba ON b.book_id = ba.book_id
-        JOIN book_keywords bk ON b.book_id = bk.book_id
         WHERE b.school_id = %s AND b.ISBN = %s AND b.book_id = %s
         GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id
         """
@@ -516,6 +513,7 @@ def edit_book():
         """
     cur.execute(query,(school_id, int(ISBN),book_id))
     authors = cur.fetchall()
+    print(authors)
     query = """SELECT GROUP_CONCAT(bt.theme SEPARATOR ',') AS themes
         FROM book b
         JOIN book_theme bt ON b.book_id = bt.book_id
@@ -524,8 +522,16 @@ def edit_book():
         """
     cur.execute(query,(school_id, int(ISBN),book_id))
     themes = cur.fetchall()
+    query = """SELECT GROUP_CONCAT(bk.keywords SEPARATOR ',') AS keywords
+        FROM book b
+        JOIN book_keywords bk ON b.book_id = bk.book_id
+        WHERE b.school_id = %s AND b.ISBN = %s AND b.book_id = %s
+        GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id
+        """
+    cur.execute(query,(school_id, int(ISBN),book_id))
+    keywords = cur.fetchall()
     cur.close()
-    return render_template('edit_book.html',book_info = book_info,authors=authors,themes=themes)
+    return render_template('edit_book.html',book_info = book_info,authors=authors,themes=themes,keywords=keywords)
 
 @app.route('/edit_password',methods=['GET', 'POST'])
 def edit_password():
@@ -569,12 +575,14 @@ def book_display():
     print("ISBN is ", type(ISBN))
     print(int(ISBN))
     query = """SELECT b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, 
-        GROUP_CONCAT(ba.author SEPARATOR ',') AS authors,
-        b.summary, b.book_image, b.book_id
+        GROUP_CONCAT(DISTINCT ba.author SEPARATOR ',') AS authors,
+        b.summary, b.book_image, b.book_id,
+        GROUP_CONCAT(DISTINCT bk.keywords SEPARATOR ',') AS keywords
         FROM book b
         JOIN book_author ba ON b.book_id = ba.book_id
+        JOIN book_keywords bk ON b.book_id = bk.book_id
         WHERE b.school_id = %s AND b.ISBN = %s AND b.book_id = %s
-        GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id;
+        GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id
         """
     cur.execute(query,(school_id, int(ISBN),book_id))
     book_info = cur.fetchone()
@@ -1338,7 +1346,6 @@ def delete_users():
 # Extra Route για να ελεγξει κρατήσεις -> να τις κανει δανεισμους [ΟΚ]
 @app.route('/school_admin_reservations', methods=['GET', 'POST'])
 def school_admin_reservations():
-    school_id = session['school_id']
     if request.method == 'POST':
         item_id = request.form['item_id']
         user_id = request.form['user_id']
@@ -1357,21 +1364,20 @@ def school_admin_reservations():
             # Να βάλλουμε και current date το rent_date
         elif action == 'deny':
             # Delete the item from the 'book_status' table
-            query = "DELETE FROM book_status WHERE book_id = %s AND user_id = %s AND status = 'reserved'"
-            cur.execute(query, (int(item_id),user_id,))
+            query = "DELETE FROM book_status WHERE book_id = %s"
+            cur.execute(query, (int(item_id),))
             mydb.connection.commit()
             query = "Select check_book_update(%s) as update_occured;"
             cur.execute(query,(int(item_id),))
             update_occured = cur.fetchone()
-            print(update_occured)
-            if update_occured[0]==0:
+            if update_occured==0:
                 query = "CALL increase_available_books(%s)"
                 cur.execute(query,(int(item_id),))
                 mydb.connection.commit()
             mydb.connection.commit()
         elif action == 'deny_queue':
             # Delete the item from the 'book_status' table
-            query = "DELETE FROM book_status WHERE book_id = %s AND user_id = %s AND status = 'queue'"
+            query = "DELETE FROM book_status WHERE book_id = %s"
             cur.execute(query, (int(item_id),))
             mydb.connection.commit()
             
@@ -1382,11 +1388,11 @@ def school_admin_reservations():
     cur = mydb.connection.cursor()
 
     # Fetch data from the 'book_status' table with status='reserved'
-    query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'reserved' AND b.school_id=%s "
-    cur.execute(query,(school_id,))
+    query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'reserved'"
+    cur.execute(query)
     reserved_items = cur.fetchall()
-    query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'queue' AND b.school_id=%s"
-    cur.execute(query,(school_id,))
+    query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'queue'"
+    cur.execute(query)
     queued_items = cur.fetchall()
     cur.close()
 
@@ -1492,7 +1498,7 @@ def school_admin_book_return():
         query = "Select check_book_update(%s) as update_occured;"
         cur.execute(query,(int(item_id),))
         update_occured = cur.fetchone()
-        if update_occured[0]==0:
+        if update_occured==0:
             query = "CALL increase_available_books(%s)"
             cur.execute(query,(int(item_id),))
             mydb.connection.commit()

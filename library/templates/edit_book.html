@@ -97,9 +97,7 @@
 
         <div class="form-row">
             <label for="authors">Authors:</label>
-                {% for author in authors %}
-                    <option value="{{ author}}" {% if author in book_authors %}selected{% endif %}>{{ author[0] }}</option>
-                {% endfor %}
+            <input type="text" id="authors" name="authors" value="{{ authors[0][0] }}" required>
         </div>
         <div class="form-row">
             <label for="themes">Themes:</label>
