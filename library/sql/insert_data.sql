@@ -1125,7 +1125,7 @@ VALUES (8, 16, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
 CALL decrease_available_books(8);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
-VALUES (9, 17, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+VALUES (9, 15, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
 CALL decrease_available_books(9);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
@@ -1210,3 +1210,10 @@ VALUES (16, 19, 'borrowed', '2023-04-29','2023-04-30');
 CALL decrease_available_books(19);
 
 ---queue
+INSERT INTO book_status (book_id, user_id, status, request_date)
+VALUES (6, 15, 'queue', '2023-05-29');
+INSERT INTO book_status (book_id, user_id, status, request_date)
+VALUES (6, 16, 'queue', '2023-05-30');
+INSERT INTO book_status (book_id, user_id, status, request_date)
+VALUES (7, 16, 'queue', '2023-05-30');
+
