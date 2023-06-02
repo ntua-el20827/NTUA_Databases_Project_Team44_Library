@@ -1332,9 +1332,10 @@ def school_admin_reviews():
     cur = mydb.connection.cursor()
 
     # Fetch the review applications from the 'review_applications' view
-    query = """ SELECT u.user_name, r.review_text, r.rating, u.user_id, r.book_id
+    query = """ SELECT u.user_name, r.review_text, r.rating, u.user_id, r.book_id, b.title
         FROM review r
         JOIN lib_user u ON r.user_id = u.user_id
+        JOIN book b ON b.book_id = r.book_id
         WHERE r.review_pending_flag = 'pending' AND u.school_id = %s"""
     cur.execute(query,(school_id,))
     review_applications = cur.fetchall()
