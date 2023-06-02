@@ -16,7 +16,7 @@ def index():
         session['school_name'] = school_name
         print(school_name)
         #query για να πάρω το school_id
-        query = "SELECT school_id from school where school_name = %s"
+        query = "SELECT school_id from school where school_name = %s" 
         cur = mydb.connection.cursor()
         cur.execute(query,(school_name,))
         school_id = cur.fetchone() # με την fetchall() πιάνω όλα όσα ηρθαν απο το execute που έγινε!!
@@ -29,7 +29,7 @@ def index():
         #with open('/home/george/Workshop/uni/dblab/project/library/sql/queries.sql', 'r') as file:
          #   queries = file.read().split(';')
         #query = queries[0]
-        query = "SELECT school_name from school"
+        query = "SELECT school_name from school ORDER BY school_name"
         # Execute the query to get a list of all schools from the database
         cur = mydb.connection.cursor()
         cur.execute(query)
@@ -1054,8 +1054,34 @@ def school_admin_add_books():
         except Exception as e:
             flash("Υπαρχει λάθος στα στοιχεία του βιβλιου")
             return redirect(url_for("school_admin_add_books"))
-
-      
+        book_id = cur.lastrowid
+        author1_query = """ INSERT INTO book_author (book_id, author)
+        VALUES (%s,%s)"""
+        author1_values = (book_id,author)
+        print(author)
+        try:
+            cur.execute(author1_query,author1_values)  # Execute your INSERT statement here
+            mydb.connection.commit()
+        except Exception as e:
+            flash(" Ποιος ειναι ο Συγγραφεας;")
+            delete_query = "DELETE FROM book WHERE school_id = %s"
+            cur.execute(delete_query, (school_id,))
+            mydb.connection.commit()
+            return redirect(url_for("school_admin_add_books"))
+        if len(author2)> 0:
+            author2_query = """INSERT INTO school_phone (book_id,author) 
+            VALUES (%s,%s)"""
+            author2_values = (school_id,author2)
+            print(author2)
+            try:
+                cur.execute(author2_query,author2_values)  # Execute your INSERT statement here
+                mydb.connection.commit()
+            except Exception as e:
+                flash("Γιολο")
+                delete_query = "DELETE FROM book WHERE school_id = %s"
+                cur.execute(delete_query, (school_id,))
+                mydb.connection.commit()
+                return redirect(url_for("school_admin_add_books"))
         flash("Το βιβλιο Προστεθηκε")
         return redirect(url_for("school_admin_add_books"))
     else:

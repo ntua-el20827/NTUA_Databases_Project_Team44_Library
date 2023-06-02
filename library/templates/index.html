@@ -26,21 +26,18 @@
 					  <a class="logout" href="{{ url_for('super_admin_login') }}" > Συνδεση Υπευθυνου Διαχεριστη</a>
 		  </div>
 		  <br>
-		  <div class ="welcome">
+		  <div class ="super_admin">
 		  <p > <h3>Μπορειτε να αναζητήσετε παρακάτω το σχολείο στο οποίο ανήκετε. Αφού το βρείτε, πατήστε στο σχολείο, όπου και θα μπορέσετε να κάνετε αίτηση για έγγραφη.</h3> 
 		  </p>
 		
-		  <h2> Σχολεία: </h2>
+		  
 		  </div>
-		  <div class="search">
-			<form action="/action_page.php">
-				<input type="text" placeholder="Αναζητήστε Σχολείο.." name="search">
-					  <button>
-						<i class="fa fa-search"> </i>
-					</button>
-			   </form>
-		  </div>
-			<div class ="school_list">
+		  
+		 <div class = "super_admin">
+		 <h2> Σχολεία: </h2>
+		</div>
+			<div class ="school_list1">
+				
               <ul>
             	{% for school in schools %}
 				<li>
