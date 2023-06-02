@@ -254,7 +254,7 @@ INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, numbe
 VALUES ('Emma', 'Stellar Books', 350, 762940815, 'A novel by Jane Austen, portraying the life and matchmaking endeavors of Emma Woodhouse in a small English village.', 4, 4, 'https://covers.openlibrary.org/b/OLID/OL13573615M-M.jpg', 'English', 3);
 
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
-VALUES ('Wuthering Heights', 'Stellar Books', 320, 238941657, 'A Gothic novel by Emily Brontë, telling the passionate and tragic love story of Heathcliff and Catherine Earnshaw on the Yorkshire moors.', 3, 3, 'https://covers.openlibrary.org/b/OLID/OL38586477M-M.jpg', 'English', 3);
+VALUES ('Wuthering Heights', 'Stellar Books', 320, 238941657, 'A Gothic novel by Emily Bronte, telling the passionate and tragic love story of Heathcliff and Catherine Earnshaw on the Yorkshire moors.', 3, 3, 'https://covers.openlibrary.org/b/OLID/OL38586477M-M.jpg', 'English', 3);
 
 INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books, number_of_available_books, book_image, book_language, school_id)
 VALUES ('Sense and Sensibility', 'Stellar Books', 380, 846291735, 'A novel by Jane Austen, following the Dashwood sisters as they navigate love, loss, and societal expectations in Regency-era England.', 4, 4, 'https://covers.openlibrary.org/b/OLID/OL14041582M-M.jpg', 'English', 3);
