@@ -496,10 +496,13 @@ def edit_book():
     cur = mydb.connection.cursor()
     #print("ISBN is ", type(ISBN))
     #print(int(ISBN))
-    query = """SELECT b.book_id, b.title, b.publisher, b.pages,b.ISBN, b.summary,b.number_of_books,b.number_of_available_books,b.book_image,
-        b.book_language,GROUP_CONCAT(ba.author SEPARATOR ',') AS authors
+    query = """SELECT b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, 
+        GROUP_CONCAT(ba.author SEPARATOR ',') AS authors,
+        b.summary, b.book_image, b.book_id,
+        GROUP_CONCAT(bk.keywords SEPARATOR ',') AS keywords
         FROM book b
         JOIN book_author ba ON b.book_id = ba.book_id
+        JOIN book_keywords bk ON b.book_id = bk.book_id
         WHERE b.school_id = %s AND b.ISBN = %s AND b.book_id = %s
         GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id
         """
@@ -1045,6 +1048,9 @@ def school_admin_add_books():
         language = request.form['language']
         author = request.form['author']
         author2 =  request.form['author2']
+        keywords = request.form['keywords']
+        keywords_list = keywords.split(",")
+        print(keywords_list)
         cur = mydb.connection.cursor()
         school_query = """ INSERT INTO book (title, publisher, pages, ISBN, summary, number_of_books,number_of_available_books, book_image, book_language, school_id)
         VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
@@ -1083,6 +1089,21 @@ def school_admin_add_books():
                 cur.execute(delete_query, (school_id,))
                 mydb.connection.commit()
                 return redirect(url_for("school_admin_add_books"))
+        for keyword in keywords_list:
+            keywords_query = """ INSERT INTO book_keywords (book_id, keywords)
+            VALUES (%s,%s)"""
+            keywords_values = (book_id, keyword)
+            try:
+                cur.execute(keywords_query,keywords_values)  # Execute your INSERT statement here
+                mydb.connection.commit()
+            except Exception as e:
+                flash("Λαθος keywords")
+                delete_query = "DELETE FROM book WHERE school_id = %s"
+                cur.execute(delete_query, (school_id,))
+                mydb.connection.commit()
+                return redirect(url_for("school_admin_add_books"))
+
+        print(keywords)
         flash("Το βιβλιο Προστεθηκε")
         return redirect(url_for("school_admin_add_books"))
     else:
