@@ -404,7 +404,7 @@ def mybooks():
         cur.close()
 
     cur = mydb.connection.cursor()
-    query = """ SELECT bs.book_id, b.title, b.book_language, b.ISBN, bs.approval_date, bs.book_status_id
+    query = """ SELECT bs.book_id, b.title, b.book_language, b.ISBN, bs.approval_date, bs.book_status_id, bs.return_date
         FROM book_status bs
         JOIN book b ON bs.book_id = b.book_id
         WHERE bs.user_id = %s AND bs.status = 'borrowed' """
@@ -646,7 +646,7 @@ def rent():
     if (ekprothesma==()):
         print("mesa")
         # Ελεγχος αν αυτο που διαλεξες το εχεις δανεισμένο ή κρατημένο
-        query = """ SELECT book_id FROM book_status WHERE user_id = %s AND book_id = %s AND return_date IS NULL """
+        query = """ SELECT book_id FROM book_status WHERE user_id = %s AND book_id = %s AND (return_date IS NULL OR status = 'reserved') """
         cur.execute(query,(user_id, book_id,))
         exei_daneistei = cur.fetchone()
         if exei_daneistei:
