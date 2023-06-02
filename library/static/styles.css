@@ -80,6 +80,7 @@ body {
     /* Add other CSS rules for the search input */
   }
 
+  
 .school_list{
 	margin: 20px;
     background-color: black;
@@ -322,6 +323,7 @@ form .likert li input[type=radio] {
 
 .form-group {
   margin-bottom: 1rem;
+  border-radius: 100px;
 }
   
 .form-control {
