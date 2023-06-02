@@ -52,20 +52,21 @@
         </tbody>
     </table>
     </div>
-    <div class = "school_list">
-    </table>
-    </div>
     <h2>Book Query Data</h2>
+    <div class = "school_list">
+    <table>
     <table>
         <thead>
             <tr>
-                <th>Item ID</th>
+                <th>Book ID</th>
                 <th>Title</th>
+                <th>User ID</th>
+                <th>User Last Name</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            {% for data in queued_items %}
+            {% for item in queued_items %}
             <tr>
                 <td>{{ item[0] }}</td>
                 <td>{{ item[1] }}</td>
