@@ -32,24 +32,11 @@
 		
 		  
 		  </div>
-		  <div class ="super_admin">
-			<form action="{{ url_for('school') }}" method="POST">
-			<div class="form-group">
-			<input type="text" name="search_text" placeholder="Αναζητήστε Σχολείο" class ="search1" required>
-			</div>
-			 
-			  <div class="form-group">
-			<input type="submit" value="Search" class="edit-btn">
-			</div>
-		   </form>
-		   {% if no_results %}
-		  <p>Δεν υπάρχουν βιβλία για την αναζήτηση σας. Ελεγξτε αν πλητρολογησατε σωστα.</p>
-		 {% endif %}
-		 </div>
+		  
 		 <div class = "super_admin">
 		 <h2> Σχολεία: </h2>
 		</div>
-			<div class ="school_list">
+			<div class ="school_list1">
 				
               <ul>
             	{% for school in schools %}

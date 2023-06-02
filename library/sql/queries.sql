@@ -73,17 +73,16 @@ ORDER BY
 LIMIT 3;
 
 ---3.1.7 Authors who have written at least 5 books less than the author who has written the most books
-SELECT book_author.author, (max_books.num_books - COUNT(*)) AS book_diff
-FROM book_author
-INNER JOIN (
-  SELECT book_author.book_id, COUNT(*) AS num_books
-  FROM book_author
-  GROUP BY book_author.book_id
-  ORDER BY num_books DESC
-  LIMIT 1
-) AS max_books ON book_author.book_id = max_books.book_id
-GROUP BY book_author.author
-HAVING book_diff >= 5;
+SELECT ba.author, COUNT(DISTINCT b.book_id) AS book_count
+FROM book_author ba
+JOIN book b ON ba.book_id = b.book_id
+GROUP BY ba.author
+HAVING book_count <= (SELECT MAX(author_book_count) - 5 FROM
+  (SELECT COUNT(DISTINCT b2.book_id) AS author_book_count
+   FROM book_author ba2
+   JOIN book b2 ON ba2.book_id = b2.book_id
+   GROUP BY ba2.author) AS author_book_counts)
+ORDER BY book_count DESC;
 
 ---3.2 Αdmin Queries
 ---3.2.1 Present all books by title, author (search criteria: book title/book theme/book author/number of books)

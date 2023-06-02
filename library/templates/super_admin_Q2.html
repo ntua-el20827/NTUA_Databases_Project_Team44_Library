@@ -25,7 +25,7 @@
     <select id="theme" name="theme">
       <option value="">Select a theme</option>
       {% for theme in themes %}
-      <option value=" theme " {% if selected_theme == theme %}selected{% endif %}>  {{ theme }}  </option>
+        <option value="{{theme}}">{{theme}}</option>
       {% endfor %}
     </select>
     <input type="submit" value="Search">

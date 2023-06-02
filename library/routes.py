@@ -808,17 +808,19 @@ def super_admin_Q1():
 @app.route('/super_admin/Q2',methods=['GET', 'POST'])
 def super_admin_Q2():
     # Get the list of book themes from the database
-    themes = ['Fiction', 'Non-fiction','Dystopia','Gothic','Science Fiction', 'Science','Drama', 'Adventure','Mystery', 'Romance','War', 'Classic','Thriller', 'Horror', 'Fantasy', 'Biography', 'Autobiography', 'History', 'Poetry', 'Comics', 'Cookbooks', 'Travel', 'Religion', 'Self-help', 'Art', 'Music','Coming of Age', 'Sports', 'Humor', 'Children','Reference']
-
+    themes = ['Fiction','Non-fiction','Dystopia','Gothic','Science Fiction', 'Science','Drama', 'Adventure','Mystery', 'Romance','War', 'Classic','Thriller', 'Horror', 'Fantasy', 'Biography', 'Autobiography', 'History', 'Poetry', 'Comics', 'Cookbooks', 'Travel', 'Religion', 'Self-help', 'Art', 'Music','Coming of Age', 'Sports', 'Humor', 'Children','Reference']
+    print(themes)
     if request.method == 'POST':
         # Get the selected book theme from the form
-        selected_theme = request.form.get('theme')
+        selected_theme = request.form['theme']
+        print(selected_theme)
 
         # Execute the query to retrieve authors for the selected book theme
         cur = mydb.connection.cursor()
         author_query = "SELECT DISTINCT book_author.author FROM book_theme INNER JOIN book_author ON book_theme.book_id = book_author.book_id WHERE book_theme.theme = %s "
-        cur.execute(author_query, (selected_theme,))
+        cur.execute(author_query, (str(selected_theme),))
         authors = cur.fetchall()
+        print('authors = ' ,authors)
 
         # Execute the query to retrieve teachers who borrowed books of the selected theme last year
         teacher_query = "SELECT DISTINCT lib_user.user_name FROM book_theme INNER JOIN book ON book_theme.book_id = book.book_id INNER JOIN book_status ON book.book_id = book_status.book_id INNER JOIN lib_user ON book_status.user_id = lib_user.user_id WHERE book_theme.theme = %s AND book_status.status = 'borrowed' AND book_status.approval_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 YEAR) AND NOW() AND lib_user.role_name = 'teacher'"
