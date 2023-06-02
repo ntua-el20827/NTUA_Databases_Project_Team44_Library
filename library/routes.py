@@ -839,15 +839,13 @@ def super_admin_Q2():
 def super_admin_Q3():
     cur = mydb.connection.cursor()
     query = """
-        SELECT lib_user.user_name, COUNT(*) AS num_borrowings
-        FROM book_status
-        INNER JOIN lib_user ON book_status.user_id = lib_user.user_id
-        WHERE lib_user.role_name = 'teacher'
-        AND lib_user.user_date_of_birth > UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 40 YEAR))
-        AND book_status.status = 'borrowed'
-        GROUP BY lib_user.user_id
-        ORDER BY num_borrowings DESC
-        LIMIT 1;
+        SELECT u.user_id, u.user_firstname, u.user_lastname,u.user_date_of_birth, s.school_name, COUNT(*) as num_books_borrowed
+FROM lib_user u
+JOIN school s ON u.school_id = s.school_id
+JOIN book_status bs ON u.user_id = bs.user_id
+WHERE u.role_name = 'teacher' AND u.user_date_of_birth > DATE_SUB(CURDATE(), INTERVAL 40 YEAR) AND bs.status = 'borrowed'
+GROUP BY u.user_id
+ORDER BY num_books_borrowed DESC
         """
     cur.execute(query)
     results = cur.fetchall()
@@ -926,17 +924,16 @@ def super_admin_Q6():
 def super_admin_Q7():
     cur = mydb.connection.cursor()
     query = """
-    SELECT book_author.author, (max_books.num_books - COUNT(*)) AS book_diff
-    FROM book_author
-    INNER JOIN (
-    SELECT book_author.book_id, COUNT(*) AS num_books
-    FROM book_author
-    GROUP BY book_author.book_id
-    ORDER BY num_books DESC
-    LIMIT 1
-    ) AS max_books ON book_author.book_id = max_books.book_id
-    GROUP BY book_author.author
-    HAVING book_diff >= 5;
+   SELECT ba.author, COUNT(DISTINCT b.book_id) AS book_count
+   FROM book_author ba
+   JOIN book b ON ba.book_id = b.book_id
+   GROUP BY ba.author
+   HAVING book_count <= (SELECT MAX(author_book_count) - 5 FROM
+   (SELECT COUNT(DISTINCT b2.book_id) AS author_book_count
+   FROM book_author ba2
+   JOIN book b2 ON ba2.book_id = b2.book_id
+   GROUP BY ba2.author) AS author_book_counts)
+   ORDER BY book_count DESC
     """
     cur.execute(query)
     results = cur.fetchall()
@@ -1206,9 +1203,11 @@ def school_admin_Q3():
             INNER JOIN book_theme bt ON b.book_id = bt.book_id
             WHERE u.school_id = %s"""
         if search_type == 'Full name':
+            # extra info
             query = q1+" AND borrower_name = %s GROUP BY u.user_id, bt.theme"
             cur.execute(query,(school_id, search_text, ))
         elif search_type == 'Category':
+            # extra info
             query = q1+" AND bt.theme = %s GROUP BY u.user_id, bt.theme"
             cur.execute(query,(school_id, search_text, ))
     ratings = cur.fetchall()

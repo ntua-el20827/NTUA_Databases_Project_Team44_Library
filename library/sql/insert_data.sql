@@ -1187,3 +1187,12 @@ VALUES (51, 28, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
 
 INSERT INTO book_status (book_id, user_id, status, request_date, approval_date, return_date)
 VALUES (52, 29, 'reserved', DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL, NULL);
+
+
+----
+---- Testing
+INSERT INTO book_author (author, book_id) VALUES ('Edith Wharton', 62),('Edith Wharton', 63),('Edith Wharton', 64),('Edith Wharton', 65),('Edith Wharton', 66);
+-- 3.2.2
+INSERT INTO book_status (book_id, user_id, status, request_date,approval_date)
+VALUES (16, 19, 'borrowed', '2023-04-29','2023-04-30');
+CALL decrease_available_books(19);
