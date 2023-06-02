@@ -267,6 +267,7 @@ form { display: inline; }
   padding-right: 10px;
   border-radius: 6px;
   margin-right: 15px;
+  margin-top: 10px;
 }
 h3.likert-header {
   padding-left:4.25%;
@@ -449,4 +450,20 @@ form .likert li input[type=radio] {
   margin: auto;
   margin-bottom: 20px;
 
+}
+.flash-messages {
+  /* Add styles to the container */
+  position: fixed; /* or absolute, relative, etc. depending on your needs */
+  top: 650px; /* adjust the distance from the top */
+  right: 50%; /* adjust the distance from the right */
+  transform: translateX(50%);
+  /* Add other styles as desired */
+  background: black;
+  color: red;
+  padding: 10px;
+  padding-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
