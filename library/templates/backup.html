@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+	<head> 
+		<meta charset ="UTF-8"> 
+		<meta name = "description" content="This is an awesome website"> 
+		<title> School Library </title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <script>
+            function confirmLogout() {
+              var result = confirm("Are you sure you want to logout?");
+              if (result) {
+                window.location.href = "{{ url_for('logout') }}";
+              }
+            }
+          </script>
+		
+      
+	</head>
+	
+    <body>
+		<div class="topnav">	
+                <a href="{{ url_for('super_admin') }}">Επιστροφή στην Σχολική Βιβλιοθήκη</a>
+                <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
+            </div> <br>
+        <div class ="welcome">
+            
+            <h1>Δημιουργία Αντιγράφου Ασφαλείας και επαναφορά συστήματος</h1>  <br>
+           <h3>
+          
+           Πατώντας στο κουμπί backup, δημιουργειται αυτοματα ενα
+                αντιγραφο ασφαλειας για ολη τη βαση, την δεδομενη χρονικη στιγμη. 
+                Ουσιαστικά, δημιουργείται ένα αντίγραφο δεδομένων.
+            </h3>
+            
+            <h3> Σε περίπτωση κάποιας βλάβης του συστήματος και απώλειας των δεδομένων του,
+                κακόβουλη επίθεσης (ιός ή κακόβουλο λογισμικό)
+                ακόμα και μή ηθελημένης διαγραφής
+                δεδομένων, πατώντας το κουμπί restore
+                γίνεται η ανάκτηση αυτών των δεδομένων και το σύστημα επαναφερεται
+                στην καταάσταση που βρισκόταν, όταν φτιάξατε το backup. 
+            </h3><br>
+            
+            <form method="POST" action="{{ url_for('backup') }}">
+                <button type="submit" class="edit-btn" name="action" value="accept">Backup</button>
+                <button type="submit" class="edit-btn"name="action" value="deny">Restore</button>
+            </form>
+            
+        </div> 
+  
+    <html>
