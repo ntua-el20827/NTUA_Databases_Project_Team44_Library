@@ -14,6 +14,15 @@
             color: white;
         }
     </style>
+    <script>
+        function confirmLogout() {
+          var result = confirm("Are you sure you want to logout?");
+          if (result) {
+            window.location.href = "{{ url_for('logout') }}";
+          }
+        }
+      </script>
+    
 </head>
 <body>
     <div class="topnav">
