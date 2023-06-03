@@ -42,8 +42,9 @@
             	{% for school in schools %}
 				<li>
 					<form action="{{ url_for('index') }}" method="POST">
-						<input type="hidden" name="school_name" value="{{ school }}">
-						<button type="submit" style="background-color: rgb(91, 186, 221)">{{ school }}</button>
+						<input type="hidden" name="school_name" value="{{ school[0] }}">
+						<input type="hidden" name="school_id" value="{{ school[1] }}">
+						<button type="submit" style="background-color: rgb(91, 186, 221)">{{ school[0] }}</button>
 					</form></li>
                 {% endfor %}
               </ul>

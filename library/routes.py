@@ -8,40 +8,26 @@ from .restore import *
 class SQLTriggerError(Exception):
     pass
 
-# Route for the first page
+# Route for the first page OK
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == "POST":
-        print("HI")
         school_name = request.form['school_name']
         session['school_name'] = school_name
-        print(school_name)
-        #query για να πάρω το school_id
-        query = "SELECT school_id from school where school_name = %s" 
-        cur = mydb.connection.cursor()
-        cur.execute(query,(school_name,))
-        school_id = cur.fetchone() # με την fetchall() πιάνω όλα όσα ηρθαν απο το execute που έγινε!!
-        cur.close()
+        school_id = request.form['school_id']
         session['school_id'] = school_id
-        print(school_id)
+        #print(school_id)
         return redirect(url_for('login'))
     else:
-        # Read the query from queries.sql
-        #with open('/home/george/Workshop/uni/dblab/project/library/sql/queries.sql', 'r') as file:
-         #   queries = file.read().split(';')
-        #query = queries[0]
-        query = "SELECT school_name from school WHERE pending_flag IS NULL ORDER BY school_name"
+        query = "SELECT school_name, school_id from school WHERE pending_flag IS NULL ORDER BY school_name"
         # Execute the query to get a list of all schools from the database
         cur = mydb.connection.cursor()
         cur.execute(query)
         schools = cur.fetchall() # με την fetchall() πιάνω όλα όσα ηρθαν απο το execute που έγινε!!
         cur.close()
-        #schools.strip("(),")
-        print(schools)
-        first_values = [t[0] for t in schools]
+        #print(schools)
         # Render the template for the first page
-        return render_template('index.html',schools=first_values)
-#!! Χρειάζεται αλλαγή για να μπαίνει o super_admin
+        return render_template('index.html',schools=schools)
 
 @app.route('/home')
 def home():
@@ -233,6 +219,7 @@ def school():
     cur.close()
     return render_template('schooltry2.html',books = books ,no_results=no_results) 
 
+#Route για εισαγωγή νέας βιβλιοθήκης
 @app.route('/request_library_form', methods=['GET', 'POST'])
 def request_library_form(): 
     if request.method == "POST":
@@ -312,6 +299,7 @@ def request_library_form():
 def waiting():
     return render_template("waiting.html")
 
+#Routes για contact
 @app.route('/contact')
 def contact():
     school_id = session['school_id']
@@ -349,12 +337,14 @@ def contact_index_super_admin():
     super_admin_statement = True
     return render_template("contact_creators.html", super_admin_statement = super_admin_statement)
 
+#To logout Route!!
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     #πρεπει να μηδενίζω τα session
     session.clear()
     return redirect(url_for('index'))
 
+#Route για το προφίλ του χρήστη
 @app.route('/user_profile')
 def user_profile():
     school_id = session['school_id']
@@ -436,6 +426,7 @@ def mybooks():
 
     return render_template("mybooks.html",borrowed_books=borrowed_books,reserved_books=reserved_books,queued_books=queued_books,is_admin=is_admin)
 
+#Route για την αλλαγή των στοιχείων του χρήστη -> Μονο για teachers και admins
 @app.route('/edit_profile',methods=['GET', 'POST'])
 def edit_profile():
     if request.method == 'POST':
@@ -469,6 +460,7 @@ def edit_profile():
     cur.close()
     return render_template('edit_profile.html',user_info = user_info,school_info=school_info)
 
+#Route για αλλαγή στοιχείων βιβλίου -> Μόνο για admins
 @app.route('/edit_book',methods=['GET', 'POST'])
 def edit_book():
     book_id = session['book_id']
@@ -577,6 +569,7 @@ def edit_book():
     cur.close()
     return render_template('edit_book.html',book_info = book_info,authors=authors,themes=themes,keywords=keywords)
 
+#Route για αλλαγή κωδικού
 @app.route('/edit_password',methods=['GET', 'POST'])
 def edit_password():
     if request.method == 'POST':
@@ -601,6 +594,7 @@ def edit_password():
     cur.close()
     return render_template('edit_password.html',user_info = user_info)
 
+#Route για διαγραφή βιβλίου -> Μονο για admins
 @app.route('/delete_book',methods=['GET', 'POST'])
 def delete_book():
     book_id = session['book_id']
@@ -612,8 +606,7 @@ def delete_book():
     session.pop('book_id', None)
     return redirect(url_for('school_admin'))
 
-
-#route για το βιβλίο που ο χρηστης επέλεξε
+#Route για το βιβλίο που ο χρηστης επέλεξε
 @app.route('/book_display',methods=['GET', 'POST'])
 def book_display():
     if request.method == "POST":
@@ -651,7 +644,7 @@ def book_display():
 
     return render_template("book_display.html", book_info=book_info, is_admin= is_admin)
 
-#route για τον χρήστη που θέλει να δανειστεί το βιβλίο
+#Route για τον χρήστη που θέλει να δανειστεί το βιβλίο
 @app.route('/rent',methods=['GET', 'POST'])
 def rent():
     ISBN = session['ISBN']
@@ -741,7 +734,7 @@ def queue():
     flash("H Κρατηση για το βιβλίο επιβεβαιωθηκε.Μπορειτε να την δείτε στην καρτελα Mybooks. Εκει θα μπορείτε να δείτε ποτε θα μπορείτε να πάτε να πάρετε το βιβλίο σας ")
     return redirect(url_for("book_display"))
 
-#route για επαναφορά στην σχολική βιβλιοθήκη
+#Route για επαναφορά στην σχολική βιβλιοθήκη
 @app.route('/back_to_school')
 def back_to_school():
     session.pop('ISBN', None)
@@ -751,7 +744,7 @@ def back_to_school():
         return redirect(url_for('school_admin'))
     return redirect(url_for('school'))
 
-#route για καταχώρηση αξιολόγησης απο τον χρήστη
+#Route για καταχώρηση αξιολόγησης απο τον χρήστη
 @app.route('/review', methods=['GET', 'POST'])
 def review():
     school_id = session['school_id']
@@ -806,6 +799,7 @@ def review():
     is_admin = role_name == 'admin' 
     return render_template("review_test2.html", is_admin=is_admin)
 
+#Route για προβολή αξιολογήσεων
 @app.route('/review_users_test')
 def review_users_test():
     school_id = session['school_id']
@@ -826,6 +820,8 @@ def review_users_test():
 
     # Render the template with the review applications
     return render_template("review_users_test.html", review_applications = review_applications,is_admin = is_admin)
+
+#Routes για τον SUPER ADMIN
 
 #Route για την αρχική του super_admin
 @app.route('/super_admin')
@@ -1110,8 +1106,9 @@ def super_admin_backup_restore():
             return redirect(url_for("super_admin_backup_restore"))
     return render_template("backup.html")
 
+# Routes για τους ADMINS
 
-#Route for school admin
+#Αρχικό Route 
 @app.route('/school_admin')
 def school_admin():
     user_id = session['user_id']
@@ -1135,6 +1132,7 @@ def school_admin():
         cur.close()
         return render_template('school_admin.html',books = books )
 
+#Route για την εισαγωγή νέων βιβλίων
 @app.route('/school_admin_add_books', methods=['GET', 'POST'])
 def school_admin_add_books(): 
     school_id = session['school_id']
@@ -1417,7 +1415,7 @@ def school_admin_Q3():
     # Render the template with the query results
     return render_template('school_admin_Q3.html', ratings=ratings,user_info= user_info,theme_info=theme_info)
 
-# Extra Route για να ελεγξει αιτήσεις αξιολόγησης 
+#Route για να ελεγξει αιτήσεις αξιολόγησης 
 @app.route('/school_admin_reviews', methods=['GET', 'POST'])
 def school_admin_reviews():
     school_id = session['school_id']
@@ -1459,7 +1457,7 @@ def school_admin_reviews():
     # Render the template with the review applications
     return render_template('school_admin_reviews.html', review_applications=review_applications)
 
-# Extra route για αν διαγράφει χρήστες
+#Route για να διαγράφει χρήστες
 @app.route('/delete_users' , methods = ['GET', 'POST'])
 def delete_users():
     school_id = session['school_id']
@@ -1485,7 +1483,7 @@ def delete_users():
     # Render the template with the data
     return render_template('delete_users.html', users=users)
 
-# Extra Route για να ελεγξει κρατήσεις -> να τις κανει δανεισμους [ΟΚ]
+#Route για να ελεγξει κρατήσεις -> να τις κανει δανεισμους / να τις διαγράψει
 @app.route('/school_admin_reservations', methods=['GET', 'POST'])
 def school_admin_reservations():
     school_id = session['school_id']
@@ -1543,7 +1541,7 @@ def school_admin_reservations():
     # Render the template with the data
     return render_template('school_admin_reservations.html', reserved_items=reserved_items,queued_items=queued_items)
 
-# Extra Route για να εισάγει κατευθειαν δανεισμό
+#Route για να εισάγει κατευθειαν δανεισμό
 @app.route('/school_admin_new_booking', methods=['GET', 'POST'])
 def school_admin_new_booking():
     school_id = session['school_id']
@@ -1616,7 +1614,7 @@ def school_admin_new_booking():
     # Render the template with the data
     return render_template('school_admin_new_booking.html', books=books)
 
-# Extra Route Αιτήσεις εγγραφής χρηστών [ΟΚ]
+#Route Αιτήσεις εγγραφής χρηστών
 @app.route('/school_admin_users_application', methods=['GET', 'POST'])
 def school_admin_users_application():
     if request.method == 'POST':
@@ -1653,7 +1651,7 @@ def school_admin_users_application():
     # Render the template with the data
     return render_template('school_admin_users_application.html', user_applications=user_applications)
 
-# Extra Route για να δηλώσει επιστροφή ενος βιβλίου
+#Route για να δηλώσει επιστροφή ενος βιβλίου
 @app.route('/school_admin_book_return', methods=['GET', 'POST'])
 def school_admin_book_return():
     if request.method == 'POST':
