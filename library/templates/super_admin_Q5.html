@@ -19,18 +19,33 @@
     <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
   </div>
   <div class="super_admin">
-  <h2>Query 5: School Admins with Same Number of Approved Books (>20) in Past Year</h2>
+  <h2>Query 5: School Admins with Same Number of Approved Books (>10) in Past Year</h2>
+  <form method="POST" action="{{ url_for('super_admin_Q5') }}">
+      <div class="form-group">
+        <label for="year">Year:</label>
+        <input type="text" id="year" name="year" required>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Search" class="edit-btn">
+        </div>
+  </form>
   <div class = "school_list">
   {% if results %}
     <table>
       <tr>
-        <th>Admin Name</th>
-        <th>Number of Approved Books</th>
+        <th>School_id A</th>
+        <th>School_id B</th>
+        <th>Borrowed Number</th>
+        <th>Admin Lastname A</th>
+        <th>Admin Lastname B</th>
       </tr>
       {% for result in results %}
       <tr>
         <td>{{ result[0] }}</td>
         <td>{{ result[1] }}</td>
+        <td>{{ result[2] }}</td>
+        <td>{{ result[3] }}</td>
+        <td>{{ result[4] }}</td>
       </tr>
       {% endfor %}
     </table>

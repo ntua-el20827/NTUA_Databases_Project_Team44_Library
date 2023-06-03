@@ -941,19 +941,36 @@ def super_admin_Q4():
     return render_template('super_admin_Q4.html', results=results)
 
 # Route for Query 3.1.5
-@app.route('/super_admin/Q5')
+@app.route('/super_admin/Q5',methods=['GET', 'POST'])
 def super_admin_Q5():
     cur = mydb.connection.cursor()
+    year = 2023
+    if request.method == 'POST':
+        year = request.form['year']
     query = """
-        SELECT lib_user.user_name
-        FROM book_status
-        INNER JOIN lib_user ON book_status.user_id = lib_user.user_id
-        WHERE lib_user.role_name = 'admin'
-        AND book_status.approval_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 YEAR) AND NOW()
-        GROUP BY lib_user.user_id
-        HAVING COUNT(*) >= 20;
+            SELECT A.school_id, B.school_id, A.borrowed_count, ua1.user_lastname AS admin_lastname1, ua2.user_lastname AS admin_lastname2
+        FROM (
+            SELECT b.school_id, COUNT(*) AS borrowed_count
+            FROM book_status bs
+            INNER JOIN book b ON bs.book_id = b.book_id
+            WHERE bs.status = 'borrowed' AND YEAR(bs.approval_date) = %s
+            GROUP BY b.school_id
+            HAVING borrowed_count > 10
+        ) A
+        JOIN (
+            SELECT b.school_id, COUNT(*) AS borrowed_count
+            FROM book_status bs
+            INNER JOIN book b ON bs.book_id = b.book_id
+            WHERE bs.status = 'borrowed' AND YEAR(bs.approval_date) = %s
+            GROUP BY b.school_id
+            HAVING borrowed_count > 10
+        ) B ON A.borrowed_count = B.borrowed_count AND A.school_id <> B.school_id
+        JOIN lib_user ua1 ON A.school_id = ua1.school_id AND ua1.role_name = 'admin'
+        JOIN lib_user ua2 ON B.school_id = ua2.school_id AND ua2.role_name = 'admin'
+        WHERE A.school_id < B.school_id
+        ORDER BY A.borrowed_count DESC
     """
-    cur.execute(query)
+    cur.execute(query,(year,year))
     results = cur.fetchall()
     cur.close()
 
@@ -1471,6 +1488,7 @@ def delete_users():
 # Extra Route για να ελεγξει κρατήσεις -> να τις κανει δανεισμους [ΟΚ]
 @app.route('/school_admin_reservations', methods=['GET', 'POST'])
 def school_admin_reservations():
+    school_id = session['school_id']
     if request.method == 'POST':
         item_id = request.form['item_id']
         user_id = request.form['user_id']
@@ -1514,11 +1532,11 @@ def school_admin_reservations():
     cur = mydb.connection.cursor()
 
     # Fetch data from the 'book_status' table with status='reserved'
-    query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname, bs.book_status_id FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'reserved'"
-    cur.execute(query)
+    query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname, bs.book_status_id FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'reserved' AND b.school_id =%s"
+    cur.execute(query,(school_id,))
     reserved_items = cur.fetchall()
-    query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname,bs.book_status_id FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'queue'"
-    cur.execute(query)
+    query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname,bs.book_status_id FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'queue' AND b.school_id =%s"
+    cur.execute(query,(school_id,))
     queued_items = cur.fetchall()
     cur.close()
 

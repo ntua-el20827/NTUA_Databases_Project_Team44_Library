@@ -56,24 +56,27 @@ WHERE lib_user.role_name = 'admin'
 GROUP BY lib_user.user_id
 HAVING COUNT(*) >= 20;
 --Το query 3.1.5 διορθωμένο(το ερμήνευσα ως φθίνουσα σειρά αριθμού δανεισμών ανά σχολείο (>20) με όνομα σχολείου και admin):
-SELECT 
-  COUNT(*) AS num_approvals, 
-  s.school_name, 
-  s.school_admin_firstname, 
-  s.school_admin_lastname
-FROM 
-  book_status bs 
-  JOIN lib_user u ON bs.user_id = u.user_id 
-  JOIN school s ON u.school_id = s.school_id 
-WHERE 
-  bs.approval_date IS NOT NULL 
-  AND bs.approval_date >= DATE_SUB(NOW(), INTERVAL 1 YEAR)
-GROUP BY 
-  s.school_id
-HAVING 
-  COUNT(*) >= 5
-ORDER BY 
-  num_approvals DESC;
+SELECT A.school_id, B.school_id, A.borrowed_count, ua1.user_lastname AS admin_lastname1, ua2.user_lastname AS admin_lastname2
+FROM (
+    SELECT b.school_id, COUNT(*) AS borrowed_count
+    FROM book_status bs
+    INNER JOIN book b ON bs.book_id = b.book_id
+    WHERE bs.status = 'borrowed' AND YEAR(bs.approval_date) = 2023
+    GROUP BY b.school_id
+    HAVING borrowed_count > 10
+) A
+JOIN (
+    SELECT b.school_id, COUNT(*) AS borrowed_count
+    FROM book_status bs
+    INNER JOIN book b ON bs.book_id = b.book_id
+    WHERE bs.status = 'borrowed' AND YEAR(bs.approval_date) = 2023
+    GROUP BY b.school_id
+    HAVING borrowed_count > 10
+) B ON A.borrowed_count = B.borrowed_count AND A.school_id <> B.school_id
+JOIN lib_user ua1 ON A.school_id = ua1.school_id AND ua1.role_name = 'admin'
+JOIN lib_user ua2 ON B.school_id = ua2.school_id AND ua2.role_name = 'admin'
+WHERE A.school_id < B.school_id
+ORDER BY A.borrowed_count DESC;
 
 ---3.1.6 top 3 book theme pairs that appear in borrowings
 SELECT 
