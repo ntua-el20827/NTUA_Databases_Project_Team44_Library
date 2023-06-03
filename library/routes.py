@@ -8,6 +8,10 @@ from .restore import *
 class SQLTriggerError(Exception):
     pass
 
+#Αρχικά υπάρχουν κάποια γενικά routes για όλους τους χρήστες, για την σύνδεση στην εφαρμογή την παρουσίαση των βιβλίων και την πλοήγηση μεσα στην εφαρφμογή
+#Επειτα υπάρχουν τα routes για τον Υπευθυνο Διαχειριστή (Super Admin)
+#Τελος υπάρχουν τα routes για τους Υπευθυνους Χειριστές (Admins) του κάθε σχολείου
+
 # Route for the first page OK
 @app.route('/', methods=['GET', 'POST'])
 def index():
