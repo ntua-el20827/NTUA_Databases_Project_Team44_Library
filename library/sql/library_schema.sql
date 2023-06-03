@@ -398,7 +398,7 @@ CREATE TRIGGER check_student_age
 BEFORE INSERT ON lib_user 
 FOR EACH ROW 
 BEGIN
-  IF (NEW.role_name = 'teacher' OR NEW.role_name = 'admin') AND 
+  IF (NEW.role_name = 'student') AND 
      (TIMESTAMPDIFF(YEAR, NEW.user_date_of_birth, CURDATE()) < 7) THEN
     SIGNAL SQLSTATE '45000'
       SET MESSAGE_TEXT = 'Teachers and admins must be at least 7 years old.';

@@ -169,7 +169,8 @@ def signup():
             return render_template("signup.html")
 
         cur.close()
-        return redirect(url_for('login'))
+        flash("Η αιτηση για εγγραφη σας πραγματοποιηθηκε. Βρισκεται Υπο εγκριση")
+        return render_template("signup.html")
     else:
         return render_template("signup.html")
 

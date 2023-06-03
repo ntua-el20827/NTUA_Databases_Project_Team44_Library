@@ -467,3 +467,20 @@ form .likert li input[type=radio] {
   margin-bottom: 10px;
   font-weight: bold;
 }
+
+.flash-messages1 {
+  /* Add styles to the container */
+  position: fixed; /* or absolute, relative, etc. depending on your needs */
+  top: 120px; /* adjust the distance from the top */
+  right: 50%; /* adjust the distance from the right */
+  transform: translateX(50%);
+  /* Add other styles as desired */
+  background: black;
+  color: red;
+  padding: 10px;
+  padding-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}

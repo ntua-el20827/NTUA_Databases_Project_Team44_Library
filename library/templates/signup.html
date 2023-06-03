@@ -12,6 +12,15 @@
 	
 	<br><br>
 	<div class="registration">
+		{% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="flash-message">{{ message | safe}}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 	<form method="POST" action="/signup" onsubmit="return validateForm()">
 		<div class="labels">
 		<label for="newusername">Username:</label> <br>
@@ -43,6 +52,16 @@
 	</form>
 
     </div>
+
+	{% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages1">
+                {% for message in messages %}
+                    <div class="flash-message">{{ message | safe}}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
 	<script>
 		function validateForm() {
