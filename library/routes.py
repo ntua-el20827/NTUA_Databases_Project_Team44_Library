@@ -29,7 +29,7 @@ def index():
         #with open('/home/george/Workshop/uni/dblab/project/library/sql/queries.sql', 'r') as file:
          #   queries = file.read().split(';')
         #query = queries[0]
-        query = "SELECT school_name from school ORDER BY school_name"
+        query = "SELECT school_name from school WHERE pending_flag IS NULL ORDER BY school_name"
         # Execute the query to get a list of all schools from the database
         cur = mydb.connection.cursor()
         cur.execute(query)
@@ -273,7 +273,7 @@ def request_library_form():
             flash("Υπαρχει λάθος στα στοιχεία του Υπευθυνου χειριστή")
             delete_query = "DELETE FROM school WHERE school_id = %s"
             cur.execute(delete_query, (school_id,))
-            mydb.commit()
+            mydb.connection.commit()
             return redirect(url_for("request_library_form"))
         phone1_query = """INSERT INTO school_phone (school_id,phone,phone_flag) 
         VALUES (%s,%s,'pending')"""
@@ -283,7 +283,7 @@ def request_library_form():
             cur.execute(phone1_query,phone1_values)  # Execute your INSERT statement here
             mydb.connection.commit()
         except Exception as e:
-            flash("Υπαρχει λάθος στα τηλεφωνικά στοιχεία 1")
+            flash("Υπαρχει λάθος στα στοιχεία του 1ου τηλεφώνου")
             delete_query = "DELETE FROM school WHERE school_id = %s"
             cur.execute(delete_query, (school_id,))
             mydb.connection.commit()
@@ -297,7 +297,7 @@ def request_library_form():
                 cur.execute(phone2_query,phone2_values)  # Execute your INSERT statement here
                 mydb.connection.commit()
             except Exception as e:
-                flash("Υπαρχει λάθος στα τηλεφωνικά στοιχεία 2")
+                flash("Υπαρχει λάθος στα στοιχεία του 2ου τηλεφώνου")
                 delete_query = "DELETE FROM school WHERE school_id = %s"
                 cur.execute(delete_query, (school_id,))
                 mydb.connection.commit()
@@ -1012,6 +1012,7 @@ def verify_school_application():
         school_id_to_review = request.form['school_id']
         action = request.form['action']
         user_id = request.form['user_id']
+        print(user_id)
         if action == 'accept':
             cur = mydb.connection.cursor()
             query = "UPDATE school SET pending_flag = NULL WHERE school_id = %s"
@@ -1042,7 +1043,7 @@ def verify_school_application():
     # Connect to the database to fetch the application details
     cur = mydb.connection.cursor()
     # Get application details from the database
-    query = "SELECT school_id,school_name,school_admin_firstname,school_admin_lastname FROM school_applications WHERE school_id = %s"
+    query = "SELECT school_id,school_name,school_admin_firstname,school_admin_lastname,user_id FROM school_applications WHERE school_id = %s"
     cur.execute(query, (school_id_to_review,))
     application = cur.fetchone()
     cur.close()

@@ -15,12 +15,13 @@
       <h5>
       Με την αίτηση Εγγραφής Σχολικής Μονάδας γίνεται αυτόματα
         η αίτηση εγγραφής του υπεύθυνου της βιβλιοθήκης.
+		Προσοχή: Ο κωδικός πρεπει να αποτελείται απο 4 χαρακτήρες
       </h5>
 	  {% with messages = get_flashed_messages() %}
 	  {% if messages %}
-		  <div class="flash-messages">
+		  <div class="flash-messages1">
 			  {% for message in messages %}
-				  <div class="flash-message">{{ message | safe}}</div>
+				  <div class="flash-message1">{{ message | safe}}</div>
 			  {% endfor %}
 		  </div>
 	  {% endif %}

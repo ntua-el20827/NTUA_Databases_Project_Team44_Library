@@ -470,7 +470,7 @@ form .likert li input[type=radio] {
 
 .flash-messages1 {
   /* Add styles to the container */
-  position: fixed; /* or absolute, relative, etc. depending on your needs */
+  position: absolute; /* or absolute, relative, etc. depending on your needs */
   top: 120px; /* adjust the distance from the top */
   right: 50%; /* adjust the distance from the right */
   transform: translateX(50%);
