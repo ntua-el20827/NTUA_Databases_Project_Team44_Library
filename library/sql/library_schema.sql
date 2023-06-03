@@ -137,7 +137,6 @@ CREATE TABLE review (
   KEY fk_review_book_id (book_id),
   CONSTRAINT fk_review_book_id FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
---- Ειναι σωστο το primary key?
 
 
 ---
