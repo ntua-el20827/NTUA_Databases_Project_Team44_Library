@@ -11,7 +11,7 @@
 </div>
 	
 	<br><br>
-	<div class="registration">
+	<div class="login">
 		
 	<form method="POST" action="/signup" onsubmit="return validateForm()">
 		<div class="labels">
@@ -35,9 +35,10 @@
 		<input type="date" id="dob" name="dob" required><br><br>
 		<label for="cars">Επιλέξτε Ιδιότητα:</label>
 		<select name="role_name" id="role_name">
-			<option value="teacher">Εκπαιδευτικος</option>
 			<option value="student">Μαθητής</option>
-			<option value="admin">Υπευθυνος Χειριστής</option>
+			<option value="teacher">Εκπαιδευτικος</option>
+	
+			
 		</select><br><br>
 		<input type="submit" value="Sign Up">
 		<br><br><p>Επιστροφη στην αρχικη <a href="{{ url_for('index') }}"> σελίδα </a></p>

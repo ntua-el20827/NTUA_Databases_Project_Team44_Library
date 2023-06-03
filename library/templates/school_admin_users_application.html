@@ -32,6 +32,7 @@
                 <th>Firstname</th>
                 <th>Lastname</th>
                 <th>Email</th>
+                <th> Role </th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -45,6 +46,7 @@
                     <td>{{ application[6] }}</td>
                     <td>{{ application[7] }}</td>
                     <td>{{ application[5] }}</td>
+                    <td>{{ application[4] }}</td>
                  
                     <td>
                         <form method="POST" action="{{ url_for('school_admin_users_application') }}">
