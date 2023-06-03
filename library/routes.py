@@ -1118,7 +1118,7 @@ def school_admin_add_books():
                 cur.execute(author2_query,author2_values)  # Execute your INSERT statement here
                 mydb.connection.commit()
             except Exception as e:
-                flash("Γιολο")
+                flash("Λαθος Phone")
                 delete_query = "DELETE FROM book WHERE school_id = %s"
                 cur.execute(delete_query, (school_id,))
                 mydb.connection.commit()
@@ -1376,6 +1376,7 @@ def school_admin_reservations():
     if request.method == 'POST':
         item_id = request.form['item_id']
         user_id = request.form['user_id']
+        book_status_id = request.form['book_status_id']
         action = request.form['action']
 
         # Connect to the database
@@ -1383,29 +1384,29 @@ def school_admin_reservations():
         print(type(item_id))
         if action == 'accept':
             # Change the status to 'borrowed' in the 'book_status' table
-            query = "UPDATE book_status SET status = 'borrowed', approval_date = CURDATE() WHERE book_id = %s AND user_id = %s "
+            query = "UPDATE book_status SET status = 'borrowed', approval_date = CURDATE() WHERE book_status_id=%s "
             ## ΑΛΛΑΓΗ ΝΑ ΒΑΛΛΩ ΤΟ book_status_id
-            cur.execute(query, (item_id, user_id,))
+            cur.execute(query, (book_status_id,))
             mydb.connection.commit()
 
             # Να βάλλουμε και current date το rent_date
         elif action == 'deny':
             # Delete the item from the 'book_status' table
-            query = "DELETE FROM book_status WHERE book_id = %s"
-            cur.execute(query, (int(item_id),))
+            query = "DELETE FROM book_status WHERE book_status_id = %s"
+            cur.execute(query, (book_status_id,))
             mydb.connection.commit()
             query = "Select check_book_update(%s) as update_occured;"
             cur.execute(query,(int(item_id),))
             update_occured = cur.fetchone()
-            if update_occured==0:
+            if update_occured[0]==0:
                 query = "CALL increase_available_books(%s)"
                 cur.execute(query,(int(item_id),))
                 mydb.connection.commit()
             mydb.connection.commit()
         elif action == 'deny_queue':
             # Delete the item from the 'book_status' table
-            query = "DELETE FROM book_status WHERE book_id = %s"
-            cur.execute(query, (int(item_id),))
+            query = "DELETE FROM book_status WHERE book_status_id = %s"
+            cur.execute(query, (book_status_id,))
             mydb.connection.commit()
             
 
@@ -1415,10 +1416,10 @@ def school_admin_reservations():
     cur = mydb.connection.cursor()
 
     # Fetch data from the 'book_status' table with status='reserved'
-    query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'reserved'"
+    query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname, bs.book_status_id FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'reserved'"
     cur.execute(query)
     reserved_items = cur.fetchall()
-    query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'queue'"
+    query = "SELECT b.book_id, b.title, u.user_id, u.user_lastname,bs.book_status_id FROM book_status bs JOIN book b ON bs.book_id = b.book_id JOIN lib_user u ON bs.user_id = u.user_id WHERE bs.status = 'queue'"
     cur.execute(query)
     queued_items = cur.fetchall()
     cur.close()
@@ -1439,24 +1440,53 @@ def school_admin_new_booking():
         else:
             # Connect to the database
             cur = mydb.connection.cursor()
-            query = "SElECT * FROM lib_user WHERE user_id = %s"
-            cur.execute(query,(user_id,))
-            user = cur.fetchone()
-            cur.close()
-            if user:
-                # Insert a new booking into the 'book_status' table
-                cur = mydb.connection.cursor()
-                insert_query = "INSERT INTO book_status (book_id, status, request_date, user_id) VALUES (%s, %s, CURDATE(), %s)"
-                cur.execute(insert_query, (book_id, 'borrowed', user_id))
-                mydb.connection.commit()
-                cur.close()
+            query = """ SELECT bs.book_id
+                FROM book_status bs
+                WHERE bs.status = 'borrowed'
+                AND bs.return_date IS NULL
+                AND bs.approval_date <= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+                AND bs.user_id = %s"""
 
-                flash('Booking successful', 'success')
+            cur.execute(query,(user_id,)) # Επιστρεφει ολα τα εκπροσθεσμα βιβλία για εναν χρήστη
+            ekprothesma = cur.fetchall()
+            print("ekprothesma = ", ekprothesma)
+            if (ekprothesma==()):
+                print("mesa")
+                # Ελεγχος αν αυτο που διαλεξες το εχεις δανεισμένο ή κρατημένο
+                query = """ SELECT book_id FROM book_status WHERE user_id = %s AND book_id = %s AND (return_date IS NULL OR status = 'reserved') """
+                cur.execute(query,(user_id, book_id,))
+                exei_daneistei = cur.fetchone()
+                if exei_daneistei:
+                    flash("Εχετε ήδη δανειστει/κρατήσει αυτο το βιβλίο")
+                    return redirect(url_for("school_admin_new_booking"))
+                else:    
+                    query = """ SELECT number_of_available_books FROM book WHERE book_id = %s"""
+                    cur.execute(query,(book_id,))
+                    diathesima_antitipa = cur.fetchone()
+                    print(diathesima_antitipa)
+                    if (int(diathesima_antitipa[0])>0):
+                        try:
+                            query = "INSERT INTO book_status (book_id, user_id, status, request_date) VALUES (%s, %s, 'reserved', CURDATE())"
+                            ## ΑΛΛΑΓΗ ΝΑ ΒΑΛΛΩ ΤΟ book_status_id
+                            cur.execute(query,(book_id,user_id,))  # Execute your INSERT statement here
+                        except Exception as e:
+                            error_message = str(e)
+                            flash("O χρήστης έχει περάσει τον αριθμό δανεισμών")
+                            return redirect(url_for("school_admin_new_booking"))
+                        mydb.connection.commit()
+                        query = "CALL decrease_available_books(%s)"
+                        cur.execute(query,(book_id,))
+                        mydb.connection.commit()
+                        cur.close()
+                        flash("Ο δανεισμός για το βιβλίο επιβεβαιωθηκε")
+                        return redirect(url_for("school_admin_new_booking"))
+                    else:
+                        flash('Δεν υπαρχουν διαθέσιμα αντιτυπα')
+                        return redirect(url_for("school_admin_new_booking"))
 
-                # Redirect to the same page to refresh with blank texts
-                return redirect(url_for('school_admin_new_booking'))
             else:
-                flash('Wrong User ID', 'failure')
+                flash("Ο χρήστης δεν εχει επιστρεψει καποιο εκπροθεσμο βιβλίο")
+                return redirect(url_for("school_admin_new_booking"))
 
     # Connect to the database to fetch the data
     cur = mydb.connection.cursor()
@@ -1513,19 +1543,21 @@ def school_admin_book_return():
     if request.method == 'POST':
         item_id = request.form['item_id']
         user_id = request.form['user_id']
+        book_status_id = request.form['book_status_id']
 
         # Connect to the database
         cur = mydb.connection.cursor()
 
         # Update the 'return_date' to the current date in the 'book_status' table
     
-        query = "UPDATE book_status SET return_date = CURDATE() WHERE book_id = %s AND  user_id = %s"
-        cur.execute(query, (item_id, user_id,))
-        mydb.connection.commit()
         query = "Select check_book_update(%s) as update_occured;"
         cur.execute(query,(int(item_id),))
         update_occured = cur.fetchone()
-        if update_occured==0:
+        print(update_occured)
+        query = "UPDATE book_status SET return_date = CURDATE() WHERE book_status_id=%s"
+        cur.execute(query, (book_status_id,))
+        mydb.connection.commit()
+        if update_occured[0]==0:
             query = "CALL increase_available_books(%s)"
             cur.execute(query,(int(item_id),))
             mydb.connection.commit()
@@ -1535,7 +1567,7 @@ def school_admin_book_return():
     cur = mydb.connection.cursor()
 
     # Fetch data from the 'book_status' table with status='booked' and return_date=NULL
-    query = """SELECT bs.book_id, b.title, bs.user_id, u.user_firstname, u.user_lastname
+    query = """SELECT bs.book_id, b.title, bs.user_id, u.user_firstname, u.user_lastname,bs.book_status_id
     FROM book_status bs
     JOIN book b ON bs.book_id = b.book_id
     JOIN lib_user u ON bs.user_id = u.user_id

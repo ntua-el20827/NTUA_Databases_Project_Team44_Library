@@ -43,6 +43,7 @@
                         <form method="POST" action="{{ url_for('school_admin_reservations') }}">
                             <input type="hidden" name="item_id" value="{{ item[0] }}">
                             <input type="hidden" name="user_id" value="{{ item[2] }}">
+                            <input type="hidden" name="book_status_id" value="{{ item[4] }}">
                             <button type="submit" name="action" value="accept">Accept</button>
                             <button type="submit" name="action" value="deny">Deny</button>
                         </form>
@@ -76,6 +77,7 @@
                     <form method="POST" action="{{ url_for('school_admin_reservations') }}">
                         <input type="hidden" name="item_id" value="{{ item[0] }}">
                         <input type="hidden" name="user_id" value="{{ item[2] }}">
+                        <input type="hidden" name="book_status_id" value="{{ item[4] }}">
                         <button type="submit" name="action" value="deny_queue">Deny</button>
                     </form>
                 </td>
