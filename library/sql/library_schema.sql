@@ -13,6 +13,7 @@ CREATE TABLE school (
   school_name VARCHAR(45) NOT NULL,
   city VARCHAR(45) NOT NULL,
   street VARCHAR(45) NOT NULL,
+  street_number INT UNSIGNED NOT NULL,
   postal_code INT UNSIGNED NOT NULL,
   email VARCHAR(45) NOT NULL,
   principal_lastname VARCHAR(45) NOT NULL,
@@ -67,7 +68,6 @@ CREATE TABLE book (
   number_of_available_books INT UNSIGNED NOT NULL,
   book_image VARCHAR(256) NOT NULL, 
   book_language VARCHAR(45),
-  borrow_count INT NOT NULL DEFAULT 0,
   school_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (book_id),
@@ -125,14 +125,13 @@ CREATE TABLE book_author (
 
 -- Table 'review'
 CREATE TABLE review (
-  rev_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id INT UNSIGNED NOT NULL,
   book_id INT UNSIGNED NOT NULL,
   review_text VARCHAR(400),
   rev_date DATE NULL,
   rating ENUM('1', '2', '3', '4', '5') NOT NULL, 
   review_pending_flag ENUM('pending'),
-  PRIMARY KEY (rev_id,user_id,book_id),
+  PRIMARY KEY (user_id,book_id),
   KEY fk_review_user_id (user_id),
   CONSTRAINT fk_review_user_id FOREIGN KEY (user_id) REFERENCES lib_user (user_id) ON DELETE CASCADE,
   KEY fk_review_book_id (book_id),

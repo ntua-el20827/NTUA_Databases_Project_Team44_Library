@@ -246,6 +246,7 @@ def request_library_form():
         school_name = request.form['school_name']
         city = request.form['city']
         street = request.form['street']
+        street_number = request.form['street_number']
         postal_code = request.form['postal_code']
         school_email = request.form['school_email']
         pfname = request.form['pfname']
@@ -253,9 +254,9 @@ def request_library_form():
         phone = request.form['phone']
         phone2 =  request.form['phone2']
         cur = mydb.connection.cursor()
-        school_query = """ INSERT INTO school (school_name, city, street, postal_code, email, principal_lastname, principal_firstname, school_admin_lastname, school_admin_firstname,pending_flag)
+        school_query = """ INSERT INTO school (school_name, city, street,street_number, postal_code, email, principal_lastname, principal_firstname, school_admin_lastname, school_admin_firstname,pending_flag)
         VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,'pending')"""
-        school_values = (school_name, city, street, postal_code, school_email, plname, pfname, lname, fname)
+        school_values = (school_name, city, street,street_number, postal_code, school_email, plname, pfname, lname, fname)
         try:
             cur.execute(school_query,school_values)  # Execute your INSERT statement here
             mydb.connection.commit()
@@ -786,7 +787,7 @@ def review():
     # Ελεγχος αν εχει ήδη αξιολογήσει το βιβλίο
     cur = mydb.connection.cursor()
     #Αν ειναι pending
-    query = "SELECT rev_id FROM review WHERE user_id = %s AND book_id = %s AND review_pending_flag='pending'"
+    query = "SELECT * FROM review WHERE user_id = %s AND book_id = %s AND review_pending_flag='pending'"
     cur.execute(query, (user_id, book_id))
     existing_review = cur.fetchone()
     cur.close()
@@ -795,7 +796,7 @@ def review():
         return redirect(url_for("book_display"))
     # Check if the user has already reviewed the book
     cur = mydb.connection.cursor()
-    query = "SELECT rev_id FROM review WHERE user_id = %s AND book_id = %s"
+    query = "SELECT * FROM review WHERE user_id = %s AND book_id = %s"
     cur.execute(query, (user_id, book_id))
     existing_review = cur.fetchone()
     cur.close()
@@ -808,7 +809,6 @@ def review():
 
 @app.route('/review_users_test')
 def review_users_test():
-    
     school_id = session['school_id']
     book_id = session['book_id']
     # Connect to the database to fetch the review applications
@@ -822,9 +822,11 @@ def review_users_test():
     cur.execute(query,(school_id,book_id,))
     review_applications = cur.fetchall()
     cur.close()
+    role_name = session['role_name']
+    is_admin = role_name == 'admin'
 
     # Render the template with the review applications
-    return render_template("review_users_test.html", review_applications = review_applications)
+    return render_template("review_users_test.html", review_applications = review_applications,is_admin = is_admin)
 
 #Route για την αρχική του super_admin
 @app.route('/super_admin')
