@@ -87,7 +87,7 @@
                         <form method="POST" action="{{ url_for('mybooks') }}">
                             <input type="hidden" name="book_status_id" value="{{ item[5] }}">
                             <input type="hidden" name="book_id" value="{{ item[0] }}">
-                            <button type="submit" name="action" value="deny">Delete</button>
+                            <button type="submit" class="edit-btn"name="action" value="deny">Delete</button>
                         </form>
                     </td>
                 </tr>
@@ -123,7 +123,7 @@
                         <form method="POST" action="{{ url_for('mybooks') }}">
                             <input type="hidden" name="book_status_id" value="{{ item[5] }}">
                             <input type="hidden" name="book_id" value="{{ item[0] }}">
-                            <button type="submit" name="action" value="deny">Deny </button>
+                            <button type="submit" class="edit-btn" name="action" value="deny">Deny </button>
                         </form>
                     </td>
                 </tr>

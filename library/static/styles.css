@@ -237,10 +237,10 @@ body {
   margin-left: 50pxΣ;
 }
 .edit-btn {
-  background-color: rgb(238, 174, 202);
+  background-color: rgb(226, 83, 145);
             color: rgb(6, 6, 6);
             padding: 8px 16px;
-            border: none;
+            
             border-radius: 4px;
             cursor: pointer;
 }
