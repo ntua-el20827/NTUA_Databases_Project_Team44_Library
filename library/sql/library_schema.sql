@@ -39,7 +39,7 @@ CREATE TABLE school_phone(
 -- Table 'lib_user'
 CREATE TABLE lib_user(
     user_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    user_pwd INT UNSIGNED NOT NULL,
+    user_pwd VARCHAR(4) NOT NULL,
     user_name VARCHAR(45) NOT NULL,
     school_id INT UNSIGNED NOT NULL,
     role_name ENUM('student', 'teacher', 'admin', 'super_admin') NOT NULL,
@@ -358,16 +358,21 @@ DELIMITER ;
 
 -- Passwords must have 4 digits
 DELIMITER //
-CREATE TRIGGER user_pwd_length_trigger BEFORE INSERT ON lib_user
+
+CREATE TRIGGER user_pwd_format_trigger BEFORE INSERT ON lib_user
 FOR EACH ROW
 BEGIN
   DECLARE pwd_length INT;
-  SET pwd_length = FLOOR(LOG10(NEW.user_pwd)) + 1;
+  DECLARE pwd_value INT;
   
-  IF pwd_length != 4 THEN
-    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Password must be a 4-digit number.';
+  SET pwd_length = LENGTH(NEW.user_pwd);
+  SET pwd_value = CONVERT(NEW.user_pwd, UNSIGNED INTEGER);
+  
+  IF pwd_length != 4 OR pwd_value IS NULL OR pwd_value < 0 OR pwd_value > 9999 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Password must be a 4-digit number (0-9).';
   END IF;
 END //
+
 DELIMITER ;
 
 --Trigger για ηλικία καθηγητών:
