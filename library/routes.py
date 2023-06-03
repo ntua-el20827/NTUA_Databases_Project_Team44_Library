@@ -4,7 +4,8 @@ from library import app,mydb
 from library.forms import *
 from datetime import datetime
 import os
-
+from .backup import *
+from .restore import *
 class SQLTriggerError(Exception):
     pass
 
@@ -232,7 +233,6 @@ def school():
     books = cur.fetchall()
     cur.close()
     return render_template('schooltry2.html',books = books ,no_results=no_results) 
-
 
 @app.route('/request_library_form', methods=['GET', 'POST'])
 def request_library_form(): 
@@ -1047,7 +1047,7 @@ def verify_school_application():
             query = "UPDATE lib_user SET user_pending_flag = NULL WHERE user_id = %s "
             cur.execute(query, (user_id,))
             mydb.connection.commit()
-            query = "UPDATE school_phone SET phone_flag = NULL WHERE school_id = %s "
+            query = "UPDATE school_phone SET    ag = NULL WHERE school_id = %s "
             cur.execute(query, (school_id_to_review,))
             mydb.connection.commit()
             cur.close()
@@ -1084,10 +1084,14 @@ def super_admin_backup_restore():
         action = request.form['action']
         if action == 'backup':
             # code for backup
-            os.system('mysqldump -u root db2023 > database_backup.sql')
+            backup_database()
+            flash("To backup της βάση ήταν επιτυχές")
+            return redirect(url_for("super_admin_backup_restore"))
         if action == 'restore':
             # code for restore
-            os.system('mysql -u root db2023 < database_backup.sql')
+            restore_database()
+            flash("To restore της βάση ήταν επιτυχές")
+            return redirect(url_for("super_admin_backup_restore"))
     return render_template("backup.html")
 
 

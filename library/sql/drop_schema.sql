@@ -1,0 +1,11 @@
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE book_author;
+DROP TABLE book_status;
+DROP TABLE book_keywords;
+DROP TABLE school_phone;
+DROP TABLE review;
+DROP TABLE school;
+DROP TABLE book_theme;
+DROP TABLE lib_user;
+DROP TABLE book;
+SET FOREIGN_KEY_CHECKS = 1;

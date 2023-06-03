@@ -41,11 +41,19 @@
                 στην καταάσταση που βρισκόταν, όταν φτιάξατε το backup. 
             </h3><br>
             
-            <form method="POST" action="{{ url_for('backup') }}">
-                <button type="submit" class="edit-btn" name="action" value="accept">Backup</button>
-                <button type="submit" class="edit-btn"name="action" value="deny">Restore</button>
+            <form method="POST" action="{{ url_for('super_admin_backup_restore') }}">
+                <button type="submit" class="edit-btn" name="action" value="backup">Backup</button>
+                <button type="submit" class="edit-btn"name="action" value="restore">Restore</button>
             </form>
-            
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="flash-message">{{ message | safe}}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
         </div> 
   
     <html>
