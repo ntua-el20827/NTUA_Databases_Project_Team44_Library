@@ -399,6 +399,27 @@ END//
 
 DELIMITER ;
 
+-- A principal can exists only in 1 school
+DELIMITER //
+
+CREATE TRIGGER unique_principal_trigger BEFORE INSERT ON school
+FOR EACH ROW
+BEGIN
+  DECLARE principal_count INT;
+  
+  SET principal_count = (
+    SELECT COUNT(*) FROM school
+    WHERE principal_lastname = NEW.principal_lastname
+    AND principal_firstname = NEW.principal_firstname
+  );
+  
+  IF principal_count > 0 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'The same principal cannot be assigned to multiple schools.';
+  END IF;
+END //
+
+DELIMITER ;
+
 /* ---Ensure that our db has only one superadmin
 CREATE TRIGGER trg_lib_user_super_admin
 BEFORE INSERT OR UPDATE ON lib_user
