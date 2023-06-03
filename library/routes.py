@@ -3,6 +3,7 @@ from flask_mysqldb import MySQL
 from library import app,mydb
 from library.forms import *
 from datetime import datetime
+import os
 
 class SQLTriggerError(Exception):
     pass
@@ -1073,6 +1074,20 @@ def verify_school_application():
 
     # Render the template with the application details
     return render_template('verify_school_applications.html', application=application)
+
+
+@app.route('/super_admin_backup_restore', methods=['GET', 'POST'])
+def super_admin_backup_restore():
+    if request.method == "POST":
+        action = request.form['action']
+        if action == 'backup':
+            # code for backup
+            os.system('mysqldump -u root db2023 > database_backup.sql')
+        if action == 'restore':
+            # code for restore
+            os.system('mysql -u root db2023 < database_backup.sql')
+    return render_template("backup.html")
+
 
 #Route for school admin
 @app.route('/school_admin')
