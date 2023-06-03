@@ -1,9 +1,9 @@
 --- shcools
-INSERT INTO school (school_id, school_name, city, street, postal_code, email, principal_lastname, principal_firstname, school_admin_lastname, school_admin_firstname)
+INSERT INTO school (school_id, school_name, city, street,street_number, postal_code, email, principal_lastname, principal_firstname, school_admin_lastname, school_admin_firstname)
 VALUES
-  (1, 'Maplewood Elementary School', 'Springfield', 'Oak Avenue', 12345, 'maplewood@gmail.com', 'Johnson', 'Emily', 'Smith', 'Jennifer'),
-  (2, 'Willowbrook High School', 'Harrisonburg', 'Willow Street', 54321, 'willowbrook@gmail.com', 'Anderson', 'Michael', 'Brown', 'Jessica'),
-  (3, 'Cedar Ridge Middle School', 'Wilmington', 'Cedar Lane', 67890, 'cedarridge@gmail.com', 'Davis', 'Sarah', 'Wilson', 'David');
+  (1, 'Maplewood Elementary School', 'Springfield', 'Oak Avenue',12, 12345, 'maplewood@gmail.com', 'Johnson', 'Emily', 'Smith', 'Jennifer'),
+  (2, 'Willowbrook High School', 'Harrisonburg', 'Willow Street',30, 54321, 'willowbrook@gmail.com', 'Anderson', 'Michael', 'Brown', 'Jessica'),
+  (3, 'Cedar Ridge Middle School', 'Wilmington', 'Cedar Lane', 50,67890, 'cedarridge@gmail.com', 'Davis', 'Sarah', 'Wilson', 'David');
 
 ---- phones
 INSERT INTO school_phone (phone, school_id) VALUES

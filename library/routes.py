@@ -246,6 +246,7 @@ def request_library_form():
         school_name = request.form['school_name']
         city = request.form['city']
         street = request.form['street']
+        street_number = request.form['street_number']
         postal_code = request.form['postal_code']
         school_email = request.form['school_email']
         pfname = request.form['pfname']
@@ -253,9 +254,9 @@ def request_library_form():
         phone = request.form['phone']
         phone2 =  request.form['phone2']
         cur = mydb.connection.cursor()
-        school_query = """ INSERT INTO school (school_name, city, street, postal_code, email, principal_lastname, principal_firstname, school_admin_lastname, school_admin_firstname,pending_flag)
+        school_query = """ INSERT INTO school (school_name, city, street,street_number, postal_code, email, principal_lastname, principal_firstname, school_admin_lastname, school_admin_firstname,pending_flag)
         VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,'pending')"""
-        school_values = (school_name, city, street, postal_code, school_email, plname, pfname, lname, fname)
+        school_values = (school_name, city, street,street_number, postal_code, school_email, plname, pfname, lname, fname)
         try:
             cur.execute(school_query,school_values)  # Execute your INSERT statement here
             mydb.connection.commit()

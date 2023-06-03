@@ -13,6 +13,7 @@ CREATE TABLE school (
   school_name VARCHAR(45) NOT NULL,
   city VARCHAR(45) NOT NULL,
   street VARCHAR(45) NOT NULL,
+  street_number INT UNSIGNED NOT NULL,
   postal_code INT UNSIGNED NOT NULL,
   email VARCHAR(45) NOT NULL,
   principal_lastname VARCHAR(45) NOT NULL,
