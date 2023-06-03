@@ -71,7 +71,7 @@ WHERE
 GROUP BY 
   s.school_id
 HAVING 
-  COUNT(*) >= 20
+  COUNT(*) >= 5
 ORDER BY 
   num_approvals DESC;
 

@@ -356,6 +356,20 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Passwords must have 4 digits
+DELIMITER //
+CREATE TRIGGER user_pwd_length_trigger BEFORE INSERT ON lib_user
+FOR EACH ROW
+BEGIN
+  DECLARE pwd_length INT;
+  SET pwd_length = FLOOR(LOG10(NEW.user_pwd)) + 1;
+  
+  IF pwd_length != 4 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Password must be a 4-digit number.';
+  END IF;
+END //
+DELIMITER ;
+
 --Trigger για ηλικία καθηγητών:
 DELIMITER //
 
