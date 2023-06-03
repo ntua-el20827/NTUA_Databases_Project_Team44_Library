@@ -46,6 +46,8 @@
 <body>
     <div class="header">
         <h1>Edit Book</h1>
+        <h3>Παρακάτω μπορείτε να αλλάξετε τα στοιχεία του βίβλιου. </h3>
+        <h3>Προσοχή: Στα Πεδία Author,Themes,Keywords τα στοιχεια πρέπει να χωρίζονται με ' , '</h3>
     </div>
     <div class="profile">
     <form method="POST" action="{{ url_for('edit_book') }}">
@@ -101,15 +103,27 @@
         </div>
         <div class="form-row">
             <label for="themes">Themes:</label>
-                {% for theme in themes %}
-                    <option value="{{ theme}}" {% if theme in book_themes %}selected{% endif %}>{{ theme[0] }}</option>
-                {% endfor %}
+            <input type="text" id="themes" name="themes" value="{{ themes[0][0] }}" required>
         </div>
+        <div class="form-row">
+            <label for="keywords">keywords:</label>
+            <input type="text" id="keywords" name="keywords" value="{{ keywords[0][0] }}" required>
+        </div>
+        
 
         
         <div class="form-row">
             <button type="submit">Submit</button>
         </div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages1">
+                {% for message in messages %}
+                    <div class="flash-messages1">{{ message | safe}}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
        
     </form>
     </div>

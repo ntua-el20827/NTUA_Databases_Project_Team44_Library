@@ -474,14 +474,6 @@ def edit_book():
     ISBN = session['ISBN']
     school_id = session['school_id']
     cur = mydb.connection.cursor()
-    query = """SELECT GROUP_CONCAT(ba.author SEPARATOR ',') AS authors
-        FROM book b
-        JOIN book_author ba ON b.book_id = ba.book_id
-        WHERE b.school_id = %s AND b.ISBN = %s AND b.book_id = %s
-        GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id
-        """
-    cur.execute(query,(school_id, int(ISBN),book_id))
-    authors = cur.fetchall()
     if request.method == 'POST':
         # Retrieve the updated book attributes from the form
         title = request.form['title']
@@ -495,7 +487,11 @@ def edit_book():
         book_language = request.form['book_language']
         authors_modified = request.form['authors']
         authors_modified_list = authors_modified.split(",")
-        # Add more attributes here as needed
+        print(authors_modified_list)
+        themes_modified = request.form['themes']
+        themes_modified_list = themes_modified.split(",")
+        keywords_modified = request.form['keywords']
+        keywords_modified_list = keywords_modified.split(",")
 
         # Perform the necessary database update query using the new information
         #cur = mydb.connection.cursor()
@@ -505,12 +501,40 @@ def edit_book():
         cur.execute(query, (title, publisher, pages, isbn, summary, number_of_books, number_of_available_books,
                             book_image, book_language, book_id,))
         mydb.connection.commit()
-        for author_modified,author in authors_modified_list,authors:
-            query = "UPDATE book_author SET author = %s WHERE author = %s AND book_id =%s"
-            cur.execute(query,(author_modified,author,book_id,))  # Execute your INSERT statement here
+        # delete previous authors
+        query = "DELETE FROM book_author WHERE book_id = %s "
+        cur.execute(query, (book_id,))
+        mydb.connection.commit()
+        # insert new authors
+        for author_modified in authors_modified_list:
+            query = "INSERT INTO book_author (author,book_id) VALUES (%s,%s)"
+            cur.execute(query,(author_modified,book_id,))  # Execute your INSERT statement here
+            mydb.connection.commit()
+        # delete previous themes
+        query = "DELETE FROM book_theme WHERE book_id = %s "
+        cur.execute(query, (book_id,))
+        mydb.connection.commit()
+        # insert new themes
+        print(themes_modified_list)
+        for themes_modified in themes_modified_list:
+            print(themes_modified)
+            try:
+                query = "INSERT INTO book_theme (theme,book_id) VALUES (%s,%s)"
+                cur.execute(query,(themes_modified,book_id,))  # Execute your INSERT statement here
+                mydb.connection.commit()
+            except Exception:
+                flash("Wrong Themes Info")
+                return redirect(url_for("edit_book"))
+        # delete previous keywords
+        query = "DELETE FROM book_keywords WHERE book_id = %s "
+        cur.execute(query, (book_id,))
+        mydb.connection.commit()
+        # insert new authors
+        for keywords_modified in keywords_modified_list:
+            query = "INSERT INTO book_keywords (keywords,book_id) VALUES (%s,%s)"
+            cur.execute(query,(keywords_modified,book_id,))  # Execute your INSERT statement here
             mydb.connection.commit()
         cur.close()
-
         # Redirect the user to the updated profile page or any other desired page
         return redirect(url_for('book_display'))
     cur = mydb.connection.cursor()
@@ -533,7 +557,6 @@ def edit_book():
         """
     cur.execute(query,(school_id, int(ISBN),book_id))
     authors = cur.fetchall()
-    print(authors)
     query = """SELECT GROUP_CONCAT(bt.theme SEPARATOR ',') AS themes
         FROM book b
         JOIN book_theme bt ON b.book_id = bt.book_id
