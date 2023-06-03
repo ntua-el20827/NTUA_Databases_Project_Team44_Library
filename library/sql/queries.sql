@@ -55,6 +55,25 @@ WHERE lib_user.role_name = 'admin'
   AND book_status.approval_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 YEAR) AND NOW()
 GROUP BY lib_user.user_id
 HAVING COUNT(*) >= 20;
+--Το query 3.1.5 διορθωμένο(το ερμήνευσα ως φθίνουσα σειρά αριθμού δανεισμών ανά σχολείο (>20) με όνομα σχολείου και admin):
+SELECT 
+  COUNT(*) AS num_approvals, 
+  s.school_name, 
+  s.school_admin_firstname, 
+  s.school_admin_lastname
+FROM 
+  book_status bs 
+  JOIN lib_user u ON bs.user_id = u.user_id 
+  JOIN school s ON u.school_id = s.school_id 
+WHERE 
+  bs.approval_date IS NOT NULL 
+  AND bs.approval_date >= DATE_SUB(NOW(), INTERVAL 1 YEAR)
+GROUP BY 
+  s.school_id
+HAVING 
+  COUNT(*) >= 20
+ORDER BY 
+  num_approvals DESC;
 
 ---3.1.6 top 3 book theme pairs that appear in borrowings
 SELECT 

@@ -161,8 +161,13 @@ def signup():
         cur = mydb.connection.cursor()
         query = "INSERT INTO lib_user (user_name, user_pwd, user_firstname,user_date_of_birth, user_lastname, user_email, school_id,role_name,user_pending_flag) VALUES (%s, %s,%s, %s, %s,%s, %s,%s,'waiting')"
         values = (newusername, newpassword, fname, date_of_birth ,lname, email,school_id,role_name)
-        cur.execute(query, values)
-        mydb.connection.commit()
+        try:
+            cur.execute(query, values)
+            mydb.connection.commit()
+        except Exception:
+            flash("Λαθος στην εισαγωγή στοιχείων")
+            return render_template("signup.html")
+
         cur.close()
         return redirect(url_for('login'))
     else:
@@ -1265,51 +1270,59 @@ def school_admin_Q3():
     if request.method == 'POST':
         search_text = request.form['search_text']
         search_type = request.form['search_type']
-        print(search_text)
+        if (len(search_text) != 0):
+            print(search_type)
 
-        # Connect to the database and execute the query based on the search type
+            # Connect to the database and execute the query based on the search type
+            
+            q1 = """  SELECT CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bt.theme, AVG(r.rating) AS avg_rating
+                FROM lib_user u
+                INNER JOIN review r ON u.user_id = r.user_id
+                INNER JOIN book b ON r.book_id = b.book_id
+                INNER JOIN book_theme bt ON b.book_id = bt.book_id
+                WHERE u.school_id = %s"""
+            if search_type == "Full_Name":
+                # extra info
+                
+                search_text_list = search_text.split(" ")
+                print(search_text_list[0])
+                print(search_text_list[1])
+                query = q1+" AND u.user_firstname = %s  AND u.user_lastname = %s GROUP BY u.user_id, bt.theme;"
+                cur.execute(query,(school_id, str(search_text_list[0]),str(search_text_list[1]), ))
+                ratings = cur.fetchall()
+                print(ratings)
+                if len(ratings) == 0:
+                    # Render the template with no results message
+                    return render_template('school_admin_Q3.html', no_results=True)
+                query = """ SELECT lib_user.user_id, CONCAT(lib_user.user_firstname, ' ', lib_user.user_lastname) as full_name, AVG(review.rating) as avg_rating
+                FROM lib_user
+                JOIN review ON lib_user.user_id = review.user_id
+                WHERE lib_user.school_id = %s AND lib_user.user_firstname = %s  AND lib_user.user_lastname = %s
+                GROUP BY lib_user.user_id;
+                """
+                cur.execute(query,(school_id, str(search_text_list[0]),str(search_text_list[1]), ))
+                user_info = cur.fetchall()
+                return render_template('school_admin_Q3.html', ratings=ratings,user_info= user_info)
+            elif search_type == 'Category':
+                # extra info
+                query = q1+" AND bt.theme = %s GROUP BY u.user_id, bt.theme"
+                cur.execute(query,(school_id, search_text, ))
+                ratings = cur.fetchall()
+                if len(ratings) == 0:
+                    # Render the template with no results message
+                    return render_template('school_admin_Q3.html', no_results=True)
+                query = """ SELECT bt.theme, AVG(r.rating) as avg_rating
+                FROM book_theme bt
+                JOIN book b ON bt.book_id = b.book_id
+                JOIN review r ON b.book_id = r.book_id
+                WHERE b.school_id = %s AND bt.theme = %s
+                GROUP BY bt.theme;
+                """
+                cur.execute(query, (school_id,search_text,))
+                theme_info = cur.fetchall()
+                return render_template('school_admin_Q3.html', ratings=ratings,theme_info=theme_info)
         
-        q1 = """  SELECT CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bt.theme, AVG(r.rating) AS avg_rating
-            FROM lib_user u
-            INNER JOIN review r ON u.user_id = r.user_id
-            INNER JOIN book b ON r.book_id = b.book_id
-            INNER JOIN book_theme bt ON b.book_id = bt.book_id
-            WHERE u.school_id = %s"""
-        if search_type == 'Full name':
-            # extra info
-            query = q1+" AND borrower_name = %s GROUP BY u.user_id, bt.theme"
-            cur.execute(query,(school_id, search_text, ))
-            ratings = cur.fetchall()
-            if len(ratings) == 0:
-                # Render the template with no results message
-                return render_template('school_admin_Q3.html', no_results=True)
-            query = """ SELECT lib_user.user_id, CONCAT(lib_user.user_firstname, ' ', lib_user.user_lastname) as full_name, AVG(review.rating) as avg_rating
-            FROM lib_user
-            JOIN review ON lib_user.user_id = review.user_id
-            WHERE lib_user.school_id = %s
-            GROUP BY lib_user.user_id;
-            """
-            cur.execute(query, (school_id,search_text,))
-            user_info = cur.fetchall()
-            return render_template('school_admin_Q3.html', ratings=ratings,user_info= user_info)
-        elif search_type == 'Category':
-            # extra info
-            query = q1+" AND bt.theme = %s GROUP BY u.user_id, bt.theme"
-            cur.execute(query,(school_id, search_text, ))
-            ratings = cur.fetchall()
-            if len(ratings) == 0:
-                # Render the template with no results message
-                return render_template('school_admin_Q3.html', no_results=True)
-            query = """ SELECT bt.theme, AVG(r.rating) as avg_rating
-            FROM book_theme bt
-            JOIN book b ON bt.book_id = b.book_id
-            JOIN review r ON b.book_id = r.book_id
-            WHERE b.school_id = %s AND bt.theme = %s
-            GROUP BY bt.theme;
-            """
-            cur.execute(query, (school_id,search_text,))
-            theme_info = cur.fetchall()
-            return render_template('school_admin_Q3.html', ratings=ratings,theme_info=theme_info)
+    # Get Method
     query = """ SELECT CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bt.theme, AVG(r.rating) AS avg_rating
             FROM lib_user u
             INNER JOIN review r ON u.user_id = r.user_id

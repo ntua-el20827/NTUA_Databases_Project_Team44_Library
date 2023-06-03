@@ -27,7 +27,7 @@ CREATE TABLE school (
 
 --- Table 'school_phone'
 CREATE TABLE school_phone(
-  phone BIGINT NOT NULL,
+  phone VARCHAR(10) NOT NULL,
   school_id INT UNSIGNED NOT NULL,
   phone_flag ENUM('pending'),
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -95,7 +95,7 @@ CREATE TABLE book_status (
 
 -- Table 'book_keywords'
 CREATE TABLE book_keywords (
-  keywords  VARCHAR(100) NOT NULL,
+  keywords  VARCHAR(50) NOT NULL,
   book_id INT UNSIGNED NOT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (keywords,book_id),
@@ -115,7 +115,7 @@ CREATE TABLE book_theme (
 
 -- Table 'book_author'
 CREATE TABLE book_author (
-	author  VARCHAR(100) NOT NULL,
+	author  VARCHAR(50) NOT NULL,
 	book_id INT UNSIGNED NOT NULL,
 	last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (author,book_id),
@@ -343,6 +343,49 @@ BEGIN
       END IF;
     END IF;
 END$$
+DELIMITER ;
+
+-- Phones must have 10 digits
+DELIMITER //
+CREATE TRIGGER phone_length_trigger BEFORE INSERT ON school_phone
+FOR EACH ROW
+BEGIN
+  IF CHAR_LENGTH(NEW.phone) != 10 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Phone number must be 10 digits.';
+  END IF;
+END //
+DELIMITER ;
+
+--Trigger για ηλικία καθηγητών:
+DELIMITER //
+
+CREATE TRIGGER check_teacher_admin_age 
+BEFORE INSERT ON lib_user 
+FOR EACH ROW 
+BEGIN
+  IF (NEW.role_name = 'teacher' OR NEW.role_name = 'admin') AND 
+     (TIMESTAMPDIFF(YEAR, NEW.user_date_of_birth, CURDATE()) < 23) THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Teachers and admins must be at least 23 years old.';
+  END IF;
+END//
+
+DELIMITER ;
+
+--Trigger για ηλικία μαθητών:
+DELIMITER //
+
+CREATE TRIGGER check_student_age 
+BEFORE INSERT ON lib_user 
+FOR EACH ROW 
+BEGIN
+  IF (NEW.role_name = 'teacher' OR NEW.role_name = 'admin') AND 
+     (TIMESTAMPDIFF(YEAR, NEW.user_date_of_birth, CURDATE()) < 7) THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Teachers and admins must be at least 7 years old.';
+  END IF;
+END//
+
 DELIMITER ;
 
 /* ---Ensure that our db has only one superadmin
