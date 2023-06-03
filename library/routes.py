@@ -1262,15 +1262,6 @@ WHERE bs.status = 'borrowed' AND bs.return_date IS NULL AND u.school_id = %s AND
 def school_admin_Q3():
     school_id = session['school_id']
     cur = mydb.connection.cursor()
-    query = """ SELECT CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bt.theme, AVG(r.rating) AS avg_rating
-            FROM lib_user u
-            INNER JOIN review r ON u.user_id = r.user_id
-            INNER JOIN book b ON r.book_id = b.book_id
-            INNER JOIN book_theme bt ON b.book_id = bt.book_id
-            WHERE u.school_id = %s
-            GROUP BY u.user_id, bt.theme
-            """
-    cur.execute(query, (school_id,))
     if request.method == 'POST':
         search_text = request.form['search_text']
         search_type = request.form['search_type']
@@ -1288,19 +1279,68 @@ def school_admin_Q3():
             # extra info
             query = q1+" AND borrower_name = %s GROUP BY u.user_id, bt.theme"
             cur.execute(query,(school_id, search_text, ))
+            ratings = cur.fetchall()
+            if len(ratings) == 0:
+                # Render the template with no results message
+                return render_template('school_admin_Q3.html', no_results=True)
+            query = """ SELECT lib_user.user_id, CONCAT(lib_user.user_firstname, ' ', lib_user.user_lastname) as full_name, AVG(review.rating) as avg_rating
+            FROM lib_user
+            JOIN review ON lib_user.user_id = review.user_id
+            WHERE lib_user.school_id = %s
+            GROUP BY lib_user.user_id;
+            """
+            cur.execute(query, (school_id,search_text,))
+            user_info = cur.fetchall()
+            return render_template('school_admin_Q3.html', ratings=ratings,user_info= user_info)
         elif search_type == 'Category':
             # extra info
             query = q1+" AND bt.theme = %s GROUP BY u.user_id, bt.theme"
             cur.execute(query,(school_id, search_text, ))
+            ratings = cur.fetchall()
+            if len(ratings) == 0:
+                # Render the template with no results message
+                return render_template('school_admin_Q3.html', no_results=True)
+            query = """ SELECT bt.theme, AVG(r.rating) as avg_rating
+            FROM book_theme bt
+            JOIN book b ON bt.book_id = b.book_id
+            JOIN review r ON b.book_id = r.book_id
+            WHERE b.school_id = %s AND bt.theme = %s
+            GROUP BY bt.theme;
+            """
+            cur.execute(query, (school_id,search_text,))
+            theme_info = cur.fetchall()
+            return render_template('school_admin_Q3.html', ratings=ratings,theme_info=theme_info)
+    query = """ SELECT CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bt.theme, AVG(r.rating) AS avg_rating
+            FROM lib_user u
+            INNER JOIN review r ON u.user_id = r.user_id
+            INNER JOIN book b ON r.book_id = b.book_id
+            INNER JOIN book_theme bt ON b.book_id = bt.book_id
+            WHERE u.school_id = %s
+            GROUP BY u.user_id, bt.theme
+            """
+    cur.execute(query, (school_id,))
     ratings = cur.fetchall()
-    cur.close()
-
-    if len(ratings) == 0:
-        # Render the template with no results message
-        return render_template('school_admin_Q3.html', no_results=True)
-
+    #Average by user
+    query = """ SELECT lib_user.user_id, CONCAT(lib_user.user_firstname, ' ', lib_user.user_lastname) as full_name, AVG(review.rating) as avg_rating
+            FROM lib_user
+            JOIN review ON lib_user.user_id = review.user_id
+            WHERE lib_user.school_id = %s
+            GROUP BY lib_user.user_id;
+            """
+    cur.execute(query, (school_id,))
+    user_info = cur.fetchall()
+    #Average by theme
+    query = """ SELECT bt.theme, AVG(r.rating) as avg_rating
+            FROM book_theme bt
+            JOIN book b ON bt.book_id = b.book_id
+            JOIN review r ON b.book_id = r.book_id
+            WHERE b.school_id = %s
+            GROUP BY bt.theme;
+            """
+    cur.execute(query, (school_id,))
+    theme_info = cur.fetchall()
     # Render the template with the query results
-    return render_template('school_admin_Q3.html', ratings=ratings)
+    return render_template('school_admin_Q3.html', ratings=ratings,user_info= user_info,theme_info=theme_info)
 
 # Extra Route για να ελεγξει αιτήσεις αξιολόγησης 
 @app.route('/school_admin_reviews', methods=['GET', 'POST'])
@@ -1466,7 +1506,7 @@ def school_admin_new_booking():
                     print(diathesima_antitipa)
                     if (int(diathesima_antitipa[0])>0):
                         try:
-                            query = "INSERT INTO book_status (book_id, user_id, status, request_date) VALUES (%s, %s, 'reserved', CURDATE())"
+                            query = "INSERT INTO book_status (book_id, user_id, status, approval_date) VALUES (%s, %s, 'borrowed', CURDATE())"
                             ## ΑΛΛΑΓΗ ΝΑ ΒΑΛΛΩ ΤΟ book_status_id
                             cur.execute(query,(book_id,user_id,))  # Execute your INSERT statement here
                         except Exception as e:

@@ -19,7 +19,7 @@
         <a class="logout" href="#" onclick="confirmLogout()">Logout</a>
     </div>  
 <div class="super_admin">
-   <h1>Average Rating by user and category</h1>
+   <h2>Μεσος Ορος Αξιολογήσεων ανα κατηγορία και χρηστη, ανα χρήστη, ανα κατηγορία</h2>
   
     <form method="POST" action="{{ url_for('school_admin_Q3') }}">
       <div class="super_admin">
@@ -47,7 +47,8 @@
     {% if no_results %}
         <p>No results for your input value.</p>
     {% else %}
-     <div class="school_list">
+    <h2>Μεσος Ορος Αξιολογήσεων ανα Χρήστη και κατηγορία </h2>
+     <div class="school_list1">
        
   
         <table>
@@ -70,6 +71,54 @@
         </table>
     {% endif %}
        </div>
+       {% if no_results %}
+       <p>No results for your input value.</p>
+   {% else %}
+   <br>
+   <h2>Μεσος ορος αξιολογήσεων ανα χρήστη: </h2>
+    <div class="school_list1">
+       <table>
+           <thead>
+               <tr>
+                   <th>User Name </th>
+                   <th>Average Rating</th>
+               </tr>
+           </thead>
+           <tbody>
+               {% for rating in user_info %}
+                   <tr>
+                       <td>{{ rating[1] }}</td>
+                       <td>{{ rating[2] }}</td>
+                   </tr>
+               {% endfor %}
+           </tbody>
+       </table>
+   {% endif %}
+      </div>
+      {% if no_results %}
+       <p>No results for your input value.</p>
+   {% else %}
+   <br>
+   <h2>Μεσος ορος αξιολογήσεων ανα Κατηργορία: </h2>
+    <div class="school_list1">
+       <table>
+           <thead>
+               <tr>
+                   <th>Category</th>
+                   <th>Average Rating</th>
+               </tr>
+           </thead>
+           <tbody>
+               {% for rating in theme_info %}
+                   <tr>
+                       <td>{{ rating[0] }}</td>
+                       <td>{{ rating[1] }}</td>
+                   </tr>
+               {% endfor %}
+           </tbody>
+       </table>
+   {% endif %}
+      </div>
   </div>
 </body>
 </html>
