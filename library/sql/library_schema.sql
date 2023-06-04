@@ -232,24 +232,6 @@ SELECT *
 FROM lib_user
 WHERE user_pending_flag = 'waiting';
 
-/*
-
-CREATE VIEW reservation_queue AS
-SELECT lu.user_id, lu.user_firstname, lu.user_lastname, b.book_id, b.book_name, bs.request_date
-FROM lib_user lu
-JOIN book_status bs ON lu.user_id = bs.user_id
-JOIN book b ON bs.book_id = b.book_id
-WHERE bs.number_of_available_books = 0 AND bs.
-ORDER BY b.book_id, bs.request_date; */
-
-/* ---All the books with image, title, name, review
-CREATE VIEW all_books_with_info AS
-SELECT b.book_image, b.title, CONCAT(u.user_firstname, ' ', u.user_lastname) AS name, r.review_text AS review
-FROM book b
-INNER JOIN lib_user u ON b.user_id = u.user_id
-LEFT JOIN review r ON b.book_id = r.book_id;
- */
-
 
 ---
 --- Procedures

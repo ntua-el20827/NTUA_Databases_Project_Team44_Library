@@ -1762,6 +1762,7 @@ def school_admin_book_return():
 
         #Ελεγχος αν ο χρήστης που επέστρεψε το βιβλίο ειναι σε queue
         #Αν το βιβλίο για το οποίο ειναι σε queue έχει διαθέσιμα αντίτυπα το δεσμεύει
+        print("user_id = ",user_id)
         query = """ SELECT bs.book_id
                 FROM book_status bs
                 JOIN book b ON bs.book_id = b.book_id
