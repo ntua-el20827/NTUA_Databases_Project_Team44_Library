@@ -232,14 +232,7 @@ SELECT *
 FROM lib_user
 WHERE user_pending_flag = 'waiting';
 
----only include reviews submitted by users with the student role,
----and with a NULL rev_date indicating that they require approval
-/* CREATE VIEW review_approval AS
-SELECT r.rev_id, r.user_id, r.book_id, r.review_text, r.rev_date, r.rating, r.review_pending_flag,
-       u.user_id, u.user_name, u.school_id, u.user_email, u.user_firstname, u.user_lastname, u.user_date_of_birth, u.role_name, u.user_pending_flag
-FROM review r
-JOIN lib_user u ON r.user_id = u.user_id
-WHERE u.role_name = 'student' AND r.rev_date IS NULL ;
+/*
 
 CREATE VIEW reservation_queue AS
 SELECT lu.user_id, lu.user_firstname, lu.user_lastname, b.book_id, b.book_name, bs.request_date
@@ -249,7 +242,6 @@ JOIN book b ON bs.book_id = b.book_id
 WHERE bs.number_of_available_books = 0 AND bs.
 ORDER BY b.book_id, bs.request_date; */
 
--- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --> WORKING SO FAR
 /* ---All the books with image, title, name, review
 CREATE VIEW all_books_with_info AS
 SELECT b.book_image, b.title, CONCAT(u.user_firstname, ' ', u.user_lastname) AS name, r.review_text AS review
@@ -455,50 +447,6 @@ END //
 
 DELIMITER ;
 
-
-
-
-/*
---- Each user can only submit one review per book title
-CREATE TRIGGER trg_review_unique_title
-BEFORE INSERT ON review
-FOR EACH ROW
-BEGIN
-  DECLARE cnt INT;
-  SELECT COUNT(*) INTO cnt FROM review WHERE user_id = NEW.user_id AND book_title = NEW.book_title;
-  IF cnt > 0 THEN
-    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Each user can only submit one review per book title';
-  END IF;
-END;
-
----When a reserved book becomes available
-CREATE TRIGGER update_book_status AFTER UPDATE ON book_status
-FOR EACH ROW
-BEGIN
-    IF NEW.number_of_available_books = 1 AND OLD.number_of_available_books = 0 THEN
-        -- Delete row from reservation_queue
-        DELETE FROM reservation_queue
-        WHERE user_id = OLD.user_id
-        AND book_id = OLD.book_id
-        AND request_date = OLD.request_date;
-
-        -- Insert new row into book_status with status set to reserved
-        INSERT INTO book_status (user_id, book_id, request_date, status)
-        VALUES (OLD.user_id, OLD.book_id, OLD.request_date, 'reserved');
-    END IF;
-END;
-
----Delete from book_status=> Delete from reservation_queue
-CREATE TRIGGER trg_delete_reservation_queue
-AFTER DELETE ON book_status
-FOR EACH ROW
-BEGIN
-    DELETE FROM reservation_queue
-    WHERE user_id = OLD.user_id
-    AND book_id = OLD.book_id
-    AND request_date = OLD.request_date;
-END;
-*/
 
 ---
 ---Indexes
