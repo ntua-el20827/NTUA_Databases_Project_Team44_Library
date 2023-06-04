@@ -70,8 +70,11 @@ def login():
             ## Ελεγχος αν ειναι καποιος admin
             print("login -> ",role_name)
             if (role_name[0]=='admin'):
-                    print("admin -> ",role_name)
-                    return redirect(url_for('school_admin'))
+                print("admin -> ",role_name)
+                return redirect(url_for('school_admin'))
+            if (role_name[0]=='super_admin'):
+                error_message = "Για Συνδεση Υπευθυνου Διαχειριστή επιστρέψτε στην αρχική σελίδα"
+                return render_template('login.html', error_message=error_message)
             return redirect(url_for('dashboard'))  # Redirect to the dashboard page after successful login
         else:
             # Invalid credentials, show an error message
@@ -401,7 +404,27 @@ def mybooks():
             query = "CALL increase_available_books(%s)"
             cur.execute(query,(book_id,))
             mydb.connection.commit()
-        mydb.connection.commit()
+        query = """ SELECT bs.book_id
+                FROM book_status bs
+                JOIN book b ON bs.book_id = b.book_id
+                WHERE bs.status = 'queue'
+                AND bs.user_id = %s
+                AND b.number_of_available_books > 0; """
+        cur.execute(query,(user_id,))
+        queued_book = cur.fetchone()
+        print(queued_book)
+        if queued_book != None:
+            print("in")
+            print(queued_book[0])
+            query = "Select check_book_update_after_deny(%s) as update_occured;"
+            cur.execute(query,(queued_book[0],))
+            update_occured = cur.fetchone()
+            print(update_occured)
+            if update_occured[0]==1:
+                query = "CALL decrease_available_books(%s)"
+                cur.execute(query,(queued_book[0],))
+                mydb.connection.commit()
+            mydb.connection.commit()
         cur.close()
 
     cur = mydb.connection.cursor()
@@ -1520,7 +1543,29 @@ def school_admin_reservations():
                 query = "CALL increase_available_books(%s)"
                 cur.execute(query,(int(item_id),))
                 mydb.connection.commit()
-            mydb.connection.commit()
+            #Ελεγχος αν ο χρήστης για τον οποίο διαγράψαμε ενα reservation ειναι σε queue για βιβλίο που πλέον έχει διαθέσιμο αντίτυπο
+            print(user_id)
+            query = """ SELECT bs.book_id
+                FROM book_status bs
+                JOIN book b ON bs.book_id = b.book_id
+                WHERE bs.status = 'queue'
+                AND bs.user_id = %s
+                AND b.number_of_available_books > 0; """
+            cur.execute(query,(user_id,))
+            queued_book = cur.fetchone()
+            print(queued_book)
+            if queued_book != None:
+                print("in")
+                print(queued_book[0])
+                query = "Select check_book_update_after_deny(%s) as update_occured;"
+                cur.execute(query,(queued_book[0],))
+                update_occured = cur.fetchone()
+                print(update_occured)
+                if update_occured[0]==1:
+                    query = "CALL decrease_available_books(%s)"
+                    cur.execute(query,(queued_book[0],))
+                    mydb.connection.commit()
+                mydb.connection.commit()
         elif action == 'deny_queue':
             # Delete the item from the 'book_status' table
             query = "DELETE FROM book_status WHERE book_status_id = %s"
@@ -1667,7 +1712,7 @@ def school_admin_book_return():
         cur = mydb.connection.cursor()
 
         # Update the 'return_date' to the current date in the 'book_status' table
-    
+        #Ελεγχος για το βιβλίο που επιστράφηκε αν υπάρχει σε queue
         query = "Select check_book_update(%s) as update_occured;"
         cur.execute(query,(int(item_id),))
         update_occured = cur.fetchone()
@@ -1678,6 +1723,30 @@ def school_admin_book_return():
         if update_occured[0]==0:
             query = "CALL increase_available_books(%s)"
             cur.execute(query,(int(item_id),))
+            mydb.connection.commit()
+
+        #Ελεγχος αν ο χρήστης που επέστρεψε το βιβλίο ειναι σε queue
+        #Αν το βιβλίο για το οποίο ειναι σε queue έχει διαθέσιμα αντίτυπα το δεσμεύει
+        query = """ SELECT bs.book_id
+                FROM book_status bs
+                JOIN book b ON bs.book_id = b.book_id
+                WHERE bs.status = 'queue'
+                AND bs.user_id = %s
+                AND b.number_of_available_books > 0; """
+        cur.execute(query,(user_id,))
+        queued_book = cur.fetchone()
+        print(queued_book)
+        if queued_book != None:
+            print("in")
+            print(queued_book[0])
+            query = "Select check_book_update_after_deny(%s) as update_occured;"
+            cur.execute(query,(queued_book[0],))
+            update_occured = cur.fetchone()
+            print(update_occured)
+            if update_occured[0]==1:
+                query = "CALL decrease_available_books(%s)"
+                cur.execute(query,(queued_book[0],))
+                mydb.connection.commit()
             mydb.connection.commit()
         cur.close()
 

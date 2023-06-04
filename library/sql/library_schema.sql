@@ -455,6 +455,9 @@ END //
 
 DELIMITER ;
 
+
+
+
 /*
 --- Each user can only submit one review per book title
 CREATE TRIGGER trg_review_unique_title
@@ -536,6 +539,79 @@ BEGIN
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
       
     IF (SELECT number_of_available_books FROM book WHERE book_id = _book_id) = 0 THEN 
+
+        OPEN cur;
+        
+        read_loop: LOOP
+          FETCH cur INTO _user_id;
+          IF done THEN
+            LEAVE read_loop;
+          END IF;
+          
+          SET borrow_count = (
+            SELECT COUNT(*) AS count
+            FROM book_status
+            WHERE user_id = _user_id
+              AND status IN ('borrowed')
+              AND approval_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+          );
+          
+          SET reserved_count = (
+            SELECT COUNT(*) AS count
+            FROM book_status
+            WHERE user_id = _user_id
+              AND status IN ('reserved')
+              AND request_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+              LIMIT 1
+          );
+          
+          IF _user_id IN (SELECT user_id FROM lib_user WHERE role_name='student') THEN
+              IF borrow_count + reserved_count < 2 THEN
+                UPDATE book_status 
+                SET status = 'reserved', request_date = CURRENT_DATE 
+                WHERE book_id = _book_id AND status = 'queue' AND user_id = _user_id
+                ORDER BY request_date;
+                SET done = TRUE;
+                SET update_occurred = TRUE;
+              END IF;
+          ELSEIF _user_id IN (SELECT user_id FROM lib_user WHERE role_name='teacher' OR role_name = 'admin') THEN
+            IF borrow_count + reserved_count < 1 THEN
+                UPDATE book_status 
+                SET status = 'reserved', request_date = CURRENT_DATE 
+                WHERE book_id = _book_id AND status = 'queue' AND user_id = _user_id
+                ORDER BY request_date;
+                SET done = TRUE;
+                SET update_occurred = TRUE;
+              END IF;
+          END IF;
+        END LOOP;
+        
+        CLOSE cur;
+    END IF;
+    
+    RETURN update_occurred;
+END$$
+
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE FUNCTION check_book_update_after_deny(_book_id INT) RETURNS BOOLEAN
+BEGIN
+    DECLARE borrow_count INT;
+    DECLARE reserved_count INT;
+    DECLARE _user_id INT UNSIGNED;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE update_occurred BOOLEAN DEFAULT FALSE;
+    
+    DECLARE cur CURSOR FOR
+      SELECT user_id AS _user_id FROM book_status 
+      WHERE book_id = _book_id AND status = 'queue' 
+      ORDER BY request_date;
+      
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+      
+    IF (SELECT number_of_available_books FROM book WHERE book_id = _book_id) > 0 THEN 
 
         OPEN cur;
         
