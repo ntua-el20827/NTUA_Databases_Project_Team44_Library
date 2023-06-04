@@ -332,6 +332,43 @@ BEGIN
 END$$
 DELIMITER ;
 
+DELIMITER $$
+CREATE TRIGGER check_queue_limit
+BEFORE INSERT ON book_status
+FOR EACH ROW
+BEGIN
+    DECLARE borrow_count INT;
+    DECLARE queue_count INT;
+    DECLARE reserved_count INT;
+    IF (NEW.status = 'queue') THEN
+      IF NEW.user_id IN (SELECT user_id FROM lib_user WHERE role_name='student') THEN
+          SET queue_count = (
+              SELECT COUNT(*) AS count
+              FROM book_status
+              WHERE user_id = NEW.user_id
+                AND status IN ('queue')
+                AND request_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+          );
+
+          IF (queue_count) >= 2 THEN
+              SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'You have exceeded the limit on the number of books you can borrow or reserve in the last seven days.';
+          END IF;
+      ELSEIF NEW.user_id IN (SELECT user_id FROM lib_user WHERE role_name='teacher' OR role_name='admin') THEN
+          SET queue_count = (
+              SELECT COUNT(*) AS count
+              FROM book_status
+              WHERE user_id = NEW.user_id
+                AND status IN ('queue')
+                AND request_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+          );
+          IF (queue_count) >= 1 THEN
+              SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'You have exceeded the limit on the number of books you can borrow or reserve in the last seven days.';
+          END IF;
+      END IF;
+    END IF;
+END$$
+DELIMITER ;
+
 -- Phones must have 10 digits
 DELIMITER //
 CREATE TRIGGER phone_length_trigger BEFORE INSERT ON school_phone

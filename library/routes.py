@@ -752,11 +752,11 @@ def queue():
         query = "INSERT INTO book_status (book_id, user_id, status, request_date) VALUES (%s, %s, 'queue', CURDATE())"
         ## ΑΛΛΑΓΗ ΝΑ ΒΑΛΛΩ ΤΟ book_status_id
         cur.execute(query,(book_id,user_id,))  # Execute your INSERT statement here
-    except SQLTriggerError as e:
+        mydb.connection.commit()
+    except Exception as e:
         error_message = str(e)
         flash("Εχετε περάσει τον αριθμό κρατήσεων")
         return redirect(url_for("book_display"))
-    mydb.connection.commit()
     cur.close()
     flash("H Κρατηση για το βιβλίο επιβεβαιωθηκε.Μπορειτε να την δείτε στην καρτελα Mybooks. Εκει θα μπορείτε να δείτε ποτε θα μπορείτε να πάτε να πάρετε το βιβλίο σας ")
     return redirect(url_for("book_display"))
