@@ -14,6 +14,5 @@ REM Change directory to C:\xampp\mysql\bin (assuming XAMPP is installed in the d
 cd /d "C:\xampp\mysql\bin"
 
 REM Run MySQL and load the files
-mysql.exe -u root -p -e "DROP DATABASE IF EXISTS library;"
 mysql.exe -u root -p library < "%schema_file%"
 mysql.exe -u root -p library < "%data_file%"
