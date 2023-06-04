@@ -145,6 +145,14 @@ FROM book_theme bt
 JOIN book b ON bt.book_id = b.book_id
 JOIN review r ON b.book_id = r.book_id
 GROUP BY bt.theme;
+---Αverage by user and theme
+SELECT CONCAT(u.user_firstname, ' ', u.user_lastname) AS borrower_name, bt.theme, AVG(r.rating) AS avg_rating
+FROM lib_user u
+INNER JOIN review r ON u.user_id = r.user_id
+INNER JOIN book b ON r.book_id = b.book_id
+INNER JOIN book_theme bt ON b.book_id = bt.book_id
+WHERE u.school_id = %s
+GROUP BY u.user_id, bt.theme;
 
 
 ---3.3 User Queries
