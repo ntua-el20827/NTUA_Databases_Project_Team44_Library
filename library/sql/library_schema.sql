@@ -394,7 +394,7 @@ END//
 
 DELIMITER ;
 
--- A principal can exists only in 1 school
+-- Ενας διευθυντής μπορεί να υπάρχει μόνο σε 1 σχολείο
 DELIMITER //
 
 CREATE TRIGGER unique_principal_trigger BEFORE INSERT ON school
@@ -415,30 +415,47 @@ END //
 
 DELIMITER ;
 
-/* ---Ensure that our db has only one superadmin
-CREATE TRIGGER trg_lib_user_super_admin
-BEFORE INSERT OR UPDATE ON lib_user
+-- Δεν γίνεται εισαγωγή 2ου super admin
+DELIMITER //
+
+CREATE TRIGGER trigger_super_admin_check
+BEFORE INSERT ON lib_user
 FOR EACH ROW
 BEGIN
-    IF NEW.role_name = 'super_admin' OR IF OLD.role_name = 'super_admin' THEN
-        IF (SELECT COUNT(*) FROM lib_user WHERE role_name = 'super_admin') > 0 THEN
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'There can be only one superadmin in the lib_user table'
-        END IF
-    END IF
-END;
+  DECLARE super_admin_count INT;
+  SET super_admin_count = (
+    SELECT COUNT(*)
+    FROM lib_user
+    WHERE role_name = 'super_admin'
+  );
+  IF super_admin_count > 0 AND NEW.role_name = 'super_admin' THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Only one super admin is allowed.';
+  END IF;
+END //
 
----Ensure that the insertion of second admin for a school is forbidden
-CREATE TRIGGER trg_lib_user_admin_count
-BEFORE INSERT OR UPDATE ON lib_user
+DELIMITER ;
+
+-- Δεν γίνεται εισαγωγή 2ου admin για ένα σχολείο
+DELIMITER //
+
+CREATE TRIGGER trigger_school_admin_check
+BEFORE INSERT ON lib_user
 FOR EACH ROW
 BEGIN
-    IF NEW.role_name = 'admin' OR OLD.role_name = 'admin' THEN
-        IF (SELECT COUNT(*) FROM lib_user WHERE role_name = 'admin' AND school_id = NEW.school_id) > 1 THEN
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Each school can have only one admin in the lib_user table';
-        END IF;
-    END IF;
-END; 
+  DECLARE admin_count INT;
+  SET admin_count = (
+    SELECT COUNT(*)
+    FROM lib_user
+    WHERE school_id = NEW.school_id AND role_name = 'admin'
+  );
+  IF admin_count > 0 AND NEW.role_name = 'admin' THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'A school can have only one admin.';
+  END IF;
+END //
 
+DELIMITER ;
+
+/*
 --- Each user can only submit one review per book title
 CREATE TRIGGER trg_review_unique_title
 BEFORE INSERT ON review
