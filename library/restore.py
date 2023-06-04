@@ -29,7 +29,7 @@ def restore_database():
         DB_USER = 'root'
         DB_PASS = ''
         DB_NAME = 'library'
-        sql_path = current_directory+ '\\library\\sql'
+        sql_path = current_directory+ '\\sql'
         backup_file = 'database_backup.sql'
         backup_file_path = os.path.join(sql_path,backup_file)
 
@@ -37,7 +37,7 @@ def restore_database():
         os.chdir('C:\\xampp\\mysql\\bin')
 
         # Run mysqldump command to export the database
-        mysqldump_cmd = f'mysql --column-statistics=0 -u {DB_USER} -p{DB_PASS} {DB_NAME} < "{backup_file_path}"'
+        mysqldump_cmd = f'mysql -u {DB_USER} -p{DB_PASS} {DB_NAME} < "{backup_file_path}"'
         os.system(mysqldump_cmd)
         os.chdir(current_directory)
     else:
