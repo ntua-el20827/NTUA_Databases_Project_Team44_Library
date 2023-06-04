@@ -12,6 +12,9 @@ Rerational Schema:
 
 
 Installation:
+![image](https://github.com/georgegeo248/Project_Databases_Team_44/assets/74141049/054ae4b3-3a05-417f-b617-222ca5914cef)
+![image](https://github.com/georgegeo248/Project_Databases_Team_44/assets/74141049/ecbeb40b-ee36-419c-8576-b49879c0befe)
+
 
 Documentaion:
 [Εξαμηνιαία-Εργασία-Βάσεις-Ομάδα-44.pdf](https://github.com/georgegeo248/Project_Databases_Team_44/files/11646589/-.-.-.-44.pdf)
