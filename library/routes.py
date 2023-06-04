@@ -1086,7 +1086,7 @@ def verify_school_application():
             query = "UPDATE lib_user SET user_pending_flag = NULL WHERE user_id = %s "
             cur.execute(query, (user_id,))
             mydb.connection.commit()
-            query = "UPDATE school_phone SET    ag = NULL WHERE school_id = %s "
+            query = "UPDATE school_phone SET phone_flag = NULL WHERE school_id = %s "
             cur.execute(query, (school_id_to_review,))
             mydb.connection.commit()
             cur.close()
