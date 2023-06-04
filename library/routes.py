@@ -1136,28 +1136,63 @@ def super_admin_backup_restore():
 # Routes για τους ADMINS
 
 #Αρχικό Route 
-@app.route('/school_admin')
+@app.route('/school_admin', methods=['GET', 'POST'])
 def school_admin():
+    no_results = False
     user_id = session['user_id']
-    cur = mydb.connection.cursor()
-    query = "SELECT school_id FROM lib_user WHERE user_id = %s"
-    cur.execute(query, (user_id,))
-    school_id_tuple = cur.fetchone()
-    school_id = school_id_tuple[0] if school_id_tuple else None
-    session['school_id'] = school_id
-    cur.close()
+    school_id = session['school_id']
+    print(school_id)
     if request.method == "POST":
-        ISBN = request.form['ISBN']  
-        session['ISBN'] = ISBN  
-        return redirect(url_for('book_display'))
-    else:
+        search_text = request.form['search_text']
+        search_type = request.form['search_type']
         cur = mydb.connection.cursor()
-        school_id = session['school_id']
-        query = "SELECT title, ISBN, book_image,book_id FROM book WHERE school_id = %s" 
-        cur.execute(query,(school_id,))
+
+        if search_type == 'title':
+            query = """ SELECT b.title, b.ISBN, b.book_image, b.book_id,
+        GROUP_CONCAT(ba.author SEPARATOR ',') AS authors
+        FROM book b
+        JOIN book_author ba ON b.book_id = ba.book_id
+        WHERE b.school_id = %s AND b.title = %s
+        GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id"""
+            cur.execute(query, (school_id,str(search_text),))
+        elif search_type == 'category':
+            print("category")
+            query = """ SELECT b.title, b.ISBN, b.book_image, b.book_id,
+        GROUP_CONCAT(ba.author SEPARATOR ',') AS authors,
+        GROUP_CONCAT(bt.theme SEPARATOR ',') AS themes
+        FROM book b
+        JOIN book_author ba ON b.book_id = ba.book_id
+        LEFT JOIN book_theme bt ON b.book_id = bt.book_id
+        WHERE b.school_id = %s AND bt.theme = %s
+        GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id;
+        """
+            cur.execute(query, (school_id,str(search_text),))
+        elif search_type == 'author':
+            query = """SELECT b.title, b.ISBN, b.book_image, b.book_id,
+        GROUP_CONCAT(ba.author SEPARATOR ',') AS authors
+        FROM book b
+        JOIN book_author ba ON b.book_id = ba.book_id
+        WHERE b.school_id = %s AND ba.author = %s
+        GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id """
+            cur.execute(query, (school_id,str(search_text),))
         books = cur.fetchall()
         cur.close()
-        return render_template('school_admin.html',books = books )
+        print(len(books))
+        if len(books) != 0:
+            return render_template('school_admin.html',books = books ,no_results=False)
+        else:
+            no_results = True
+    cur = mydb.connection.cursor()
+    query = """ SELECT b.title, b.ISBN, b.book_image, b.book_id,
+    GROUP_CONCAT(ba.author SEPARATOR ',') AS authors
+    FROM book b
+    JOIN book_author ba ON b.book_id = ba.book_id
+    WHERE b.school_id = %s 
+    GROUP BY b.ISBN, b.title, b.publisher, b.number_of_available_books, b.pages, b.book_language, b.summary, b.book_image, b.book_id """
+    cur.execute(query,(school_id,))
+    books = cur.fetchall()
+    cur.close()
+    return render_template('school_admin.html',books = books,no_results=no_results )
 
 #Route για την εισαγωγή νέων βιβλίων
 @app.route('/school_admin_add_books', methods=['GET', 'POST'])
