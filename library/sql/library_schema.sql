@@ -54,7 +54,6 @@ CREATE TABLE lib_user(
     KEY fk_user_school_id (school_id),
     CONSTRAINT fk_user_school_id FOREIGN KEY (school_id) REFERENCES school (school_id) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8; 
--- ισως: ON DELETE CASCADE 
 
 -- Table 'book'
 CREATE TABLE book (
@@ -227,6 +226,11 @@ FROM school s
 JOIN lib_user u ON s.school_id = u.school_id
 WHERE s.pending_flag = 'pending' AND u.user_pending_flag = 'waiting' AND u.role_name = 'admin';
 
+--- User applications
+CREATE VIEW new_user_application AS
+SELECT *
+FROM lib_user
+WHERE user_pending_flag = 'waiting';
 
 ---only include reviews submitted by users with the student role,
 ---and with a NULL rev_date indicating that they require approval
@@ -252,15 +256,8 @@ SELECT b.book_image, b.title, CONCAT(u.user_firstname, ' ', u.user_lastname) AS 
 FROM book b
 INNER JOIN lib_user u ON b.user_id = u.user_id
 LEFT JOIN review r ON b.book_id = r.book_id;
-
----List of user applications
-CREATE VIEW new_user_application AS
-SELECT *
-FROM lib_user
-WHERE user_pending_flag = 'waiting';
-
-
  */
+
 
 ---
 --- Procedures
