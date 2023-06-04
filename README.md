@@ -9,10 +9,11 @@ Rerational Schema:
 ![351683594_237371858997740_7062331166621450421_n](https://github.com/georgegeo248/Project_Databases_Team_44/assets/74141049/4f431b36-794c-4d4c-929f-e3adde484d47)
 
 
-
-
 Installation:
+
+
 ![image](https://github.com/georgegeo248/Project_Databases_Team_44/assets/74141049/054ae4b3-3a05-417f-b617-222ca5914cef)
+
 ![image](https://github.com/georgegeo248/Project_Databases_Team_44/assets/74141049/ecbeb40b-ee36-419c-8576-b49879c0befe)
 
 
