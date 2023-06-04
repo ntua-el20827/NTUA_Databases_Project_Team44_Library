@@ -892,7 +892,7 @@ def super_admin_Q2():
         print('authors = ' ,authors)
 
         # Execute the query to retrieve teachers who borrowed books of the selected theme last year
-        teacher_query = "SELECT DISTINCT lib_user.user_name FROM book_theme INNER JOIN book ON book_theme.book_id = book.book_id INNER JOIN book_status ON book.book_id = book_status.book_id INNER JOIN lib_user ON book_status.user_id = lib_user.user_id WHERE book_theme.theme = %s AND book_status.status = 'borrowed' AND book_status.approval_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 YEAR) AND NOW() AND lib_user.role_name = 'teacher'"
+        teacher_query = "SELECT DISTINCT lib_user.user_name FROM book_theme INNER JOIN book ON book_theme.book_id = book.book_id INNER JOIN book_status ON book.book_id = book_status.book_id INNER JOIN lib_user ON book_status.user_id = lib_user.user_id WHERE book_theme.theme = %s AND book_status.status = 'borrowed' AND book_status.approval_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 YEAR) AND NOW() AND (lib_user.role_name = 'teacher' OR lib_user.role_name = 'admin')"
         cur.execute(teacher_query, (selected_theme,))
         teachers = cur.fetchall()
         cur.close()
@@ -912,7 +912,7 @@ def super_admin_Q3():
 FROM lib_user u
 JOIN school s ON u.school_id = s.school_id
 JOIN book_status bs ON u.user_id = bs.user_id
-WHERE u.role_name = 'teacher' AND u.user_date_of_birth > DATE_SUB(CURDATE(), INTERVAL 40 YEAR) AND bs.status = 'borrowed'
+WHERE (u.role_name = 'teacher' OR u.role_name = 'admin') AND u.user_date_of_birth > DATE_SUB(CURDATE(), INTERVAL 40 YEAR) AND bs.status = 'borrowed'
 GROUP BY u.user_id
 ORDER BY num_books_borrowed DESC
         """
