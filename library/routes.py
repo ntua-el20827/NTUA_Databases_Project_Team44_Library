@@ -978,7 +978,7 @@ def super_admin_Q5():
             INNER JOIN book b ON bs.book_id = b.book_id
             WHERE bs.status = 'borrowed' AND YEAR(bs.approval_date) = %s
             GROUP BY b.school_id
-            HAVING borrowed_count > 10
+            HAVING borrowed_count > 8
         ) A
         JOIN (
             SELECT b.school_id, COUNT(*) AS borrowed_count
@@ -986,7 +986,7 @@ def super_admin_Q5():
             INNER JOIN book b ON bs.book_id = b.book_id
             WHERE bs.status = 'borrowed' AND YEAR(bs.approval_date) = %s
             GROUP BY b.school_id
-            HAVING borrowed_count > 10
+            HAVING borrowed_count > 8
         ) B ON A.borrowed_count = B.borrowed_count AND A.school_id <> B.school_id
         JOIN lib_user ua1 ON A.school_id = ua1.school_id AND ua1.role_name = 'admin'
         JOIN lib_user ua2 ON B.school_id = ua2.school_id AND ua2.role_name = 'admin'
