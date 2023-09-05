@@ -1,19 +1,26 @@
 # Project Databases Team-44
 Entity-Relational Diagram:
-![343697934_647753233394654_7750504785213796317_n](https://github.com/georgegeo248/Project_Databases_Team_44/assets/74141049/6356dfb0-0d4a-4c75-a9f3-ccaab6dd9434)
+![351538236_826380015677767_1066245636714549008_n](https://github.com/georgegeo248/Project_Databases_Team_44/assets/74141049/0209b817-af36-4049-b294-889e2683f54b)
+
 
 
 
 Rerational Schema:
-![image](https://github.com/georgegeo248/Project_Databases_Team_44/assets/74141049/916cee3a-1e74-487d-8aba-ddad2460e80f)
-
+![351683594_237371858997740_7062331166621450421_n](https://github.com/georgegeo248/Project_Databases_Team_44/assets/74141049/4f431b36-794c-4d4c-929f-e3adde484d47)
 
 
 Installation:
 
-Dcumentaion:
+
+![image](https://github.com/georgegeo248/Project_Databases_Team_44/assets/74141049/054ae4b3-3a05-417f-b617-222ca5914cef)
+
+![image](https://github.com/georgegeo248/Project_Databases_Team_44/assets/74141049/ecbeb40b-ee36-419c-8576-b49879c0befe)
+
+
+Documentaion:
+[Εξαμηνιαία-Εργασία-Βάσεις-Ομάδα-44.pdf](https://github.com/georgegeo248/Project_Databases_Team_44/files/11646589/-.-.-.-44.pdf)
 
 Μέλη Ομάδας:
 Ιωαννα Μπαμπαρουτση el20081
-Γιωργος Γεωργακόπουλος el
-Μανος Νεοφωτιστος el
+Γιωργος Γεωργακόπουλος el20827
+Μανος Νεοφωτιστος el19128
